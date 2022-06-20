@@ -1,6 +1,5 @@
 import { FC, useState } from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import "./styles/App.css";
 
 const App: FC = () => {
   const [count, setCount] = useState(0);
@@ -8,7 +7,6 @@ const App: FC = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <h1 className="text-3xl font-bold underline">
           Hello world!
         </h1>
