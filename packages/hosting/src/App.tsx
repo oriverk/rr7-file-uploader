@@ -1,40 +1,20 @@
-import { FC, useState } from "react";
-import "./styles/App.css";
+import { FC } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-const App: FC = () => {
-  const [count, setCount] = useState(0);
+import { Layout } from "./components/Layout";
+import { Home } from "./pages/home"
+import { PageNotFound } from "./pages/404";
+import "./styles/tailwind.css";
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h1 className="text-3xl font-bold underline">
-          Hello world!
-        </h1>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-            Learn React
-          </a>
-          {" | "}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
-    </div>
-  );
-}
+const App: FC = () => (
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="*" element={<PageNotFound />} />
+      </Route>
+    </Routes>
+  </BrowserRouter>
+);
 
 export default App;
