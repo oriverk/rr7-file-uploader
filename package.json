@@ -1,8 +1,7 @@
 {
-  "name": "up",
+  "name": "ixanary-uploader",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "deploy": "firebase deploy",
     "deploy:functions": "firebase deploy --only functions",
@@ -10,5 +9,5 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "MIT"
 }
