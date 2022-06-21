@@ -4,7 +4,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import { Home } from "./pages/home"
 import { PageNotFound } from "./pages/404";
-import "./styles/tailwind.css";
 
 const App: FC = () => (
   <BrowserRouter>
