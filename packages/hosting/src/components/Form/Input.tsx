@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { FC } from "react"
-import { useFormContext } from "react-hook-form"
+import { RegisterOptions, useFormContext } from "react-hook-form"
 
 import { classNames } from "../../utils/classNames"
 import { ExclamationCircle } from "../Icons"
@@ -8,7 +8,7 @@ import { ExclamationCircle } from "../Icons"
 interface IProps extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
   id: string;
   label: string;
-  validation?: any;
+  validation?: RegisterOptions;
   helperText?: string;
 }
 

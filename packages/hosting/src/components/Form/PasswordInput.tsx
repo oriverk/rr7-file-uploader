@@ -1,5 +1,5 @@
 import React, { FC, useState, useCallback } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { RegisterOptions, useFormContext } from 'react-hook-form';
 
 import { Visibility, VisibilityOff } from '../Icons';
 import { classNames } from "../../utils/classNames"
@@ -7,7 +7,7 @@ import { classNames } from "../../utils/classNames"
 interface IProps extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
   id: string;
   label: string;
-  validation: any;
+  validation: RegisterOptions;
   helperText?: string;
 }
 
