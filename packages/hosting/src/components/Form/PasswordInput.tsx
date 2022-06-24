@@ -1,15 +1,9 @@
-import React, { FC, useState, useCallback } from 'react';
-import { RegisterOptions, useFormContext } from 'react-hook-form';
+import { FC, useState, useCallback } from 'react';
+import { useFormContext } from 'react-hook-form';
+import clsx from "clsx"
+import { EyeIcon, EyeOffIcon } from "@heroicons/react/outline"
 
-import { Visibility, VisibilityOff } from '../Icons';
-import { classNames } from "../../utils/classNames"
-
-interface IProps extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
-  id: string;
-  label: string;
-  validation: RegisterOptions;
-  helperText?: string;
-}
+import type { IProps } from './Input'
 
 export const PasswordInput: FC<IProps> = (props) => {
   const {
@@ -17,8 +11,8 @@ export const PasswordInput: FC<IProps> = (props) => {
     placeholder = '',
     helperText = '',
     id,
-    disabled = false,
-    readOnly = false,
+    disabled,
+    readOnly,
     validation,
     ...rest
   } = props
@@ -37,8 +31,7 @@ export const PasswordInput: FC<IProps> = (props) => {
   } else {
     stateClass = "focus:ring-primary-500 border-gray-300 focus:border-primary-500"
   }
-
-  const className = classNames(stateClass, "block w-full rounded-md shadow-sm")
+  const className = clsx(stateClass, "block w-full rounded-md shadow-sm")
 
   return (
     <div>
@@ -60,21 +53,22 @@ export const PasswordInput: FC<IProps> = (props) => {
         />
 
         <button
-          type="button"
-          onClick={togglePassword}
+          onClick={(e) => {
+            e.preventDefault();
+            togglePassword();
+          }}
+          type='button'
           className='absolute inset-y-0 right-0 flex items-center p-1 mr-3 rounded-lg focus:outline-none focus:ring focus:ring-primary-500'
         >
           {showPassword ? (
-            <VisibilityOff className='cursor-pointer w-6 h-6' />
+            <EyeOffIcon className='h-6 w-6 text-gray-500 cursor-pointer hover:text-gray-600' />
           ) : (
-            <Visibility className='cursor-pointer w-6 h-6' />
+            <EyeIcon className='h-6 w-6 text-gray-500 cursor-pointer hover:text-gray-600' />
           )}
         </button>
       </div>
       <div className='mt-1'>
-        {helperText !== '' && (
-          <p className='text-xs text-gray-500'>{helperText}</p>
-        )}
+        {helperText && <p className='text-xs text-gray-500'>{helperText}</p>}
         {errors[id] && (
           <span className='text-sm text-red-500'>{errors[id].message}</span>
         )}

@@ -8,7 +8,7 @@ import { ExclamationCircle } from "../Icons"
 interface IProps extends React.DetailedHTMLProps<React.TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement> {
   id: string;
   label: string;
-  validation: RegisterOptions;
+  validation?: RegisterOptions;
   helperText?: string;
 }
 
