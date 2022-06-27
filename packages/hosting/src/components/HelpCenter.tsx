@@ -20,12 +20,13 @@ export const HelpCenter: FC = () => (
         a real written text.
       </p>
 
-      <div className="mt-auto">
+      <div className="mt-auto mx-auto sm:ml-0">
         <a
-          href="#"
+          href="https://twitter.com/IXAnary"
+          target="_blank" rel="noreferrer noopener"
           className="inline-block bg-white hover:bg-gray-100 active:bg-gray-200 focus-visible:ring ring-indigo-300 text-gray-800 text-sm md:text-base font-semibold text-center rounded-lg outline-none transition duration-100 px-8 py-3"
         >
-          Contact support
+          Contact support (Twitter@IXAnary)
         </a>
       </div>
     </div>
