@@ -19,6 +19,8 @@
     "@tailwindcss/forms": "^0.5.2",
     "clsx": "^1.1.1",
     "firebase": "^9.8.3",
+    "micromark": "^3.0.10",
+    "micromark-extension-gfm": "^2.0.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-dropzone": "^14.2.1",
