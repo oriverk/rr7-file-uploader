@@ -6,10 +6,8 @@ import { Footer } from './Footer'
 
 export const Layout: FC = () => (
   <>
-    <div className="bg-white pb-6 sm:pb-8 lg:pb-12">
-      <div className="max-w-screen-2xl px-4 md:px-8 mx-auto">
-        <Header />
-      </div>
+    <div className="bg-white max-w-screen-2xl px-4 md:px-8 mx-auto">
+      <Header />
     </div>
     <Outlet />
     <Footer />

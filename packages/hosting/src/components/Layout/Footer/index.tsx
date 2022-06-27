@@ -37,7 +37,7 @@ export const Footer: FC = () => (
           </div>
           <div>
             <div className="text-gray-800 font-bold tracking-widest mb-4">
-              戦国Ixanary
+              IXAnary
             </div>
             <nav className="flex flex-col gap-4">
               <div>
@@ -64,7 +64,7 @@ export const Footer: FC = () => (
           </div>
           <div>
             <div className="text-gray-800 font-bold tracking-widest mb-4">
-              戦国IXA
+              Platforms
             </div>
             <nav className="flex flex-col gap-4">
               <div>
@@ -101,7 +101,7 @@ export const Footer: FC = () => (
           </div>
           <div>
             <div className="text-gray-800 font-bold tracking-widest mb-4">
-              その他
+              Links
             </div>
             <nav className="flex flex-col gap-4">
               <div>
@@ -132,20 +132,20 @@ export const Footer: FC = () => (
             </div>
             <nav className="flex flex-col gap-4">
               <div>
-                <Link  href="#">
-                  Terms of Service
+                <Link href="/terms">
+                  利用規約
                 </Link>
               </div>
               <div>
-                <Link href="#">
-                  Privacy Policy
+                <Link href="/privacy">
+                  プライバシーポリシー
                 </Link>
               </div>
-              <div>
+              {/* <div>
                 <Link href="#">
                   Cookie settings
                 </Link>
-              </div>
+              </div> */}
             </nav>
           </div>
         </div>
