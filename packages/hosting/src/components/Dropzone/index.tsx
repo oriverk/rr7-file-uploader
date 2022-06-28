@@ -1,6 +1,6 @@
 
 import clsx from 'clsx';
-import { FC, MouseEvent, useCallback, useEffect, useState } from 'react';
+import { FC, MouseEvent, useCallback, useState } from 'react';
 import { RegisterOptions, Controller, useFormContext, } from 'react-hook-form';
 import { Accept, FileRejection, useDropzone } from 'react-dropzone';
 
@@ -51,7 +51,7 @@ export const DropzoneInput: FC<DropzoneInputProps> = (props) => {
       } else {
         const acceptedFilesPreview = acceptedFiles.map(
           (file: File) => Object.assign(file, {
-              preview: URL.createObjectURL(file),
+            preview: URL.createObjectURL(file),
           })
         );
 
@@ -76,11 +76,11 @@ export const DropzoneInput: FC<DropzoneInputProps> = (props) => {
     [clearErrors, files, id, maxFiles, setError, setValue]
   );
 
-  useEffect(() => {
-    files.forEach((file) => URL.revokeObjectURL(file.preview));
-  },
-    [files]
-  );
+  // useEffect(() => {
+  //   files.forEach((file) => URL.revokeObjectURL(file.preview));
+  // },
+  //   [files]
+  // );
 
   const deleteFile = (e: MouseEvent, file: FileWithPreview) => {
     e.preventDefault();
