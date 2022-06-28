@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { FC, ReactNode } from "react";
 import { NavLink } from "react-router-dom"
-import { Hamburger, Twitter } from "../Icons";
+import { MenuAlt1Icon } from '@heroicons/react/outline'
 
 interface IHeaderNavLink {
   children: ReactNode;
@@ -58,9 +58,9 @@ export const Header: FC = () => (
         type="button"
         className="inline-flex items-center lg:hidden bg-gray-200 hover:bg-gray-300 focus-visible:ring ring-indigo-300 text-gray-500 active:text-gray-700 text-sm md:text-base font-semibold rounded-lg gap-2 px-2.5 py-2"
       >
-        <Hamburger className="h-6 w-6" />
+        <MenuAlt1Icon className="h-5 w-5" />
         Menu
       </button>
     </div>
   </header>
-  )
+)

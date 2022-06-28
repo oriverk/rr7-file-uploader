@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { FC } from "react"
 import { RegisterOptions, useFormContext } from "react-hook-form"
+import { ExclamationCircleIcon } from '@heroicons/react/outline'
 
 import { classNames } from "../../utils/classNames"
-import { ExclamationCircle } from "../Icons"
 
 interface IProps extends React.DetailedHTMLProps<React.TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement> {
   id: string;
@@ -55,7 +55,7 @@ export const TextArea: FC<IProps> = (props) => {
         />
         {errors[id] && (
           <div className='absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none'>
-            <ExclamationCircle className='text-xl text-red-500' />
+            <ExclamationCircleIcon className='w-6 h-6 text-red-500' />
           </div>
         )}
       </div>
