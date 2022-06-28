@@ -4,8 +4,10 @@ import { Markdown } from '../components/Markdown'
 
 import markdown from "../docs/privacy-policy.md?raw"
 
-export const PrivacyPolicy: FC = () => (
+const PrivacyPolicy: FC = () => (
   <Container>
     <Markdown markdown={markdown} />
   </Container>
 )
+
+export default PrivacyPolicy

@@ -40,7 +40,7 @@ const CardContent: FC<ICardContent> = (props) => {
   )
 }
 
-export const Blog: FC = () => (
+const Blog: FC = () => (
   <Container>
     <div className="max-w-screen-2xl px-4 md:px-8 mx-auto">
       <div className="mb-10 md:mb-16">
@@ -89,3 +89,5 @@ export const Blog: FC = () => (
     </div>
   </Container>
 )
+
+export default Blog

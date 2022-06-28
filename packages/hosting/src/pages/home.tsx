@@ -5,7 +5,7 @@ import { HelpCenter } from "../components/HelpCenter";
 import { OurTeam } from "../components/OurTeam";
 import { Gallery } from "../components/Gallery";
 
-export const Home: FC = () => (
+const Home: FC = () => (
   <>
     <Container>
       <Hero />
@@ -21,3 +21,5 @@ export const Home: FC = () => (
     </Container>
   </>
 );
+
+export default Home

@@ -3,7 +3,7 @@ import { FC } from 'react'
 
 import { Container } from '../components/Container'
 
-export const Pricing: FC = () => (
+const Pricing: FC = () => (
   <Container>
     <div className="max-w-screen-xl px-4 md:px-8 mx-auto">
       <h2 className="text-gray-800 text-2xl lg:text-3xl font-bold text-center mb-4 md:mb-8 xl:mb-12">Pick your plan</h2>
@@ -153,3 +153,5 @@ export const Pricing: FC = () => (
     </div>
   </Container>
 )
+
+export default Pricing
