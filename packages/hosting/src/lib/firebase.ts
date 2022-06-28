@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, browserSessionPersistence, GoogleAuthProvider } from "firebase/auth"
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from 'firebase/storage'
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_APP_KEY,
@@ -16,6 +17,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app)
+const storage = getStorage(app)
 const analytics = getAnalytics(app);
 const provider = new GoogleAuthProvider();
 
@@ -26,4 +28,4 @@ if (persisit) {
   getAuth().setPersistence(browserSessionPersistence);
 }
 
-export { auth, provider, db, analytics }
+export { auth, provider, db, storage, analytics }
