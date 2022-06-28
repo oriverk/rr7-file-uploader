@@ -4,6 +4,8 @@
 interface ImportMetaEnv {
   // cloudinary
   readonly VITE_CLOUDINARY_NAME: string;
+  // admin
+  readonly VITE_VALID_EMAIL_ADRESS: string;
   // firebase
   readonly VITE_FIREBASE_APP_KEY: string;
   readonly VITE_FIREBASE_AUTH_DOMAIN: string;
