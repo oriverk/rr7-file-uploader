@@ -6,7 +6,7 @@ interface Props {
   className?: string;
 }
 export const ImageLightbox: FC<Props> = (props) => {
-  const { src, alt, ...rest } = props
+  const { src, alt, ...rest } = props;
   // const [index, setIndex] = useState(0);
   // const [isOpen, setIsOpen] = useState(false);
 
@@ -19,7 +19,7 @@ export const ImageLightbox: FC<Props> = (props) => {
         onClick={() => setIsOpen(true)}
         className='focus:outline-none'
       > */}
-        <img src={src} alt={alt} {...rest} />
+      <img src={src} alt={alt} {...rest} />
       {/* </button> */}
       {/* {isOpen && (
         <Lightbox
@@ -39,4 +39,4 @@ export const ImageLightbox: FC<Props> = (props) => {
       )} */}
     </>
   );
-}
+};

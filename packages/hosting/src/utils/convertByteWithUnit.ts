@@ -3,18 +3,18 @@
  * @param size
  * @return
  */
-function getTarget (size: number) {
-  const kb = 1024
-  const mb = kb**2
-  const gb = kb**3
-  const tb = kb**4
+function getTarget(size: number) {
+  const kb = 1024;
+  const mb = kb ** 2;
+  const gb = kb ** 3;
+  const tb = kb ** 4;
 
-  if (size >= tb) return { target: tb, unit: 'TB' }
-  if (size >= gb) return { target: gb, unit: 'GB' }
-  if (size >= mb) return { target: mb, unit: 'MB' }
-  if (size >= kb) return { target: kb, unit: 'KB' }
+  if (size >= tb) return { target: tb, unit: "TB" };
+  if (size >= gb) return { target: gb, unit: "GB" };
+  if (size >= mb) return { target: mb, unit: "MB" };
+  if (size >= kb) return { target: kb, unit: "KB" };
 
-  return { target: null, unit: 'byte' }
+  return { target: null, unit: "byte" };
 }
 
 /**
@@ -24,11 +24,10 @@ function getTarget (size: number) {
  * @return
  */
 export function convertByteWithUnit(size: number, decimal = 2) {
-  const { target, unit } = getTarget(size)
-  const d = 10**decimal
+  const { target, unit } = getTarget(size);
+  const d = 10 ** decimal;
 
-  const newSize = target !== null ? Math.floor((size / target) * d) / d : size
+  const newSize = target !== null ? Math.floor((size / target) * d) / d : size;
 
-  return newSize + unit
+  return newSize + unit;
 }
-

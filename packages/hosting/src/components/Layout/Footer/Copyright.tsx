@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC } from "react";
 
 export const CopyRight: FC = () => {
   const thisYear: number = new Date().getFullYear();
@@ -9,5 +9,5 @@ export const CopyRight: FC = () => {
       <p>記載されている会社名・製品名・システム名などは、各社の商標、または登録商標です。</p>
       <p>Copyright © 2010-{thisYear} SQUARE ENIX CO., LTD. All Rights Reserved.</p>
     </div>
-  )
-}
+  );
+};

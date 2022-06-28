@@ -1,29 +1,33 @@
-import { FC } from 'react'
-import { collection, DocumentData, FirestoreDataConverter, QueryDocumentSnapshot, SnapshotOptions, WithFieldValue } from 'firebase/firestore'
-import { useCollectionData } from "react-firebase-hooks/firestore"
-import { CloudDownloadIcon } from '@heroicons/react/outline'
+import { FC } from "react";
+import {
+  collection,
+  DocumentData,
+  FirestoreDataConverter,
+  QueryDocumentSnapshot,
+  SnapshotOptions,
+  WithFieldValue,
+} from "firebase/firestore";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import { CloudDownloadIcon } from "@heroicons/react/outline";
 
-import type { IData } from './fileDetail'
-import { db } from '../lib/firebase'
-import { dateString } from "../utils/dateString"
-import { convertByteWithUnit } from '../utils/convertByteWithUnit'
-import { Container } from '../components/Container'
+import type { IData } from "./fileDetail";
+import { db } from "../lib/firebase";
+import { dateString } from "../utils/dateString";
+import { convertByteWithUnit } from "../utils/convertByteWithUnit";
+import { Container } from "../components/Container";
 
 interface IListData extends IData {
   id: string;
 }
 
-const StyledTr: FC<Omit<IListData, 'description'>> = (props) => {
-  const { id, name, path, createdAt, updatedAt, size, downloaded = 0 } = props
-  const sizeString = convertByteWithUnit(size)
-  
+const StyledTr: FC<Omit<IListData, "description">> = (props) => {
+  const { id, name, createdAt, updatedAt, size, downloaded = 0 } = props;
+  const sizeString = convertByteWithUnit(size);
+
   return (
     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
       <th scope="row" className="px-6 py-4">
-        <a
-          href={`/files/${id}`}
-          className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-        >
+        <a href={`/files/${id}`} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
           {name}
         </a>
       </th>
@@ -33,27 +37,22 @@ const StyledTr: FC<Omit<IListData, 'description'>> = (props) => {
         </time>
       </td>
       <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
-        <div title={`${size}byte`}>
-          {sizeString}
-        </div>
+        <div title={`${size}byte`}>{sizeString}</div>
       </td>
       <td className="px-6 py-4 text-center font-medium text-gray-900 dark:text-white whitespace-nowrap">
         {downloaded}
       </td>
     </tr>
-  )
-}
+  );
+};
 
 const converter: FirestoreDataConverter<IListData> = {
   toFirestore(post: WithFieldValue<IData>): DocumentData {
-    return post
+    return post;
   },
-  fromFirestore(
-    snapshot: QueryDocumentSnapshot,
-    options: SnapshotOptions
-  ): IListData {
+  fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): IListData {
     const data = snapshot.data(options);
-    const { name, path, description, contentType, size, downloaded, createdAt, updatedAt } = data
+    const { name, path, description, contentType, size, downloaded, createdAt, updatedAt } = data;
     return {
       id: snapshot.id,
       name,
@@ -69,15 +68,15 @@ const converter: FirestoreDataConverter<IListData> = {
 };
 
 const Files: FC = () => {
-  const collectionRef = collection(db, "files").withConverter(converter)
-  const [value, loading, error] = useCollectionData(collectionRef,)
-  
+  const collectionRef = collection(db, "files").withConverter(converter);
+  const [value, loading, error] = useCollectionData(collectionRef);
+
   if (error) {
     return (
       <Container>
         <strong>Error: {JSON.stringify(error)}</strong>
       </Container>
-    )
+    );
   }
 
   if (loading) {
@@ -85,7 +84,7 @@ const Files: FC = () => {
       <Container>
         <strong>Collection: Loading...</strong>
       </Container>
-    )
+    );
   }
 
   return (
@@ -105,23 +104,32 @@ const Files: FC = () => {
                   サイズ
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  <CloudDownloadIcon className='h-5 w-5 mx-auto text-gray-700 dark:text-gray-400 uppercase pointer-events-none' />
+                  <CloudDownloadIcon className="h-5 w-5 mx-auto text-gray-700 dark:text-gray-400 uppercase pointer-events-none" />
                 </th>
               </tr>
             </thead>
             <tbody>
               {value?.map((file) => {
-                const { id, name, path, contentType, size, createdAt, updatedAt } = file
+                const { id, name, path, contentType, size, createdAt, updatedAt } = file;
                 return (
-                  <StyledTr id={id} name={name} path={path} contentType={contentType} size={size} createdAt={createdAt} updatedAt={updatedAt} key={file.toString()} />
-                )
+                  <StyledTr
+                    id={id}
+                    name={name}
+                    path={path}
+                    contentType={contentType}
+                    size={size}
+                    createdAt={createdAt}
+                    updatedAt={updatedAt}
+                    key={file.toString()}
+                  />
+                );
               })}
             </tbody>
           </table>
         </div>
       </div>
     </Container>
-  )
-}
+  );
+};
 
-export default Files
+export default Files;

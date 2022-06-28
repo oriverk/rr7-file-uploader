@@ -21,13 +21,13 @@ export interface FirestoreType {
   type: string;
   downloaded: number;
   deleted: Date | null;
-  createdAt: Date
+  createdAt: Date;
 }
 
 export interface FormData {
   name: string;
   description?: string;
-  file: FileWithPreview[]
+  file: FileWithPreview[];
   password: string;
   downloaded: number;
   createdAt: Date;

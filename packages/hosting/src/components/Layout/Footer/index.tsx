@@ -7,17 +7,18 @@ import { SocialLinks } from "./SocialLinks";
 type LinkProps = {
   children: ReactNode;
   href: string;
-  isExternal?: boolean
-}
-const Link: FC<LinkProps> = ({children, href, isExternal = false}) => (
+  isExternal?: boolean;
+};
+const Link: FC<LinkProps> = ({ children, href, isExternal = false }) => (
   <a
     href={href}
-    target={isExternal ? "_black" : "_self"} rel={isExternal ? "noopener noreferrer" : ""}
+    target={isExternal ? "_black" : "_self"}
+    rel={isExternal ? "noopener noreferrer" : ""}
     className="text-gray-500 hover:text-indigo-500 active:text-indigo-600 transition duration-100"
   >
     {children}
   </a>
-)
+);
 
 export const Footer: FC = () => (
   <footer className="bg-white">
@@ -36,9 +37,7 @@ export const Footer: FC = () => (
             <SocialLinks />
           </div>
           <div>
-            <div className="text-gray-800 font-bold tracking-widest mb-4">
-              IXAnary
-            </div>
+            <div className="text-gray-800 font-bold tracking-widest mb-4">IXAnary</div>
             <nav className="flex flex-col gap-4">
               <div>
                 <Link href="https://ixanary.com/" isExternal>
@@ -63,9 +62,7 @@ export const Footer: FC = () => (
             </nav>
           </div>
           <div>
-            <div className="text-gray-800 font-bold tracking-widest mb-4">
-              Platforms
-            </div>
+            <div className="text-gray-800 font-bold tracking-widest mb-4">Platforms</div>
             <nav className="flex flex-col gap-4">
               <div>
                 <Link href="https://sengokuixa.jp/" isExternal>
@@ -100,9 +97,7 @@ export const Footer: FC = () => (
             </nav>
           </div>
           <div>
-            <div className="text-gray-800 font-bold tracking-widest mb-4">
-              Links
-            </div>
+            <div className="text-gray-800 font-bold tracking-widest mb-4">Links</div>
             <nav className="flex flex-col gap-4">
               <div>
                 <Link href="https://world.sengokuixa.jp/help/ixa_help.php?ch=1&s=23" isExternal>
@@ -127,19 +122,13 @@ export const Footer: FC = () => (
             </nav>
           </div>
           <div>
-            <div className="text-gray-800 font-bold tracking-widest mb-4">
-              Legal
-            </div>
+            <div className="text-gray-800 font-bold tracking-widest mb-4">Legal</div>
             <nav className="flex flex-col gap-4">
               <div>
-                <Link href="/terms">
-                  利用規約
-                </Link>
+                <Link href="/terms">利用規約</Link>
               </div>
               <div>
-                <Link href="/privacy">
-                  プライバシーポリシー
-                </Link>
+                <Link href="/privacy">プライバシーポリシー</Link>
               </div>
               {/* <div>
                 <Link href="#">

@@ -1,13 +1,20 @@
-import { FC } from 'react'
-import { useParams, Link } from 'react-router-dom'
-import { doc, DocumentData, FirestoreDataConverter, QueryDocumentSnapshot, SnapshotOptions, WithFieldValue } from 'firebase/firestore'
-import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { FC } from "react";
+import { useParams, Link } from "react-router-dom";
+import {
+  doc,
+  DocumentData,
+  FirestoreDataConverter,
+  QueryDocumentSnapshot,
+  SnapshotOptions,
+  WithFieldValue,
+} from "firebase/firestore";
+import { useDocumentData } from "react-firebase-hooks/firestore";
 
-import { db } from '../lib/firebase'
-import { dateString } from "../utils/dateString"
-import { Container } from '../components/Container'
-import { convertByteWithUnit } from "../utils/convertByteWithUnit"
-import { Markdown } from '../components/Markdown';
+import { db } from "../lib/firebase";
+import { dateString } from "../utils/dateString";
+import { Container } from "../components/Container";
+import { convertByteWithUnit } from "../utils/convertByteWithUnit";
+import { Markdown } from "../components/Markdown";
 
 export interface IData {
   name: string;
@@ -23,14 +30,11 @@ export interface IData {
 
 const converter: FirestoreDataConverter<IData> = {
   toFirestore(post: WithFieldValue<IData>): DocumentData {
-    return post
+    return post;
   },
-  fromFirestore(
-    snapshot: QueryDocumentSnapshot,
-    options: SnapshotOptions
-  ): IData {
+  fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): IData {
     const data = snapshot.data(options);
-    const { name, path, fullPath, description, contentType, size, downloaded, createdAt, updatedAt } = data
+    const { name, path, fullPath, description, contentType, size, downloaded, createdAt, updatedAt } = data;
     return {
       name,
       path,
@@ -47,31 +51,29 @@ const converter: FirestoreDataConverter<IData> = {
 
 const FileDetail: FC = () => {
   const { fileId } = useParams() as {
-    fileId: string
-  }
+    fileId: string;
+  };
 
-  const docRef = doc(db, "files", fileId).withConverter(converter)
-  const [value, loading, error] = useDocumentData(docRef)
+  const docRef = doc(db, "files", fileId).withConverter(converter);
+  const [value, loading, error] = useDocumentData(docRef);
 
   if (error || loading) {
     return (
       <Container>
         <div className="mt-8 mx-auto max-w-5xl">
-          {error && (<strong>Error: {JSON.stringify(error)}</strong>)}
-          {loading && (<span>Document: Loading...</span>)} 
+          {error && <strong>Error: {JSON.stringify(error)}</strong>}
+          {loading && <span>Document: Loading...</span>}
         </div>
       </Container>
-    )
+    );
   }
 
-  const { name, path, description, contentType, size, downloaded, createdAt, updatedAt } = value as IData
+  const { name, path, description, contentType, size, downloaded, createdAt, updatedAt } = value as IData;
 
   return (
     <Container>
       <div className="max-x-5xl text-center">
-        <h2 className="text-2xl">
-          {name}
-        </h2>
+        <h2 className="text-2xl">{name}</h2>
       </div>
       <div className="mt-8 mx-auto max-w-5xl">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -91,17 +93,13 @@ const FileDetail: FC = () => {
                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                   ファイル
                 </th>
-                <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
-                  {name}
-                </td>
+                <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">{name}</td>
               </tr>
               <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                   種類
                 </th>
-                <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
-                  {contentType}
-                </td>
+                <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">{contentType}</td>
               </tr>
               <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
@@ -125,9 +123,7 @@ const FileDetail: FC = () => {
                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                   ダウンロード
                 </th>
-                <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
-                  {downloaded}
-                </td>
+                <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">{downloaded}</td>
               </tr>
             </tbody>
           </table>
@@ -142,14 +138,15 @@ const FileDetail: FC = () => {
         {/* <p className="mb-4">
           利用規約に同意した上で、{name} のダウンロードを続けるには「ダウンロード」ボタンを押下してください。ダウンロードが開始されます。
         </p> */}
-        <Link to={`download?name=${name}&q=${path}&d=${Date.now()}`}
+        <Link
+          to={`download?name=${name}&q=${path}&d=${Date.now()}`}
           className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
           次へ進む
         </Link>
       </div>
     </Container>
-  ) 
-}
+  );
+};
 
-export default FileDetail
+export default FileDetail;

@@ -1,11 +1,10 @@
+import clsx from "clsx";
+import { FC, MouseEvent, useCallback, useState } from "react";
+import { RegisterOptions, Controller, useFormContext } from "react-hook-form";
+import { Accept, FileRejection, useDropzone } from "react-dropzone";
 
-import clsx from 'clsx';
-import { FC, MouseEvent, useCallback, useState } from 'react';
-import { RegisterOptions, Controller, useFormContext, } from 'react-hook-form';
-import { Accept, FileRejection, useDropzone } from 'react-dropzone';
-
-import { FilePreview } from './FilePreview';
-import { File, FileWithPreview } from "../../types/firestore"
+import { FilePreview } from "./FilePreview";
+import { File, FileWithPreview } from "../../types/firestore";
 
 type DropzoneInputProps = {
   accept?: Accept;
@@ -18,25 +17,10 @@ type DropzoneInputProps = {
 };
 
 export const DropzoneInput: FC<DropzoneInputProps> = (props) => {
-  const {
-    accept,
-    helperText = '',
-    id,
-    label,
-    maxFiles = 1,
-    validation,
-    readOnly,
-  } = props;
-  const {
-    control,
-    getValues,
-    setValue,
-    setError,
-    clearErrors,
-    formState,
-  } = useFormContext();
+  const { accept, helperText = "", id, label, maxFiles = 1, validation, readOnly } = props;
+  const { control, getValues, setValue, setError, clearErrors, formState } = useFormContext();
 
-  const { errors } = formState
+  const { errors } = formState;
 
   const [files, setFiles] = useState<FileWithPreview[]>(getValues(id) || []);
 
@@ -45,31 +29,21 @@ export const DropzoneInput: FC<DropzoneInputProps> = (props) => {
       if (rejectedFiles && rejectedFiles.length > 0) {
         setValue(id, files ? [...files] : null);
         setError(id, {
-          type: 'manual',
+          type: "manual",
           message: rejectedFiles && rejectedFiles[0].errors[0].message,
         });
       } else {
-        const acceptedFilesPreview = acceptedFiles.map(
-          (file: File) => Object.assign(file, {
+        const acceptedFilesPreview = acceptedFiles.map((file: File) =>
+          Object.assign(file, {
             preview: URL.createObjectURL(file),
           })
         );
 
-        setFiles(
-          files
-            ? [...files, ...acceptedFilesPreview].slice(0, maxFiles)
-            : acceptedFilesPreview
-        );
+        setFiles(files ? [...files, ...acceptedFilesPreview].slice(0, maxFiles) : acceptedFilesPreview);
 
-        setValue(
-          id,
-          files
-            ? [...files, ...acceptedFiles].slice(0, maxFiles)
-            : acceptedFiles,
-          {
-            shouldValidate: true,
-          }
-        );
+        setValue(id, files ? [...files, ...acceptedFiles].slice(0, maxFiles) : acceptedFiles, {
+          shouldValidate: true,
+        });
         clearErrors(id);
       }
     },
@@ -115,19 +89,19 @@ export const DropzoneInput: FC<DropzoneInputProps> = (props) => {
   if (readOnly && !(files?.length > 0)) {
     return (
       <div>
-        <label className='block text-sm font-normal text-gray-700' htmlFor={id}>
+        <label className="block text-sm font-normal text-gray-700" htmlFor={id}>
           {label}
         </label>
-        <div className='py-3 pl-3 pr-4 text-sm border border-gray-300 divide-y divide-gray-300 rounded-md'>
+        <div className="py-3 pl-3 pr-4 text-sm border border-gray-300 divide-y divide-gray-300 rounded-md">
           No file uploaded
         </div>
       </div>
-    )
+    );
   }
 
   return (
     <div>
-      <label className='block text-sm font-normal text-gray-700' htmlFor={id}>
+      <label className="block text-sm font-normal text-gray-700" htmlFor={id}>
         {label}
       </label>
       <Controller
@@ -138,47 +112,32 @@ export const DropzoneInput: FC<DropzoneInputProps> = (props) => {
           <>
             {files.length === maxFiles ? null : (
               <div
-                className='mt-1 focus:outline-none focus:ring-dark-400 group'
+                className="mt-1 focus:outline-none focus:ring-dark-400 group"
                 {...getRootProps()}
                 {...controllerProps}
               >
                 <input {...getInputProps()} />
                 <div
                   className={clsx(
-                    'w-full p-2 bg-gray-100 border border-gray-300 border-dashed rounded cursor-pointer',
-                    errors[id]
-                      ? 'border-red-500 group-focus:border-red-500'
-                      : 'group-focus:border-primary-500'
+                    "w-full p-2 bg-gray-100 border border-gray-300 border-dashed rounded cursor-pointer",
+                    errors[id] ? "border-red-500 group-focus:border-red-500" : "group-focus:border-primary-500"
                   )}
                 >
-                  <div className='my-20 space-y-2 text-center'>
-                    <p className='text-gray-500'>
-                      Drag &apos;n&apos; drop some files here, or click to
-                      select files
-                    </p>
-                    <p className='text-xs text-gray-500'>{`${maxFiles - (files?.length || 0)
-                      } file(s) remaining`}</p>
+                  <div className="my-20 space-y-2 text-center">
+                    <p className="text-gray-500">Drag &apos;n&apos; drop some files here, or click to select files</p>
+                    <p className="text-xs text-gray-500">{`${maxFiles - (files?.length || 0)} file(s) remaining`}</p>
                   </div>
                 </div>
               </div>
             )}
-            <div className='mt-1'>
-              {helperText !== '' && (
-                <p className='text-xs text-gray-500'>{helperText}</p>
-              )}
-              {errors[id] && (
-                <p className='text-sm text-red-500'>{errors[id].message}</p>
-              )}
+            <div className="mt-1">
+              {helperText !== "" && <p className="text-xs text-gray-500">{helperText}</p>}
+              {errors[id] && <p className="text-sm text-red-500">{errors[id].message}</p>}
             </div>
             {!readOnly && !!files?.length && (
-              <ul className='mt-1 border border-gray-300 divide-y divide-gray-300 rounded-md'>
+              <ul className="mt-1 border border-gray-300 divide-y divide-gray-300 rounded-md">
                 {files.map((file) => (
-                  <FilePreview
-                    key={file.toString()}
-                    readOnly={readOnly}
-                    file={file}
-                    deleteFile={deleteFile}
-                  />
+                  <FilePreview key={file.toString()} readOnly={readOnly} file={file} deleteFile={deleteFile} />
                 ))}
               </ul>
             )}
@@ -187,4 +146,4 @@ export const DropzoneInput: FC<DropzoneInputProps> = (props) => {
       />
     </div>
   );
-}
+};

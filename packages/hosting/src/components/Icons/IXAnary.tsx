@@ -1,7 +1,7 @@
-import { FC } from "react"
+import { FC } from "react";
 
 interface Props {
-  className?: string
+  className?: string;
 }
 
 // https://danmarshall.github.io/google-font-to-svg-path/
@@ -10,12 +10,7 @@ export const IXAnary: FC<Props> = (props) => {
   const { className } = props;
 
   return (
-    <svg
-      className={className}
-      viewBox="0 0 629.2 107.5"
-      fill="currentColor"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 629.2 107.5" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="gradient">
           <stop offset="20%" stopColor="#a3620c" />

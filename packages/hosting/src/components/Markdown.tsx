@@ -1,13 +1,13 @@
-import { FC } from 'react'
-import { micromark } from 'micromark'
-import { gfm, gfmHtml } from 'micromark-extension-gfm'
+import { FC } from "react";
+import { micromark } from "micromark";
+import { gfm, gfmHtml } from "micromark-extension-gfm";
 
 function parseMarkdown(markdown: string) {
   const result = micromark(markdown, {
     extensions: [gfm()],
-    htmlExtensions: [gfmHtml()]
-  })
-  return result
+    htmlExtensions: [gfmHtml()],
+  });
+  return result;
 }
 
 export const Markdown: FC<{ markdown: string }> = (props) => {
@@ -20,5 +20,5 @@ export const Markdown: FC<{ markdown: string }> = (props) => {
       // eslint-disable-next-line react/no-danger
       dangerouslySetInnerHTML={{ __html: html }}
     />
-  )
-}
+  );
+};

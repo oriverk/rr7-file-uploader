@@ -1,48 +1,42 @@
-import { FC, useState, useCallback } from 'react';
-import { useFormContext } from 'react-hook-form';
-import clsx from "clsx"
-import { EyeIcon, EyeOffIcon } from "@heroicons/react/outline"
+import { FC, useState, useCallback } from "react";
+import { useFormContext } from "react-hook-form";
+import clsx from "clsx";
+import { EyeIcon, EyeOffIcon } from "@heroicons/react/outline";
 
-import type { IProps } from './Input'
+import type { IProps } from "./Input";
 
 export const PasswordInput: FC<IProps> = (props) => {
-  const {
-    label,
-    placeholder = '',
-    helperText = '',
-    id,
-    disabled,
-    readOnly,
-    validation,
-    ...rest
-  } = props
+  const { label, placeholder = "", helperText = "", id, disabled, readOnly, validation, ...rest } = props;
 
-  const { register, formState: { errors } } = useFormContext();
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
   const [showPassword, setShowPassword] = useState(false);
   const togglePassword = useCallback(() => {
-    setShowPassword(prev => !prev)
-  }, [])
+    setShowPassword((prev) => !prev);
+  }, []);
 
   let stateClass;
   if (readOnly || disabled) {
-    stateClass = "bg-gray-100 focus:ring-0 cursor-not-allowed border-gray-300 focus:border-gray-300"
+    stateClass = "bg-gray-100 focus:ring-0 cursor-not-allowed border-gray-300 focus:border-gray-300";
   } else if (errors[id]) {
-    stateClass = "focus:ring-red-500 border-red-500 focus:border-red-500"
+    stateClass = "focus:ring-red-500 border-red-500 focus:border-red-500";
   } else {
-    stateClass = "focus:ring-primary-500 border-gray-300 focus:border-primary-500"
+    stateClass = "focus:ring-primary-500 border-gray-300 focus:border-primary-500";
   }
-  const className = clsx(stateClass, "block w-full rounded-md shadow-sm")
+  const className = clsx(stateClass, "block w-full rounded-md shadow-sm");
 
   return (
     <div>
-      <label htmlFor={id} className='block text-sm font-normal text-gray-700'>
+      <label htmlFor={id} className="block text-sm font-normal text-gray-700">
         {label}
       </label>
-      <div className='relative mt-1'>
+      <div className="relative mt-1">
         <input
           {...register(id, validation)}
           {...rest}
-          type={showPassword ? 'text' : 'password'}
+          type={showPassword ? "text" : "password"}
           name={id}
           id={id}
           readOnly={readOnly}
@@ -57,22 +51,20 @@ export const PasswordInput: FC<IProps> = (props) => {
             e.preventDefault();
             togglePassword();
           }}
-          type='button'
-          className='absolute inset-y-0 right-0 flex items-center p-1 mr-3 rounded-lg focus:outline-none focus:ring focus:ring-primary-500'
+          type="button"
+          className="absolute inset-y-0 right-0 flex items-center p-1 mr-3 rounded-lg focus:outline-none focus:ring focus:ring-primary-500"
         >
           {showPassword ? (
-            <EyeOffIcon className='h-6 w-6 text-gray-500 cursor-pointer hover:text-gray-600' />
+            <EyeOffIcon className="h-6 w-6 text-gray-500 cursor-pointer hover:text-gray-600" />
           ) : (
-            <EyeIcon className='h-6 w-6 text-gray-500 cursor-pointer hover:text-gray-600' />
+            <EyeIcon className="h-6 w-6 text-gray-500 cursor-pointer hover:text-gray-600" />
           )}
         </button>
       </div>
-      <div className='mt-1'>
-        {helperText && <p className='text-xs text-gray-500'>{helperText}</p>}
-        {errors[id] && (
-          <span className='text-sm text-red-500'>{errors[id].message}</span>
-        )}
+      <div className="mt-1">
+        {helperText && <p className="text-xs text-gray-500">{helperText}</p>}
+        {errors[id] && <span className="text-sm text-red-500">{errors[id].message}</span>}
       </div>
     </div>
   );
-}
+};
