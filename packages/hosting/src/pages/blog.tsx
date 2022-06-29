@@ -42,8 +42,7 @@ const Blog: FC = () => (
       <div className="mb-10 md:mb-16">
         <h2 className="text-gray-800 text-2xl lg:text-3xl font-bold text-center mb-4 md:mb-6">Blog</h2>
         <p className="max-w-screen-md text-gray-500 md:text-lg text-center mx-auto">
-          This is a section of some simple filler text, also known as placeholder text. It shares some characteristics
-          of a real written text but is random or otherwise generated.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         </p>
       </div>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 xl:gap-8">
@@ -79,6 +78,9 @@ const Blog: FC = () => (
         </Link>
         <Link to="/terms">
           <CardContent dateString="2022-06-27" title="利用規約" />
+        </Link>
+        <Link to="lorem">
+          <CardContent dateString="2022-06-29" title="Lorem ipsum" />
         </Link>
       </div>
     </div>
