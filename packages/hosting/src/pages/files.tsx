@@ -69,7 +69,7 @@ const converter: FirestoreDataConverter<IListData> = {
 
 const Files: FC = () => {
   const collectionRef = collection(db, "files").withConverter(converter);
-  const [value, loading, error] = useCollectionData(collectionRef);
+  const [files, , error] = useCollectionData(collectionRef);
 
   if (error) {
     return (
@@ -79,38 +79,30 @@ const Files: FC = () => {
     );
   }
 
-  if (loading) {
-    return (
-      <Container>
-        <strong>Collection: Loading...</strong>
-      </Container>
-    );
-  }
-
   return (
     <Container>
       <div className="mt-8 mx-auto max-w-5xl">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+          <table className="table-auto w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="px-6 py-3" title="file">
                   ファイル
                 </th>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="px-6 py-3" title="updated at">
                   更新
                 </th>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="px-6 py-3" title="size">
                   サイズ
                 </th>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="px-6 py-3" title="download">
                   <CloudDownloadIcon className="h-5 w-5 mx-auto text-gray-700 dark:text-gray-400 uppercase pointer-events-none" />
                 </th>
               </tr>
             </thead>
             <tbody>
-              {value?.map((file) => {
-                const { id, name, path, contentType, size, createdAt, updatedAt } = file;
+              {files?.map((file) => {
+                const { id, name, path, contentType, size, downloaded, createdAt, updatedAt } = file;
                 return (
                   <StyledTr
                     id={id}
@@ -118,9 +110,10 @@ const Files: FC = () => {
                     path={path}
                     contentType={contentType}
                     size={size}
+                    downloaded={downloaded}
                     createdAt={createdAt}
                     updatedAt={updatedAt}
-                    key={file.toString()}
+                    key={path}
                   />
                 );
               })}

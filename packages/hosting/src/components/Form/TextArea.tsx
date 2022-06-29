@@ -2,8 +2,7 @@
 import React, { FC } from "react";
 import { RegisterOptions, useFormContext } from "react-hook-form";
 import { ExclamationCircleIcon } from "@heroicons/react/outline";
-
-import { classNames } from "../../utils/classNames";
+import clsx from "clsx";
 
 interface IProps
   extends React.DetailedHTMLProps<React.TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement> {
@@ -29,7 +28,7 @@ export const TextArea: FC<IProps> = (props) => {
   } else {
     stateClass = "focus:ring-primary-500 border-gray-300 focus:border-primary-500";
   }
-  const className = classNames(stateClass, "block w-full rounded-md shadow-sm");
+  const className = clsx(stateClass, "block w-full rounded-md shadow-sm");
 
   return (
     <div>
