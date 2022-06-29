@@ -5,21 +5,19 @@ export const HelpCenter: FC = () => (
   <div className="md:h-80 flex flex-col sm:flex-row bg-gray-200 rounded-lg overflow-hidden">
     <div className="w-full sm:w-1/2 lg:w-2/5 h-48 sm:h-auto order-first sm:order-none bg-gray-300">
       <img
-        src="https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?auto=format&q=75&fit=crop&w=1000"
+        src="./assets/image/sengoku-hasha.webp"
         loading="lazy"
-        alt="by Andras Vas"
+        alt="戦場を制覇し、戦国の覇者となれ！"
         className="w-full h-full object-cover object-center"
       />
     </div>
-
     <div className="w-full sm:w-1/2 lg:w-3/5 flex flex-col p-4 sm:p-8">
-      <h2 className="text-gray-800 text-xl md:text-2xl lg:text-4xl font-bold mb-4">Help center</h2>
-
+      <h2 className="text-gray-800 text-xl md:text-2xl lg:text-4xl font-bold mb-4">
+        Help center
+      </h2>
       <p className="max-w-md text-gray-600 mb-8">
-        This is a section of some simple filler text, also known as placeholder text. It shares some characteristics of
-        a real written text.
+        Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit
       </p>
-
       <div className="mt-auto mx-auto sm:ml-0">
         <a
           href="https://twitter.com/IXAnary"
