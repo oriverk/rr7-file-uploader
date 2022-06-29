@@ -32,7 +32,7 @@ export const Footer: FC = () => (
               </a>
             </div>
             <p className="text-gray-500 sm:pr-8 mb-6">
-              Filler text is dummy text which has no meaning however looks very similar to real text
+              Quo usque tandem abutere, Catilina, patientia nostra? Quam diu etiam furor iste tuus nos eludet?
             </p>
             <SocialLinks />
           </div>
