@@ -4,6 +4,7 @@ import { CheckIcon } from '@heroicons/react/outline'
 import { InformationCircleIcon } from '@heroicons/react/solid'
 
 import { Container } from "../components/Container";
+import { Seo } from "../components/Seo";
 
 const potato = "https://www.amazon.jp/hz/wishlist/ls/10OQ35MBI8WSF?ref_=wl_share"
 const buyMeCoffee = "https://www.buymeacoffee.com/ixanary"
@@ -21,6 +22,7 @@ const CheckList: FC<{ list: string[] }> = ({ list }) => (
 
 const Pricing: FC = () => (
   <Container>
+    <Seo pathname="/price" title="Price" description="Price" />
     <div className="max-w-screen-xl px-4 md:px-8 mx-auto">
       <h2 className="text-gray-800 text-2xl lg:text-3xl font-bold text-center mb-4 md:mb-8 xl:mb-12">Pick your plan</h2>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-6 lg:gap-x-8 gap-y-12 mb-6 md:mb-8">

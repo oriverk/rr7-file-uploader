@@ -10,6 +10,7 @@ const PrivacyPolicy = lazy(() => import("./pages/privacy-policy"));
 const Pricing = lazy(() => import("./pages/pricing"));
 const TermOfService = lazy(() => import("./pages/term-of-service"));
 const Blog = lazy(() => import("./pages/blog"));
+const Lorem = lazy(() => import("./pages/lorem"))
 
 const Admin = lazy(() => import("./pages/admin"));
 const Signup = lazy(() => import("./pages/signup"));
@@ -28,7 +29,10 @@ const App: FC = () => (
         <Route path="privacy" element={<PrivacyPolicy />} />
         <Route path="terms" element={<TermOfService />} />
         <Route path="price" element={<Pricing />} />
-        <Route path="blog" element={<Blog />} />
+        <Route path="blog">
+          <Route index element={<Blog />} />
+          <Route path="lorem" element={<Lorem />} />
+        </Route>
         <Route path="files">
           <Route index element={<Files />}/>
           <Route path=":fileId">
@@ -38,13 +42,13 @@ const App: FC = () => (
         </Route>
         <Route path="new" element={
           <RequiredAuth>
-              <NewFile />
+            <NewFile />
           </RequiredAuth>
         }/>
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
         <Route path="admin">
-          <Route index element={<Admin />} />
+          <Route index element={<RequiredAuth><Admin /></RequiredAuth>} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Route>

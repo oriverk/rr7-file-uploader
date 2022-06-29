@@ -9,6 +9,7 @@ import { auth } from "../lib/firebase";
 import { SignInWithEmailAndPasswordSchema } from "../lib/zod";
 import { Container } from "../components/Container";
 import { Input, PasswordInput, Button } from "../components/Form";
+import { Seo } from "../components/Seo";
 
 const validEmail = import.meta.env.VITE_VALID_EMAIL_ADRESS;
 
@@ -39,7 +40,10 @@ const Login: FC = () => {
   if (error || loading) {
     return (
       <Container>
-        <h2 className="text-gray-800 text-2xl lg:text-3xl font-bold text-center mb-4 md:mb-8">Login</h2>
+        <Seo noindex />
+        <h2 className="text-gray-800 text-2xl lg:text-3xl font-bold text-center mb-4 md:mb-8">
+          Login
+        </h2>
         <div className="p-4 md:p-8 mx-auto max-w-lg border rounded-lg text-center">
           {error && <strong className="text-red-500">{`Error: ${error}`}</strong>}
           {loading && <p>Loading...</p>}
@@ -50,8 +54,10 @@ const Login: FC = () => {
 
   return (
     <Container>
-      <h2 className="text-gray-800 text-2xl lg:text-3xl font-bold text-center mb-4 md:mb-8">Login</h2>
-
+      <Seo noindex />
+      <h2 className="text-gray-800 text-2xl lg:text-3xl font-bold text-center mb-4 md:mb-8">
+        Login
+      </h2>
       <FormProvider {...methos}>
         <form onSubmit={onSubmit} className="max-w-lg border rounded-lg mx-auto">
           <div className="flex flex-col gap-4 p-4 md:p-8">

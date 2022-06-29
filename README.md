@@ -39,6 +39,8 @@ gsutil cors get gs://<bucket_name>
 ### Env
 
 ```env
+VITE_SITE_PATH=https://.+
+
 # cloudinary
 VITE_CLOUDINARY_NAME=CLOUDINARY CLOUD NAME
 

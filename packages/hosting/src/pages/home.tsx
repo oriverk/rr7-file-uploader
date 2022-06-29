@@ -4,9 +4,11 @@ import { Hero } from "../components/Hero";
 import { HelpCenter } from "../components/HelpCenter";
 import { OurTeam } from "../components/OurTeam";
 import { Gallery } from "../components/Gallery";
+import { Seo } from "../components/Seo";
 
 const Home: FC = () => (
   <>
+    <Seo pathname="/" title="Top" description="" />
     <Container>
       <Hero />
     </Container>

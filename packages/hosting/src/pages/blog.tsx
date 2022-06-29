@@ -3,6 +3,7 @@ import { FC } from "react";
 import { Link } from "react-router-dom";
 
 import { Container } from "../components/Container";
+import { Seo } from "../components/Seo";
 import { useRandomHeroImage } from "../hooks/useRandomHeroImage";
 
 interface ICardContent {
@@ -38,6 +39,7 @@ const CardContent: FC<ICardContent> = (props) => {
 
 const Blog: FC = () => (
   <Container>
+    <Seo pathname="/blog" title="Blog" description="" />
     <div className="max-w-screen-2xl px-4 md:px-8 mx-auto">
       <div className="mb-10 md:mb-16">
         <h2 className="text-gray-800 text-2xl lg:text-3xl font-bold text-center mb-4 md:mb-6">Blog</h2>

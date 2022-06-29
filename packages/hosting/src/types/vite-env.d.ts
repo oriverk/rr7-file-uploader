@@ -2,6 +2,7 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
+  readonly VITE_SITE_PATH: string;
   // cloudinary
   readonly VITE_CLOUDINARY_NAME: string;
   // admin

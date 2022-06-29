@@ -15,6 +15,7 @@ import { dateString } from "../utils/dateString";
 import { Container } from "../components/Container";
 import { convertByteWithUnit } from "../utils/convertByteWithUnit";
 import { Markdown } from "../components/Markdown";
+import { Seo } from "../components/Seo";
 
 export interface IData {
   name: string;
@@ -71,6 +72,7 @@ const FileDetail: FC = () => {
 
   return (
     <Container>
+      <Seo pathname={`/files/${fileId}`} title={name} description={`Download ${name}`} />
       <div className="max-x-5xl text-center">
         <h2 className="text-2xl">{name}</h2>
       </div>

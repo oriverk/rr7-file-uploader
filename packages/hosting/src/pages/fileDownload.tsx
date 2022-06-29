@@ -7,6 +7,7 @@ import { useDocumentData } from "react-firebase-hooks/firestore";
 import { storage, db } from "../lib/firebase";
 import { Container } from "../components/Container";
 import { Button } from "../components/Form";
+import { Seo } from "../components/Seo";
 
 /**
  * @param time
@@ -66,6 +67,7 @@ const FileDownload: FC = () => {
 
     return (
       <Container>
+        <Seo noindex />
         <div className="mt-8 mx-auto max-w-5xl">
           <div className="grid grid-cols-1 gap-6">
             <div>
@@ -87,6 +89,7 @@ const FileDownload: FC = () => {
 
   return (
     <Container>
+      <Seo noindex />
       <div className="mt-8 mx-auto max-w-5xl">
         <div className="grid grid-cols-1 gap-6">
           <p className="mb-4">

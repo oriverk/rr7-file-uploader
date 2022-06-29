@@ -15,6 +15,7 @@ import { db } from "../lib/firebase";
 import { dateString } from "../utils/dateString";
 import { convertByteWithUnit } from "../utils/convertByteWithUnit";
 import { Container } from "../components/Container";
+import { Seo } from "../components/Seo";
 
 interface IListData extends IData {
   id: string;
@@ -74,6 +75,7 @@ const Files: FC = () => {
   if (error) {
     return (
       <Container>
+        <Seo pathname="/files" title="Files" description="list uploaded files" />
         <strong>Error: {JSON.stringify(error)}</strong>
       </Container>
     );
@@ -81,6 +83,7 @@ const Files: FC = () => {
 
   return (
     <Container>
+      <Seo pathname="/files" title="Files" />
       <div className="mt-8 mx-auto max-w-5xl">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table className="table-auto w-full text-sm text-left text-gray-500 dark:text-gray-400">

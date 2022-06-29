@@ -40,6 +40,10 @@ type ReturnType = {
   url: string;
 };
 
+/**
+ * @param chapter 章
+ * @returns "{name, url}"
+ */
 export function useRandomHeroImage(chapter: number) {
   const [image, setImage] = useState<ReturnType>({
     name: "",
