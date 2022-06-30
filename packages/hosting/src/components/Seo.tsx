@@ -2,6 +2,8 @@ import { FC } from "react";
 import { Helmet } from "react-helmet-async";
 import urlJoin from "url-join"
 
+import { AdSense } from "../components/AdSense"
+
 interface Props {
   pathname?: string;
   title?: string;
@@ -33,6 +35,7 @@ export const Seo: FC<Props> = (props) => {
       <meta property="og:type" content="article" />
       <meta property="og:site_name" content="👆 Uploader" />
       <meta name="robots" content={noindex ? "noindex,nofollow" : "all"} />
+      <AdSense />
     </Helmet>
   );
 };

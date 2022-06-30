@@ -44,6 +44,9 @@ VITE_SITE_PATH=https://.+
 # cloudinary
 VITE_CLOUDINARY_NAME=CLOUDINARY CLOUD NAME
 
+# Google AdSense
+VITE_PUBLISHER_ID=pub-\d+
+
 # admin
 VITE_VALID_EMAIL_ADRESS=example@gmail.com
 
