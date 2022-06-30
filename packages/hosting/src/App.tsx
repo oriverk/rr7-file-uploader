@@ -40,15 +40,11 @@ const App: FC = () => (
             <Route path="download" element={<FileDownload />}/>
           </Route>
         </Route>
-        <Route path="new" element={
-          <RequiredAuth>
-            <NewFile />
-          </RequiredAuth>
-        }/>
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
-        <Route path="admin">
-          <Route index element={<RequiredAuth><Admin /></RequiredAuth>} />
+        <Route path="admin" element={<RequiredAuth />}>
+          <Route index element={<Admin />} />
+          <Route path="new" element={<NewFile />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Route>

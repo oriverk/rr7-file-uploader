@@ -13,7 +13,7 @@ const FileSchema = z.object({
 
 export const CreateFormSchema = z.object({
   name: z.string().min(3),
-  description: z.string().max(140).nullable(),
+  description: z.string().max(500).nullable(),
   file: z.array(FileSchema),
   // password: z.string().max(20).nullable(),
   // downloaded: z.number().min(0),
