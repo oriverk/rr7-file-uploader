@@ -32,7 +32,7 @@
 ```
 
 ```sh
-gsutil cors set cors-json-file gs://<bucket_name>...
+gsutil cors set path-to-cors-json-file gs://<bucket_name>...
 gsutil cors get gs://<bucket_name>
 ```
 

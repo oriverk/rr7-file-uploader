@@ -1,21 +1,34 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { FC, ReactNode } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, NavLinkProps } from "react-router-dom";
+import urlJoin from "url-join";
 
-interface IHeaderNavLink {
+const IxanaryPath = import.meta.env.VITE_IXANARY_PATH
+
+interface IHeaderNavLink extends NavLinkProps {
   children: ReactNode;
   to: string;
   isExternal?: boolean;
 }
 const HeaderNavLink: FC<IHeaderNavLink> = (props) => {
   const { children, to, isExternal = false } = props;
+
+  if (isExternal) {
+    return (
+      <a
+        href={to}
+        target="_blank" rel="noopener noreferrer"
+        className="text-gray-600 hover:text-indigo-500 active:text-indigo-700 text-lg font-semibold transition duration-100"
+      >
+        {children}
+      </a>
+    )
+  }
   const active = (isActive: boolean) => (isActive ? "text-indigo-500" : "text-gray-600");
 
   return (
     <NavLink
       to={to}
-      target={isExternal ? "_blank" : "_self"}
-      rel={isExternal ? "noopener noreferrer" : ""}
       className={({ isActive }) =>
         `${active(isActive)} hover:text-indigo-500 active:text-indigo-700 text-lg font-semibold transition duration-100`
       }
@@ -34,10 +47,14 @@ export const Header: FC = () => (
       👆&nbsp;Uploader
     </NavLink>
     <nav className="flex gap-12">
-      <HeaderNavLink to="">Home</HeaderNavLink>
+      <HeaderNavLink to={IxanaryPath} isExternal>
+        戦国IXAnary
+      </HeaderNavLink>
       <HeaderNavLink to="files">Files</HeaderNavLink>
       <HeaderNavLink to="price">Pricing</HeaderNavLink>
-      <HeaderNavLink to="blog">Blog</HeaderNavLink>
+      <HeaderNavLink to={urlJoin(IxanaryPath, "entry")} isExternal>
+        Blog
+      </HeaderNavLink>
     </nav>
   </header>
 );

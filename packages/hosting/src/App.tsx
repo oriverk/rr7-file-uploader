@@ -6,11 +6,10 @@ import { Layout } from "./components/Layout";
 import { PageNotFound } from "./pages/404";
 
 const Home = lazy(() => import("./pages/home"));
+const Lorem = lazy(() => import("./pages/lorem"))
 const PrivacyPolicy = lazy(() => import("./pages/privacy-policy"));
 const Pricing = lazy(() => import("./pages/pricing"));
 const TermOfService = lazy(() => import("./pages/term-of-service"));
-const Blog = lazy(() => import("./pages/blog"));
-const Lorem = lazy(() => import("./pages/lorem"))
 
 const Admin = lazy(() => import("./pages/admin"));
 const Signup = lazy(() => import("./pages/signup"));
@@ -26,13 +25,10 @@ const App: FC = () => (
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
+        <Route path="lorem" element={<Lorem />} />
         <Route path="privacy" element={<PrivacyPolicy />} />
         <Route path="terms" element={<TermOfService />} />
         <Route path="price" element={<Pricing />} />
-        <Route path="blog">
-          <Route index element={<Blog />} />
-          <Route path="lorem" element={<Lorem />} />
-        </Route>
         <Route path="files">
           <Route index element={<Files />}/>
           <Route path=":fileId">

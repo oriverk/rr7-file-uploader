@@ -7,7 +7,6 @@
 
 - [Googleアナリティクスサービス利用規約](https://marketingplatform.google.com/about/analytics/terms/jp/)
 
-
 ## 広告の配信について
 
 ### Google AdSense の利用について

@@ -1,24 +1,45 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { FC, ReactNode } from "react";
-import { IXAnary } from "../../Icons/IXAnary";
+import type { FC, ReactNode } from "react";
+import { Link } from "react-router-dom"
+import { ExternalLinkIcon } from "@heroicons/react/outline";
+import clsx from "clsx";
+import urlJoin from 'url-join';
+import { IXAnary } from "../../Icons";
 import { CopyRight } from "./Copyright";
 import { SocialLinks } from "./SocialLinks";
 
-type LinkProps = {
+type StyledLinkProps = {
   children: ReactNode;
   href: string;
   isExternal?: boolean;
 };
-const Link: FC<LinkProps> = ({ children, href, isExternal = false }) => (
-  <a
-    href={href}
-    target={isExternal ? "_black" : "_self"}
-    rel={isExternal ? "noopener noreferrer" : ""}
-    className="text-gray-500 hover:text-indigo-500 active:text-indigo-600 transition duration-100"
-  >
-    {children}
-  </a>
-);
+
+const StyledLink: FC<StyledLinkProps> = (props) => {
+  const { children, href, isExternal = false } = props;
+  const className = "text-gray-500 hover:text-indigo-500 active:text-indigo-600 transition duration-100"
+
+  if (!isExternal) {
+    return (
+      <Link to={href} className={className}>
+        {children}
+      </Link>
+    )
+  }
+
+  return (
+    <a
+      href={href}
+      target="_black"
+      rel="noopener noreferrer"
+      className={clsx(className, "flex items-center")}
+    >
+      {children}
+      <ExternalLinkIcon className="ml-1 h-4 w-4" />
+    </a>
+  );
+}
+
+const ixanaryPath = import.meta.env.VITE_IXANARY_PATH
 
 export const Footer: FC = () => (
   <footer className="bg-white">
@@ -27,7 +48,12 @@ export const Footer: FC = () => (
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-12 lg:gap-8 mb-16">
           <div className="col-span-full lg:col-span-2">
             <div className="lg:-mt-2 mb-4">
-              <a href="/" className="" aria-label="logo">
+              <a
+                href="/"
+                className="flex items-center gap-2.5 text-2xl"
+                aria-label="logo"
+              >
+                <span>⚔</span>
                 <IXAnary className="w-30 h-8" />
               </a>
             </div>
@@ -40,24 +66,24 @@ export const Footer: FC = () => (
             <div className="text-gray-800 font-bold tracking-widest mb-4">IXAnary</div>
             <nav className="flex flex-col gap-4">
               <div>
-                <Link href="https://ixanary.com/" isExternal>
+                <StyledLink href={ixanaryPath} isExternal>
                   トップ
-                </Link>
+                </StyledLink>
               </div>
               <div>
-                <Link href="https://ixanary.com/tools/gousei-sozai-kensaku/" isExternal>
+                <StyledLink href={urlJoin(ixanaryPath, "tools/gousei-sozai-kensaku")} isExternal>
                   追加合成素材検索
-                </Link>
+                </StyledLink>
               </div>
               <div>
-                <Link href="https://ixanary.com/entry/" isExternal>
+                <StyledLink href={urlJoin(ixanaryPath, "entry")} isExternal>
                   投稿一覧
-                </Link>
+                </StyledLink>
               </div>
               <div>
-                <Link href="https://ixanary.com/albums/" isExternal>
+                <StyledLink href={urlJoin(ixanaryPath, "albums")} isExternal>
                   カードアルバム
-                </Link>
+                </StyledLink>
               </div>
             </nav>
           </div>
@@ -65,34 +91,34 @@ export const Footer: FC = () => (
             <div className="text-gray-800 font-bold tracking-widest mb-4">Platforms</div>
             <nav className="flex flex-col gap-4">
               <div>
-                <Link href="https://sengokuixa.jp/" isExternal>
+                <StyledLink href="https://sengokuixa.jp/" isExternal>
                   Yahoo!ゲーム
-                </Link>
+                </StyledLink>
               </div>
               <div>
-                <Link href="https://d.sengokuixa.jp/top" isExternal>
+                <StyledLink href="https://d.sengokuixa.jp/top" isExternal>
                   DMM GAMES
-                </Link>
+                </StyledLink>
               </div>
               <div>
-                <Link href="https://m.sengokuixa.jp/top" isExternal>
+                <StyledLink href="https://m.sengokuixa.jp/top" isExternal>
                   mixiゲーム
-                </Link>
+                </StyledLink>
               </div>
               <div>
-                <Link href="https://g.sengokuixa.jp/top" isExternal>
+                <StyledLink href="https://g.sengokuixa.jp/top" isExternal>
                   my GAMECITY
-                </Link>
+                </StyledLink>
               </div>
               <div>
-                <Link href="http://sengokuixa.hange.jp/" isExternal>
+                <StyledLink href="http://sengokuixa.hange.jp/" isExternal>
                   hange
-                </Link>
+                </StyledLink>
               </div>
               <div>
-                <Link href="https://gesoten.com/games/genre/battle-simulation/IXA" isExternal>
+                <StyledLink href="https://gesoten.com/games/genre/battle-simulation/IXA" isExternal>
                   ゲソてん
-                </Link>
+                </StyledLink>
               </div>
             </nav>
           </div>
@@ -100,24 +126,24 @@ export const Footer: FC = () => (
             <div className="text-gray-800 font-bold tracking-widest mb-4">Links</div>
             <nav className="flex flex-col gap-4">
               <div>
-                <Link href="https://world.sengokuixa.jp/help/ixa_help.php?ch=1&s=23" isExternal>
+                <StyledLink href="https://world.sengokuixa.jp/help/ixa_help.php?ch=1&s=23" isExternal>
                   戦国IXA ヘルプ
-                </Link>
+                </StyledLink>
               </div>
               <div>
-                <Link href="https://twitter.com/noroshi_ixa" isExternal>
-                  戦国IXA応援のろし
-                </Link>
+                <StyledLink href="https://twitter.com/noroshi_ixa" isExternal>
+                  応援のろし
+                </StyledLink>
               </div>
               <div>
-                <Link href="https://twitter.com/IxaPr" isExternal>
+                <StyledLink href="https://twitter.com/IxaPr" isExternal>
                   戦国IXA_PR
-                </Link>
+                </StyledLink>
               </div>
               <div>
-                <Link href="http://www.ixawiki.com/index.php?FrontPage" isExternal>
+                <StyledLink href="http://www.ixawiki.com/index.php?FrontPage" isExternal>
                   戦国IXA wiki
-                </Link>
+                </StyledLink>
               </div>
             </nav>
           </div>
@@ -125,10 +151,13 @@ export const Footer: FC = () => (
             <div className="text-gray-800 font-bold tracking-widest mb-4">Legal</div>
             <nav className="flex flex-col gap-4">
               <div>
-                <Link href="/terms">利用規約</Link>
+                <StyledLink href="/lorem">lorem ipsum</StyledLink>
               </div>
               <div>
-                <Link href="/privacy">プライバシーポリシー</Link>
+                <StyledLink href="/terms">利用規約</StyledLink>
+              </div>
+              <div>
+                <StyledLink href="/privacy">プライバシーポリシー</StyledLink>
               </div>
               {/* <div>
                 <Link href="#">

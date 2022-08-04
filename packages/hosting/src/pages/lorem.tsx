@@ -5,11 +5,15 @@ import { Seo } from "../components/Seo";
 
 import markdown from "../docs/lorem.md?raw";
 
-const Lorem: FC = () => (
+const TermOfService: FC = () => (
   <Container>
-    <Seo pathname="/blog/lorem" title="Lorem Ipsum" description="Maior cognataque pronos tantummodo effluat" />
+    <Seo
+      pathname="/lorem"
+      title="lorem ipsum"
+      description="In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content."
+    />
     <Markdown markdown={markdown} />
   </Container>
 );
 
-export default Lorem;
+export default TermOfService;

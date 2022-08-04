@@ -8,7 +8,7 @@ export const GameStart: FC = () => {
   const startImgUrl = getCloudinaryImage(`ixanary/game-start.webp`);
   return (
     // eslint-disable-next-line react/style-prop-object
-    <div className="relative group" style={{ width: "238px", height: "248px" }}>
+    <div className="relative group h-[248px] w-[238px]">
       <a
         href="https://sengokuixa.jp/"
         title="Yahoo! JAPAN IDをお持ちでない方もこちら　登録は5秒でOK！　ゲームスタート"
@@ -19,7 +19,7 @@ export const GameStart: FC = () => {
           src={startImgUrl}
           alt="Yahoo! JAPAN IDをお持ちでない方もこちら　登録は5秒でOK！　ゲームスタート"
           loading="lazy"
-          className="w-full h-full object-cover object-top absolute inset-0 group-hover:object-bottom"
+          className="absolute inset-0 h-full w-full object-cover object-top group-hover:object-bottom"
         />
       </a>
     </div>
@@ -30,15 +30,17 @@ export const Hero: FC = () => {
   const { name, url } = useRandomHeroImage(23);
 
   return (
-    <section className="min-h-[calc(100vh-4rem)] flex justify-center items-center flex-1 shrink-0 bg-gray-100 overflow-hidden shadow-lg rounded relative py-16 md:py-20 xl:py-48">
-      <img
-        src={url}
-        loading="lazy"
-        alt={name}
-        className="w-full h-full object-cover object-left-top absolute inset-0"
-      />
-      <div className="bg-gray-200 mix-blend-multiply absolute inset-0" />
-      <div className="p-4 absolute bottom-2 md:bottom-12 md:right-16">
+    <section className="relative flex min-h-[calc(100vh-4rem)] flex-1 shrink-0 items-center justify-center overflow-hidden rounded bg-gray-100 py-16 shadow-lg md:py-20 xl:py-48">
+      <picture>
+        <img
+          src={url}
+          loading="lazy"
+          alt={name}
+          className="absolute inset-0 h-full w-full object-cover object-left-top"
+        />
+      </picture>
+      <div className="absolute inset-0 bg-gray-200 mix-blend-multiply" />
+      <div className="absolute bottom-2 p-4 md:bottom-12 md:right-16">
         <GameStart />
       </div>
     </section>

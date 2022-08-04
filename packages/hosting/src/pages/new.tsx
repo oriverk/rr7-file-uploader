@@ -66,6 +66,7 @@ const NewFile: FC = () => {
           updatedAt: serverTimestamp(),
           downloaded: 0,
         });
+        console.log('docref', docRef)
         navigate(`/files/${docRef.id}`);
       }
     );

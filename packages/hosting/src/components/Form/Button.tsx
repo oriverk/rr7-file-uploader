@@ -6,7 +6,7 @@ interface IProps extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 export const Button: FC<IProps> = (props) => {
-  const { children, className = "", type = "button", onClick, ...rest } = props;
+  const { children, className, type = "button", onClick, ...rest } = props;
 
   return (
     <button

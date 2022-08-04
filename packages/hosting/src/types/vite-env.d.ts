@@ -3,6 +3,7 @@
 
 interface ImportMetaEnv {
   readonly VITE_SITE_PATH: string;
+  readonly VITE_IXANARY_PATH: string;
   readonly VITE_PUBLISHER_ID: string;
   // cloudinary
   readonly VITE_CLOUDINARY_NAME: string;
