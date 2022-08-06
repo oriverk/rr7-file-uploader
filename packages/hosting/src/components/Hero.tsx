@@ -7,7 +7,6 @@ import { useRandomHeroImage } from "../hooks/useRandomHeroImage";
 export const GameStart: FC = () => {
   const startImgUrl = getCloudinaryImage(`ixanary/game-start.webp`);
   return (
-    // eslint-disable-next-line react/style-prop-object
     <div className="relative group h-[248px] w-[238px]">
       <a
         href="https://sengokuixa.jp/"
@@ -27,7 +26,7 @@ export const GameStart: FC = () => {
 };
 
 export const Hero: FC = () => {
-  const { name, url } = useRandomHeroImage(23);
+  const { name, url } = useRandomHeroImage(24);
 
   return (
     <section className="relative flex min-h-[calc(100vh-4rem)] flex-1 shrink-0 items-center justify-center overflow-hidden rounded bg-gray-100 py-16 shadow-lg md:py-20 xl:py-48">

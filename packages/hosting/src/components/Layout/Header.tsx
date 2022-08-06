@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import { FC, ReactNode } from "react";
 import { NavLink, NavLinkProps } from "react-router-dom";
 import urlJoin from "url-join";
@@ -48,7 +47,7 @@ export const Header: FC = () => (
     </NavLink>
     <nav className="flex gap-12">
       <HeaderNavLink to={IxanaryPath} isExternal>
-        戦国IXAnary
+        IXAnary
       </HeaderNavLink>
       <HeaderNavLink to="files">Files</HeaderNavLink>
       <HeaderNavLink to="price">Pricing</HeaderNavLink>

@@ -31,27 +31,32 @@ const FileDownload: FC = () => {
   const [dbValue] = useDocumentData(firestoreRef)
   const paramsNow = searchParams.get("t");
   const isOld = checkTimestampAge(parseInt(paramsNow!, 10), 1000 * 60 * 60 * 2)
+  const [isConfirmed, setIsConfirmed] = useState(false);
 
-  async function getFileBlob(storageFilePath: string) {
+  async function setFileBlob(storageFilePath: string) {
     const storageRef = ref(storage, storageFilePath);
     const blob = await getBlob(storageRef)
     setObjectUrl(URL.createObjectURL(blob))
   }
 
-  async function updateFileDownloadNum() {
-    await updateDoc(firestoreRef, {
-      downloaded: dbValue!.downloaded + 1
-    })
-  }
-
   useEffect(() => {
     if (isOld || !dbValue) return;
     setSaveName(dbValue.name)
-    getFileBlob(`files/${dbValue.path}`)
+    setFileBlob(`files/${dbValue.path}`)
   }, [dbValue])
 
+  const handleConfirm = useCallback(() => {
+    setIsConfirmed(prev => !prev)
+  }, [isConfirmed])
+
   const handleDownload = useCallback(() => {
-    if (!dbValue || !objectUrl) return;
+    if (!dbValue) return;
+
+    async function updateFileDownloadNum() {
+      await updateDoc(firestoreRef, {
+        downloaded: dbValue!.downloaded + 1
+      })
+    }
     updateFileDownloadNum()
   },[dbValue])
 
@@ -92,17 +97,29 @@ const FileDownload: FC = () => {
       <Seo noindex />
       <div className="mt-8 mx-auto max-w-5xl">
         <div className="grid grid-cols-1 gap-6">
-          <p className="mb-4">
+          <div className="mb-4 text-lg">
+            {saveName} のダウンロードを続けるには
             <Link
               to="/terms"
               target="_blank" rel="noopener noreferrer"
-              className="text-indigo-500 hover:text-indigo-600 active:text-indigo-700 transition duration-100"
+              className="mx-4 text-indigo-500 hover:text-red-600 underline underline-offset-4 active:text-red-700 transition duration-100"
             >
               利用規約
             </Link>
-            に同意した上で、{saveName} のダウンロードを続けるには「ダウンロード」ボタンを押下してください。ダウンロードが開始されます。
-          </p>
-          {objectUrl ? (
+            に同意した上で「ダウンロード」ボタンを押下してください。ダウンロードが開始されます。
+          </div>
+          <div className="mb-4">
+            <label className="ml-2 flex justify-center items-center text-base font-medium text-gray-900 dark:text-gray-300">
+              <input
+                type="checkbox"
+                checked={isConfirmed}
+                onClick={handleConfirm}
+                className="w-4 h-4 mr-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+              />
+              利用規約に同意する
+            </label>
+          </div>
+          {isConfirmed && objectUrl ? (
             <a
               href={objectUrl}
               download={saveName}

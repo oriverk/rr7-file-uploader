@@ -16,6 +16,7 @@ import { dateString } from "../utils/dateString";
 import { convertByteWithUnit } from "../utils/convertByteWithUnit";
 import { Container } from "../components/Container";
 import { Seo } from "../components/Seo";
+import { AmazonAffiliateBanners } from "../components/Ads/AmazonAffiliate";
 
 interface IListData extends IData {
   id: string;
@@ -82,9 +83,12 @@ const Files: FC = () => {
   }
 
   return (
-    <Container>
+    <Container className="md:flex">
       <Seo pathname="/files" title="Files" />
-      <div className="mt-8 mx-auto max-w-5xl">
+      <nav className="hidden md:flex flex-col max-w-xs w-full h-full overflow-y-auto ml-4">
+        <AmazonAffiliateBanners isKasane />
+      </nav>
+      <div className="grow mt-8 mx-auto max-w-5xl">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table className="dark table-auto w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">

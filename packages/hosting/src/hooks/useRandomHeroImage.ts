@@ -33,6 +33,9 @@ const Data: Record<string, string[]> = {
     "araki_murashige",
     "oda_nobunaga",
   ],
+  24: [
+    "hachisuka", "hori", "kato", "kunohe", "kuroda", "maeda", "saika", "sanada", "shibata", "shimazu", "takenaka", "toyotomi", "ukita"
+  ]
 };
 
 type ReturnType = {
@@ -54,7 +57,8 @@ export function useRandomHeroImage(chapter: number) {
     const images = Data[chapter];
     const random = Math.floor(Math.random() * images.length);
     const name = images[random];
-    const url = getCloudinaryImage(`ixanary/chapter${chapter}/${name}.webp`);
+    const ext = chapter < 24 ? "webp" : "jpg"
+    const url = getCloudinaryImage(`ixanary/chapter${chapter}/${name}.${ext}`);
     setImage((prev) => ({ ...prev, name, url }));
   }, [chapter]);
 
