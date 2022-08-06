@@ -30,4 +30,5 @@ rules: {
     1, 
     { "extensions": [".jsx", ".tsx"] }
   ],
+  'jsx-a11y/label-has-associated-control': 0
 }
