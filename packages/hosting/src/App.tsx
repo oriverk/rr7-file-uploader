@@ -21,31 +21,31 @@ const FileDetail = lazy(() => import("./pages/fileDetail"));
 const FileDownload = lazy(() => import("./pages/fileDownload"));
 
 const App: FC = () => (
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Home />} />
-        <Route path="lorem" element={<Lorem />} />
-        <Route path="privacy" element={<PrivacyPolicy />} />
-        <Route path="terms" element={<TermOfService />} />
-        <Route path="price" element={<Pricing />} />
-        <Route path="files">
-          <Route index element={<Files />}/>
-          <Route path=":fileId">
-            <Route index element={<FileDetail />}/>
-            <Route path="download" element={<FileDownload />}/>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="lorem" element={<Lorem />} />
+          <Route path="privacy" element={<PrivacyPolicy />} />
+          <Route path="terms" element={<TermOfService />} />
+          <Route path="price" element={<Pricing />} />
+          <Route path="files">
+            <Route index element={<Files />} />
+            <Route path=":fileId">
+              <Route index element={<FileDetail />} />
+              <Route path="download" element={<FileDownload />} />
+            </Route>
           </Route>
+          <Route path="login" element={<Login />} />
+          <Route path="signup" element={<Signup />} />
+          <Route path="admin" element={<RequiredAuth />}>
+            <Route index element={<Admin />} />
+            <Route path="new" element={<NewFile />} />
+          </Route>
+          <Route path="*" element={<PageNotFound />} />
         </Route>
-        <Route path="login" element={<Login />} />
-        <Route path="signup" element={<Signup />} />
-        <Route path="admin" element={<RequiredAuth />}>
-          <Route index element={<Admin />} />
-          <Route path="new" element={<NewFile />} />
-        </Route>
-        <Route path="*" element={<PageNotFound />} />
-      </Route>
-    </Routes>
-  </BrowserRouter>
-);
+      </Routes>
+    </BrowserRouter>
+  )
 
 export default App;
