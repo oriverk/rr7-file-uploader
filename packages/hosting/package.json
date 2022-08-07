@@ -14,6 +14,7 @@
     "deploy": "firebase deploy --only hosting"
   },
   "dependencies": {
+    "@headlessui/react": "^1.6.6",
     "@heroicons/react": "^1.0.6",
     "@hookform/resolvers": "^2.9.7",
     "@tailwindcss/forms": "^0.5.2",

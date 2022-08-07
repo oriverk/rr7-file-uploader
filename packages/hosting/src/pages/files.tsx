@@ -1,4 +1,6 @@
 import { FC } from "react";
+import { Link } from "react-router-dom";
+
 import {
   collection,
   DocumentData,
@@ -29,9 +31,9 @@ const StyledTr: FC<Omit<IListData, "description">> = (props) => {
   return (
     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
       <th scope="row" className="px-6 py-4">
-        <a href={`/files/${id}`} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+        <Link to={`/files/${id}`} className="font-medium text-blue-600 dark:text-blue-300 hover:underline">
           {name}
-        </a>
+        </Link>
       </th>
       <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
         <time dateTime={updatedAt} title={`作成：${createdAt}`}>
@@ -83,12 +85,10 @@ const Files: FC = () => {
   }
 
   return (
-    <Container className="md:flex">
+    <Container className="flex flex-col gap-8 sm:flex-row">
+      <AmazonAffiliateBanners isKasane />
       <Seo pathname="/files" title="Files" />
-      <nav className="hidden md:flex flex-col max-w-xs w-full h-full overflow-y-auto ml-4">
-        <AmazonAffiliateBanners isKasane />
-      </nav>
-      <div className="grow mt-8 mx-auto max-w-5xl">
+      <div className="w-full max-w-5xl">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table className="dark table-auto w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">

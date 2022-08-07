@@ -8,17 +8,9 @@ import { storage, db } from "../lib/firebase";
 import { Container } from "../components/Container";
 import { Button } from "../components/Form";
 import { Seo } from "../components/Seo";
-
-/**
- * @param time
- * @param threshold
- * 2days: 1000 * 60 * 60 * 24 * 2
- * @returns 
- */
-const checkTimestampAge = (time: number, threshold: number) => {
-  const gap = Date.now() - time
-  return Number.isNaN(gap) || gap > threshold;
-}
+import { DownloadModal } from "../components/DownloadModal";
+import { checkTimestampAge } from "../utils/checkTimestampAge";
+import { AmazonAffiliateBanners } from "../components/Ads/AmazonAffiliate";
 
 const FileDownload: FC = () => {
   const [objectUrl, setObjectUrl] = useState<string>()
@@ -32,6 +24,7 @@ const FileDownload: FC = () => {
   const paramsNow = searchParams.get("t");
   const isOld = checkTimestampAge(parseInt(paramsNow!, 10), 1000 * 60 * 60 * 2)
   const [isConfirmed, setIsConfirmed] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   async function setFileBlob(storageFilePath: string) {
     const storageRef = ref(storage, storageFilePath);
@@ -47,7 +40,7 @@ const FileDownload: FC = () => {
 
   const handleConfirm = useCallback(() => {
     setIsConfirmed(prev => !prev)
-  }, [isConfirmed])
+  }, [])
 
   const handleDownload = useCallback(() => {
     if (!dbValue) return;
@@ -58,7 +51,14 @@ const FileDownload: FC = () => {
       })
     }
     updateFileDownloadNum()
-  },[dbValue])
+    setIsOpen(true)
+  }, [dbValue])
+  
+  const handleCloseModal = useCallback(() => {
+    setIsConfirmed(false)
+    setObjectUrl("")
+    setIsOpen(false);
+  },[])
 
   if (isOld || !dbValue) {
     let errorText = ""
@@ -71,33 +71,37 @@ const FileDownload: FC = () => {
     }
 
     return (
-      <Container>
+      <Container className="flex flex-col gap-8 sm:flex-row">
         <Seo noindex />
-        <div className="mt-8 mx-auto max-w-5xl">
-          <div className="grid grid-cols-1 gap-6">
-            <div>
-              <strong className="mb-4 text-red-500">
-                {errorText}
-              </strong>
-            </div>
-            <Link
-              to="/files"
-              className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              ファイル一覧へ戻る
-            </Link>
-          </div>
+        <AmazonAffiliateBanners isKasane />
+        <div className="w-full max-w-5xl">
+          <h1 className="mb-8 text-xl text-center">
+            ダウンロード
+          </h1>
+          <p className="mb-8 text-lg text-center text-red-500 font-medium">
+            {errorText}
+          </p>
+          <Link
+            to="/files"
+            className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            ファイル一覧へ戻る
+          </Link>
         </div>
       </Container>
     );
   }
 
   return (
-    <Container>
+    <Container className="flex flex-col gap-8 sm:flex-row">
       <Seo noindex />
-      <div className="mt-8 mx-auto max-w-5xl">
-        <div className="grid grid-cols-1 gap-6">
-          <div className="mb-4 text-lg">
+      <AmazonAffiliateBanners isKasane />
+      <div className="mx-auto max-w-5xl">
+        <h1 className="mb-8 text-xl text-center">
+          ダウンロード
+        </h1>
+        <div className="flex flex-col gap-6">
+          <div className="mb-4 text-base sm:text-lg">
             {saveName} のダウンロードを続けるには
             <Link
               to="/terms"
@@ -113,7 +117,7 @@ const FileDownload: FC = () => {
               <input
                 type="checkbox"
                 checked={isConfirmed}
-                onClick={handleConfirm}
+                onChange={handleConfirm}
                 className="w-4 h-4 mr-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               />
               利用規約に同意する
@@ -135,6 +139,7 @@ const FileDownload: FC = () => {
           )}
         </div>
       </div>
+      <DownloadModal isOpen={isOpen} onClose={handleCloseModal} />
     </Container>
   );
 };

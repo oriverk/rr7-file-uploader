@@ -6,6 +6,7 @@ interface ImportMetaEnv {
   readonly VITE_IXANARY_PATH: string;
   readonly VITE_PUBLISHER_ID: string;
   readonly VITE_GA4_TRACKING_ID: string;
+  readonly VITE_AMAZON_WISHLIST: string;
   // cloudinary
   readonly VITE_CLOUDINARY_NAME: string;
   // admin

@@ -1,14 +1,15 @@
+/* eslint-disable arrow-body-style */
 // ASIN と Amazon API を使って出来るようにしたい。そのうち。
 import type { FC } from 'react';
-import { useMediaQuery } from 'react-responsive';
+// import { useMediaQuery } from 'react-responsive';
 
-const breakpoints = {
-  sm: '640px',
-  md: '768px',
-  lg: '1024px',
-  xl: '1280px',
-  '2xl': '1536px',
-};
+// const breakpoints = {
+//   sm: '640px',
+//   md: '768px',
+//   lg: '1024px',
+//   xl: '1280px',
+//   '2xl': '1536px',
+// };
 
 type Props = {
   title?: string;
@@ -45,8 +46,8 @@ export const AmazonAffiliateKasane: FC = () => (
 )
 
 export const AmazonAffiliateNityouhin: FC = () => {
-  const largerThanlg = useMediaQuery({ query: `(min-width: ${breakpoints.lg})` });
-  if (largerThanlg) {
+  // const largerThanlg = useMediaQuery({ query: `(min-width: ${breakpoints.lg})` });
+  // if (largerThanlg) {
     return (
       <iframe
       title="日用品"
@@ -57,39 +58,38 @@ export const AmazonAffiliateNityouhin: FC = () => {
       sandbox="allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation"
       />
     )
-  }
+  // }
 
-  return (
-    <iframe
-      title="日用品"
-      src="https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=21&l=ur1&category=consumables&banner=03RKAEY2YXPBTX9JE002&f=ifr&linkID=f8d44f2d0bcb13201cd9fca1ec679a52&t=ixanary-uploader-22&tracking_id=ixanary-uploader-22"
-      width="125" height="125" scrolling="no" frameBorder="0"
-      style={{ border: "none", margin: 0 }}
-      sandbox="allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation" />
-  )
+  // return (
+  //   <iframe
+  //     title="日用品"
+  //     src="https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=21&l=ur1&category=consumables&banner=03RKAEY2YXPBTX9JE002&f=ifr&linkID=f8d44f2d0bcb13201cd9fca1ec679a52&t=ixanary-uploader-22&tracking_id=ixanary-uploader-22"
+  //     width="125" height="125" scrolling="no" frameBorder="0"
+  //     style={{ border: "none", margin: 0 }}
+  //     sandbox="allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation" />
+  // )
 }
 
 export const AmazonAffiliateCharge: FC = () => {
-  const largerThanlg = useMediaQuery({ query: `(min-width: ${breakpoints.lg})` });
-  if (largerThanlg) {
-    return (
-      <iframe
-        title="charge"
-        src="https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=12&l=ur1&category=gift_certificates&banner=1TJ8XM5YGJR5WC15P202&f=ifr&linkID=6fd35f43024385a68a48038d7a80785d&t=ixanary-uploader-22&tracking_id=ixanary-uploader-22"
-        width="300" height="250" scrolling="no" frameBorder="0"
-        style={{ border: "none", margin: 0 }}
-        sandbox="allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation"
-      />
-    )
-  }
+  // const largerThanlg = useMediaQuery({ query: `(min-width: ${breakpoints.lg})` });
+  // const largerThanlg = true;
   return (
     <iframe
       title="charge"
-      src="https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=21&l=ur1&category=gift_certificates&banner=0K2839167Y2W14T3QWG2&f=ifr&linkID=bbcef82e2ac5069497a6b89468a26ce7&t=ixanary-uploader-22&tracking_id=ixanary-uploader-22"
-      width="125" height="125" scrolling="no" frameBorder="0"
+      src="https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=12&l=ur1&category=gift_certificates&banner=1TJ8XM5YGJR5WC15P202&f=ifr&linkID=6fd35f43024385a68a48038d7a80785d&t=ixanary-uploader-22&tracking_id=ixanary-uploader-22"
+      width="300" height="250" scrolling="no" frameBorder="0"
       style={{ border: "none", margin: 0 }}
-      sandbox="allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation" />
+      sandbox="allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation"
+    />
   )
+  // return (
+  //   <iframe
+  //     title="charge"
+  //     src="https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=21&l=ur1&category=gift_certificates&banner=0K2839167Y2W14T3QWG2&f=ifr&linkID=bbcef82e2ac5069497a6b89468a26ce7&t=ixanary-uploader-22&tracking_id=ixanary-uploader-22"
+  //     width="125" height="125" scrolling="no" frameBorder="0"
+  //     style={{ border: "none", margin: 0 }}
+  //     sandbox="allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation" />
+  // )
 }
 
 interface BannersProps {
