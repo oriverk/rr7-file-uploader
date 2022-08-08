@@ -8,6 +8,8 @@ import {
   QueryDocumentSnapshot,
   SnapshotOptions,
   WithFieldValue,
+  query,
+  where,
 } from "firebase/firestore";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { CloudDownloadIcon } from "@heroicons/react/outline";
@@ -18,13 +20,17 @@ import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
 import { Container } from "@/components/Container";
 import { Seo } from "@/components/Seo";
 import { AmazonAffiliateBanners } from "@/components/Ads/AmazonAffiliate";
-import type { IData } from "./fileDetail";
+import { FirestoreFileType } from "@/types/firestore";
 
-interface IListData extends IData {
+interface IProps extends Omit<FirestoreFileType, "createdAt" | "updatedAt"> {
   id: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-const StyledTr: FC<Omit<IListData, "description">> = (props) => {
+type TrProps = Omit<IProps, "description" | "fullPath" | "path">
+
+const StyledTr: FC<TrProps> = (props) => {
   const { id, name, createdAt, updatedAt, size, downloaded = 0 } = props;
   const sizeString = convertByteWithUnit(size);
 
@@ -50,32 +56,28 @@ const StyledTr: FC<Omit<IListData, "description">> = (props) => {
   );
 };
 
-const converter: FirestoreDataConverter<IListData> = {
-  toFirestore(post: WithFieldValue<IData>): DocumentData {
+const converter: FirestoreDataConverter<IProps> = {
+  toFirestore(post: WithFieldValue<IProps>): DocumentData {
     return post;
   },
-  fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): IListData {
+  fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions) {
     const data = snapshot.data(options);
-    const { name, path, description, contentType, size, downloaded, createdAt, updatedAt } = data;
+    const { createdAt, updatedAt, ...rest } = data as FirestoreFileType;
     return {
       id: snapshot.id,
-      name,
-      path,
-      description,
-      contentType,
-      size,
-      downloaded,
       updatedAt: dateString(updatedAt.toDate()),
       createdAt: dateString(createdAt.toDate()),
+      ...rest
     };
   },
 };
 
 const Files: FC = () => {
   const collectionRef = collection(db, "files").withConverter(converter);
-  const [files, , error] = useCollectionData(collectionRef);
+  const q = query(collectionRef, where("deletedAt", "==", null),)
+  const [files, , error] = useCollectionData(q);
 
-  if (error) {
+  if (!files?.length || error) {
     return (
       <Container>
         <Seo pathname="/files" title="Files" description="list uploaded files" />
@@ -83,6 +85,16 @@ const Files: FC = () => {
       </Container>
     );
   }
+
+  const sortedFiles = files.sort((a, b) => {
+    if (a.updatedAt < b.updatedAt) {
+      return 1
+    }
+    if (a.updatedAt > b.updatedAt) {
+      return -1
+    }
+    return 0
+  })
 
   return (
     <Container className="flex flex-col gap-8 sm:flex-row">
@@ -108,20 +120,10 @@ const Files: FC = () => {
               </tr>
             </thead>
             <tbody>
-              {files?.map((file) => {
-                const { id, name, path, contentType, size, downloaded, createdAt, updatedAt } = file;
+              {sortedFiles.map((file) => {
+                const { description, path, fullPath, ...rest } = file;
                 return (
-                  <StyledTr
-                    id={id}
-                    name={name}
-                    path={path}
-                    contentType={contentType}
-                    size={size}
-                    downloaded={downloaded}
-                    createdAt={createdAt}
-                    updatedAt={updatedAt}
-                    key={path}
-                  />
+                  <StyledTr key={path} {...rest} />
                 );
               })}
             </tbody>

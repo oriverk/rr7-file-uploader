@@ -17,36 +17,26 @@ import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
 import { Markdown } from "@/components/Markdown";
 import { Seo } from "@/components/Seo";
 import { AmazonAffiliateBanners } from "@/components/Ads/AmazonAffiliate";
+import type { FirestoreFileType } from "@/types/firestore";
 
-export interface IData {
-  name: string;
-  path: string;
-  fullPath?: string;
-  description: string;
-  contentType: string;
+interface IProps extends Omit<FirestoreFileType, "createdAt" | "updatedAt"> {
+  id: string;
   createdAt: string;
   updatedAt: string;
-  size: number;
-  downloaded?: number;
 }
 
-const converter: FirestoreDataConverter<IData> = {
-  toFirestore(post: WithFieldValue<IData>): DocumentData {
+const converter: FirestoreDataConverter<IProps> = {
+  toFirestore(post: WithFieldValue<IProps>): DocumentData {
     return post;
   },
-  fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): IData {
+  fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions) {
     const data = snapshot.data(options);
-    const { name, path, fullPath, description, contentType, size, downloaded, createdAt, updatedAt } = data;
+    const { createdAt, updatedAt, ...rest } = data as FirestoreFileType;
     return {
-      name,
-      path,
-      fullPath,
-      description,
-      contentType,
-      size,
-      downloaded,
+      id: snapshot.id,
       updatedAt: dateString(updatedAt.toDate()),
       createdAt: dateString(createdAt.toDate()),
+      ...rest
     };
   },
 };
@@ -69,8 +59,8 @@ const FileDetail: FC = () => {
     );
   }
 
-  const { name, description, contentType, size, downloaded, createdAt, updatedAt } = value as IData;
-
+  const { name, description, contentType, size, downloaded, createdAt, updatedAt } = value
+  
   return (
     <Container className="flex flex-col gap-8 sm:flex-row">
       <Seo pathname={`/files/${fileId}`} title={name} description={`Download ${name}`} />

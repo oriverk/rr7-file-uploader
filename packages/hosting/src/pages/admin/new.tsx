@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,18 +12,16 @@ import { storage, db } from "@/lib/firebase";
 import { Container } from "@/components/Container";
 import { TextArea, Button } from "@/components/Form";
 import { DropzoneInput } from "@/components/Dropzone";
-import { Seo } from "@/components/Seo";
 
 const NewFile: FC = () => {
   const navigate = useNavigate();
-  const [progress, setProgress] = useState(0);
+  // const [progress, setProgress] = useState(0);
   const methods = useForm<Pick<FormData, "name" | "description" | "file">>({
     resolver: zodResolver(CreateFormSchema),
     defaultValues: {
       name: "",
       file: [],
       description: "",
-      // password: ""
     },
   });
   const { handleSubmit, getValues, setValue } = methods;
@@ -46,14 +44,15 @@ const NewFile: FC = () => {
       "state_changed",
       (snapshot) => {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setProgress(progress);
+        // eslint-disable-next-line no-console
+        console.log('progress', progress)
       },
       (error) => {
         // eslint-disable-next-line no-alert
         alert(`Error: ${error}`);
       },
       async () => {
-        const { name,  } = getValues();
+        const { name } = getValues();
         const { metadata } = uploadTask.snapshot;
         const { name: uuidName, contentType, size, fullPath } = metadata;
         const docRef = await addDoc(collection(db, "files"), {
@@ -65,6 +64,7 @@ const NewFile: FC = () => {
           description,
           createdAt: serverTimestamp(),
           updatedAt: serverTimestamp(),
+          deletedAt: null,
           downloaded: 0,
         });
         navigate(`/files/${docRef.id}`);
@@ -74,7 +74,6 @@ const NewFile: FC = () => {
 
   return (
     <Container>
-      <Seo noindex />
       <div className="mb-4">
         <FormProvider {...methods}>
           <form onSubmit={onSubmit}>
@@ -88,7 +87,6 @@ const NewFile: FC = () => {
                   }}
                 />
                 <TextArea id="description" label="description" />
-                {/* <CheckBox id="deletedAt" label="delete" /> */}
                 <Button type="submit">submit</Button>
               </div>
             </div>
