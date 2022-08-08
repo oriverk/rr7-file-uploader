@@ -1,4 +1,4 @@
-// import { FileWithPath } from "react-dropzone"
+import type { Timestamp } from "firebase/firestore";
 
 export interface File extends Blob {
   readonly lastModified: number;
@@ -14,14 +14,17 @@ export interface FileWithPreview extends FileWithPath {
   preview: string;
 }
 
-export interface FirestoreType {
+export interface FirestoreFileType {
   name: string;
+  description: string;
   path: string;
+  fullPath: string;
   size: number;
-  type: string;
+  contentType: string;
   downloaded: number;
-  deleted: Date | null;
-  createdAt: Date;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+  deletedAt: Timestamp | null;
 }
 
 export interface FormData {
@@ -32,5 +35,5 @@ export interface FormData {
   downloaded: number;
   createdAt: Date;
   updatedAt: Date;
-  deletedAt: Date;
+  deleted: boolean;
 }
