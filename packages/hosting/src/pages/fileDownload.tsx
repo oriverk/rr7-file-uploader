@@ -4,13 +4,13 @@ import { doc, updateDoc } from "firebase/firestore"
 import { ref, getBlob } from "firebase/storage";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 
-import { storage, db } from "../lib/firebase";
-import { Container } from "../components/Container";
-import { Button } from "../components/Form";
-import { Seo } from "../components/Seo";
-import { DownloadModal } from "../components/DownloadModal";
-import { checkTimestampAge } from "../utils/checkTimestampAge";
-import { AmazonAffiliateBanners } from "../components/Ads/AmazonAffiliate";
+import { storage, db } from "@/lib/firebase";
+import { Container } from "@/components/Container";
+import { Button } from "@/components/Form";
+import { Seo } from "@/components/Seo";
+import { DownloadModal } from "@/components/DownloadModal";
+import { checkTimestampAge } from "@/utils/checkTimestampAge";
+import { AmazonAffiliateBanners } from "@/components/Ads/AmazonAffiliate";
 
 const FileDownload: FC = () => {
   const [objectUrl, setObjectUrl] = useState<string>()

@@ -6,12 +6,13 @@ import { ref, uploadBytesResumable } from "firebase/storage";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 
-import { FormData } from "../../types/firestore";
-import { CreateFormSchema } from "../../lib/zod";
-import { storage, db } from "../../lib/firebase";
-import { Container } from "../../components/Container";
-import { TextArea, Button } from "../../components/Form";
-import { DropzoneInput } from "../../components/Dropzone";
+import { FormData } from "@/types/firestore";
+import { CreateFormSchema } from "@/lib/zod";
+import { storage, db } from "@/lib/firebase";
+import { Container } from "@/components/Container";
+import { TextArea, Button } from "@/components/Form";
+import { DropzoneInput } from "@/components/Dropzone";
+import { Seo } from "@/components/Seo";
 
 const NewFile: FC = () => {
   const navigate = useNavigate();
@@ -73,6 +74,7 @@ const NewFile: FC = () => {
 
   return (
     <Container>
+      <Seo noindex />
       <div className="mb-4">
         <FormProvider {...methods}>
           <form onSubmit={onSubmit}>

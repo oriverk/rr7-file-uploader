@@ -1,9 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { FC, MouseEvent } from "react";
-
 import { PaperClipIcon, PhotographIcon, XIcon } from "@heroicons/react/outline";
 
-import { FileWithPreview } from "../../types/firestore";
+import type { FileWithPreview } from "@/types/firestore";
 
 type FilePreviewProps = {
   file: FileWithPreview;

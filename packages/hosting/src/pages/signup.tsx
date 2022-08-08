@@ -4,11 +4,11 @@ import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { auth } from "../lib/firebase";
-import { SignInWithEmailAndPasswordSchema } from "../lib/zod";
-import { Container } from "../components/Container";
-import { Input, PasswordInput, Button } from "../components/Form";
-import { Seo } from "../components/Seo";
+import { auth } from "@/lib/firebase";
+import { SignInWithEmailAndPasswordSchema } from "@/lib/zod";
+import { Container } from "@/components/Container";
+import { Input, PasswordInput, Button } from "@/components/Form";
+import { Seo } from "@/components/Seo";
 
 const validEmail = import.meta.env.VITE_VALID_EMAIL_ADRESS;
 

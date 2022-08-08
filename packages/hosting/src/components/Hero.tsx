@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { FC } from "react";
 
-import { getCloudinaryImage } from "../utils/getCloudinaryImage";
-import { useRandomHeroImage } from "../hooks/useRandomHeroImage";
+import { getCloudinaryImage } from "@/utils/getCloudinaryImage";
+import { useRandomHeroImage } from "@/hooks/useRandomHeroImage";
 
 export const GameStart: FC = () => {
   const startImgUrl = getCloudinaryImage(`ixanary/game-start.webp`);

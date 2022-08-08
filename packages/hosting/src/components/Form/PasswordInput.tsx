@@ -63,7 +63,11 @@ export const PasswordInput: FC<IProps> = (props) => {
       </div>
       <div className="mt-1">
         {helperText && <p className="text-xs text-gray-500">{helperText}</p>}
-        {errors[id] && <span className="text-sm text-red-500">{errors[id].message}</span>}
+        {errors.length && errors[id] ? (
+          <span className="text-sm text-red-500">
+            {JSON.stringify(errors[id]?.message, null, 2)}
+          </span>
+        ) : null}
       </div>
     </div>
   );

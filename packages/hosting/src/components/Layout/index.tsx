@@ -1,12 +1,12 @@
 import { FC, Suspense } from "react";
 import { Outlet } from "react-router-dom";
 
+import { GoogleAnalytics, usePageView } from "@/utils/google/gtag";
+import { AdsByGoogle, useGoogleAdsense } from "@/utils/google/adsense";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { Loading } from "../Icons"
 import { Container } from "../Container";
-import { GoogleAnalytics, usePageView } from "../../utils/google/gtag";
-import { AdsByGoogle, useGoogleAdsense } from "../../utils/google/adsense";
 
 const LoadingPage: FC = () => (
   <Container>

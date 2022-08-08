@@ -3,8 +3,8 @@ import { FC, MouseEvent, useCallback, useState } from "react";
 import { RegisterOptions, Controller, useFormContext } from "react-hook-form";
 import { Accept, FileRejection, useDropzone } from "react-dropzone";
 
+import type { File, FileWithPreview } from "@/types/firestore";
 import { FilePreview } from "./FilePreview";
-import { File, FileWithPreview } from "../../types/firestore";
 
 type DropzoneInputProps = {
   accept?: Accept;
@@ -132,7 +132,11 @@ export const DropzoneInput: FC<DropzoneInputProps> = (props) => {
             )}
             <div className="mt-1">
               {helperText !== "" && <p className="text-xs text-gray-500">{helperText}</p>}
-              {errors[id] && <p className="text-sm text-red-500">{errors[id].message}</p>}
+              {errors.length && errors[id] ? (
+                <span className="text-sm text-red-500">
+                  {JSON.stringify(errors[id]?.message, null, 2)}
+                </span>
+              ) : null}
             </div>
             {!readOnly && !!files?.length && (
               <ul className="mt-1 border border-gray-300 divide-y divide-gray-300 rounded-md">

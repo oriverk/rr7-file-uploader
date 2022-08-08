@@ -19,7 +19,7 @@ export const CreateFormSchema = z.object({
   // downloaded: z.number().min(0),
   // createdAt: z.date(),
   // updatedAt: z.date().optional(),
-  // deletedAt: z.date().optional(),
+  deleted: z.date().optional(),
 });
 
 // type Type = z.infer<typeof CreateFormSchema>

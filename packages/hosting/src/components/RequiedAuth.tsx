@@ -2,7 +2,7 @@ import { FC } from "react";
 import { useLocation, Navigate, Outlet } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-import { auth } from "../lib/firebase";
+import { auth } from "@/lib/firebase";
 import { Container } from "./Container";
 import { Seo } from "./Seo";
 

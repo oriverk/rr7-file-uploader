@@ -3,10 +3,10 @@ import { FC } from "react";
 import { CheckIcon } from '@heroicons/react/outline'
 import { InformationCircleIcon } from '@heroicons/react/solid'
 
-import { Container } from "../components/Container";
-import { Seo } from "../components/Seo";
+import { Container } from "@/components/Container";
+import { Seo } from "@/components/Seo";
 
-const potato = "https://www.amazon.jp/hz/wishlist/ls/10OQ35MBI8WSF?ref_=wl_share"
+const potato = import.meta.env.VITE_AMAZON_WISHLIST || ""
 const buyMeCoffee = "https://www.buymeacoffee.com/ixanary"
 
 const CheckList: FC<{ list: string[] }> = ({ list }) => (

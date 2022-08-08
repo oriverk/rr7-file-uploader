@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getCloudinaryImage } from "../utils/getCloudinaryImage";
+import { getCloudinaryImage } from "@/utils/getCloudinaryImage";
 
 const Data: Record<string, string[]> = {
   // chapter22: 天廻争乱～覇者開闢に抗いし戦鬼～

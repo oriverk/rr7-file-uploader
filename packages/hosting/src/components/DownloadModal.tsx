@@ -2,7 +2,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { CheckIcon, LinkIcon, XIcon } from '@heroicons/react/outline';
 import { FC, Fragment, useCallback, useEffect } from 'react'
 import { useLocation } from 'react-router-dom';
-import useCopyToClipboard from '../hooks/useCopyToClipboard';
+import useCopyToClipboard from 'hooks/useCopyToClipboard';
 import { BuyMePotato } from './Ads/BuyMePotato';
 
 interface Props {

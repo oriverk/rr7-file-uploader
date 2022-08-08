@@ -3,7 +3,7 @@ import { ExternalLinkIcon } from "@heroicons/react/outline";
 import { FC } from "react";
 import { Link } from "react-router-dom";
 import urlJoin from "url-join";
-import { useRandomHeroImage } from "../hooks/useRandomHeroImage";
+import { useRandomHeroImage } from "@/hooks/useRandomHeroImage";
 
 type ContentProps = {
   href: string;

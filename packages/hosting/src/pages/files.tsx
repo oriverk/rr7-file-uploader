@@ -12,13 +12,13 @@ import {
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { CloudDownloadIcon } from "@heroicons/react/outline";
 
+import { db } from "@/lib/firebase";
+import { dateString } from "@/utils/dateString";
+import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
+import { Container } from "@/components/Container";
+import { Seo } from "@/components/Seo";
+import { AmazonAffiliateBanners } from "@/components/Ads/AmazonAffiliate";
 import type { IData } from "./fileDetail";
-import { db } from "../lib/firebase";
-import { dateString } from "../utils/dateString";
-import { convertByteWithUnit } from "../utils/convertByteWithUnit";
-import { Container } from "../components/Container";
-import { Seo } from "../components/Seo";
-import { AmazonAffiliateBanners } from "../components/Ads/AmazonAffiliate";
 
 interface IListData extends IData {
   id: string;

@@ -10,13 +10,13 @@ import {
 } from "firebase/firestore";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 
-import { db } from "../lib/firebase";
-import { dateString } from "../utils/dateString";
-import { Container } from "../components/Container";
-import { convertByteWithUnit } from "../utils/convertByteWithUnit";
-import { Markdown } from "../components/Markdown";
-import { Seo } from "../components/Seo";
-import { AmazonAffiliateBanners } from "../components/Ads/AmazonAffiliate";
+import { db } from "@/lib/firebase";
+import { dateString } from "@/utils/dateString";
+import { Container } from "@/components/Container";
+import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
+import { Markdown } from "@/components/Markdown";
+import { Seo } from "@/components/Seo";
+import { AmazonAffiliateBanners } from "@/components/Ads/AmazonAffiliate";
 
 export interface IData {
   name: string;
