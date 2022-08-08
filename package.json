@@ -5,7 +5,9 @@
   "scripts": {
     "deploy": "firebase deploy",
     "deploy:functions": "firebase deploy --only functions",
-    "deploy:hosting": "firebase deploy --only hosting"
+    "deploy:hosting": "firebase deploy --only hosting",
+    "deploy:storage": "firebase deploy --only storage",
+    "deploy:firestore": "firebase deploy --only firestore:rules"
   },
   "keywords": [],
   "author": "",

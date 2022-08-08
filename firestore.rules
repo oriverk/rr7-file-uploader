@@ -1,0 +1,21 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // positive list:
+    // read: get, list
+    // write: create, update, delete
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // function isUserAuthenticated(userID) {
+    //   return request.auth.uid == userID;
+    // }
+
+  	match /files/{fileID} {
+    	allow get, list, update;
+      allow create: if isAuthenticated()
+    }
+  }
+}

@@ -1,0 +1,18 @@
+rules_version = '2';
+service firebase.storage {
+  // positive list:
+  // read: get, list
+  // write: create, update, delete
+  // allow read, write: if request.auth!=null;
+
+  function isAuthenticated() {
+    return request.auth != null;
+  }
+
+  match /b/{bucket}/o {
+    match /files/{fileID} {
+      allow get;
+      allow create, update: if isAuthenticated()
+    }
+  }
+}
