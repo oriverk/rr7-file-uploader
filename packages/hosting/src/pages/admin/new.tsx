@@ -6,12 +6,12 @@ import { ref, uploadBytesResumable } from "firebase/storage";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 
-import { FormData } from "../types/firestore";
-import { CreateFormSchema } from "../lib/zod";
-import { storage, db } from "../lib/firebase";
-import { Container } from "../components/Container";
-import { TextArea, Button } from "../components/Form";
-import { DropzoneInput } from "../components/Dropzone";
+import { FormData } from "../../types/firestore";
+import { CreateFormSchema } from "../../lib/zod";
+import { storage, db } from "../../lib/firebase";
+import { Container } from "../../components/Container";
+import { TextArea, Button } from "../../components/Form";
+import { DropzoneInput } from "../../components/Dropzone";
 
 const NewFile: FC = () => {
   const navigate = useNavigate();
@@ -52,7 +52,7 @@ const NewFile: FC = () => {
         alert(`Error: ${error}`);
       },
       async () => {
-        const { name } = getValues();
+        const { name,  } = getValues();
         const { metadata } = uploadTask.snapshot;
         const { name: uuidName, contentType, size, fullPath } = metadata;
         const docRef = await addDoc(collection(db, "files"), {
@@ -66,7 +66,6 @@ const NewFile: FC = () => {
           updatedAt: serverTimestamp(),
           downloaded: 0,
         });
-        console.log('docref', docRef)
         navigate(`/files/${docRef.id}`);
       }
     );

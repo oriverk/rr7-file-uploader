@@ -15,7 +15,7 @@ const Admin = lazy(() => import("./pages/admin"));
 const Signup = lazy(() => import("./pages/signup"));
 const Login = lazy(() => import("./pages/login"));
 
-const NewFile = lazy(() => import("./pages/new"));
+const NewFile = lazy(() => import("./pages/admin/new"));
 const Files = lazy(() => import("./pages/files"));
 const FileDetail = lazy(() => import("./pages/fileDetail"));
 const FileDownload = lazy(() => import("./pages/fileDownload"));
