@@ -1,6 +1,6 @@
 import { FC, useCallback, useEffect, useState } from "react";
 import { useParams, Link, useSearchParams } from "react-router-dom";
-import { doc, updateDoc } from "firebase/firestore"
+import { doc, updateDoc } from "firebase/firestore";
 import { ref, getBlob } from "firebase/storage";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 
@@ -13,61 +13,61 @@ import { checkTimestampAge } from "@/utils/checkTimestampAge";
 import { AmazonAffiliateBanners } from "@/components/Ads/AmazonAffiliate";
 
 const FileDownload: FC = () => {
-  const [objectUrl, setObjectUrl] = useState<string>()
-  const [saveName, setSaveName] = useState<string>("")
+  const [objectUrl, setObjectUrl] = useState<string>();
+  const [saveName, setSaveName] = useState<string>("");
   const [searchParams] = useSearchParams();
   const { fileId } = useParams() as {
     fileId: string;
   };
-  const firestoreRef = doc(db, "files", fileId)
-  const [dbValue] = useDocumentData(firestoreRef)
+  const firestoreRef = doc(db, "files", fileId);
+  const [dbValue] = useDocumentData(firestoreRef);
   const paramsNow = searchParams.get("t");
-  const isOld = checkTimestampAge(parseInt(paramsNow!, 10), 1000 * 60 * 60 * 2)
+  const isOld = checkTimestampAge(parseInt(paramsNow!, 10), 1000 * 60 * 60 * 2);
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   async function setFileBlob(storageFilePath: string) {
     const storageRef = ref(storage, storageFilePath);
-    const blob = await getBlob(storageRef)
-    setObjectUrl(URL.createObjectURL(blob))
+    const blob = await getBlob(storageRef);
+    setObjectUrl(URL.createObjectURL(blob));
   }
 
   useEffect(() => {
     if (isOld || !dbValue) return;
-    setSaveName(dbValue.name)
-    setFileBlob(`files/${dbValue.path}`)
-  }, [dbValue])
+    setSaveName(dbValue.name);
+    setFileBlob(`files/${dbValue.path}`);
+  }, [dbValue]);
 
   const handleConfirm = useCallback(() => {
-    setIsConfirmed(prev => !prev)
-  }, [])
+    setIsConfirmed((prev) => !prev);
+  }, []);
 
   const handleDownload = useCallback(() => {
     if (!dbValue) return;
 
     async function updateFileDownloadNum() {
       await updateDoc(firestoreRef, {
-        downloaded: dbValue!.downloaded + 1
-      })
+        downloaded: dbValue!.downloaded + 1,
+      });
     }
-    updateFileDownloadNum()
-    setIsOpen(true)
-  }, [dbValue])
-  
+    updateFileDownloadNum();
+    setIsOpen(true);
+  }, [dbValue]);
+
   const handleCloseModal = useCallback(() => {
-    setIsConfirmed(false)
-    setObjectUrl("")
+    setIsConfirmed(false);
+    setObjectUrl("");
     setIsOpen(false);
-  },[])
+  }, []);
 
   if (isOld || !dbValue) {
-    let errorText = ""
+    let errorText = "";
     if (isOld) {
-      errorText = "Error: リンクが古くなっています"
-    } else if (!dbValue){
-      errorText = "Error: URLパスが間違っています"
+      errorText = "Error: リンクが古くなっています";
+    } else if (!dbValue) {
+      errorText = "Error: URLパスが間違っています";
     } else if (!objectUrl) {
-      errorText = "Error: ファイルは削除された可能性があります"
+      errorText = "Error: ファイルは削除された可能性があります";
     }
 
     return (
@@ -75,12 +75,8 @@ const FileDownload: FC = () => {
         <Seo noindex />
         <AmazonAffiliateBanners isKasane />
         <div className="w-full max-w-5xl">
-          <h1 className="mb-8 text-xl text-center">
-            ダウンロード
-          </h1>
-          <p className="mb-8 text-lg text-center text-red-500 font-medium">
-            {errorText}
-          </p>
+          <h1 className="mb-8 text-xl text-center">ダウンロード</h1>
+          <p className="mb-8 text-lg text-center text-red-500 font-medium">{errorText}</p>
           <Link
             to="/files"
             className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -97,15 +93,14 @@ const FileDownload: FC = () => {
       <Seo noindex />
       <AmazonAffiliateBanners isKasane />
       <div className="mx-auto max-w-5xl">
-        <h1 className="mb-8 text-xl text-center">
-          ダウンロード
-        </h1>
+        <h1 className="mb-8 text-xl text-center">ダウンロード</h1>
         <div className="flex flex-col gap-6">
           <div className="mb-4 text-base sm:text-lg">
             {saveName} のダウンロードを続けるには
             <Link
               to="/terms"
-              target="_blank" rel="noopener noreferrer"
+              target="_blank"
+              rel="noopener noreferrer"
               className="mx-4 text-indigo-500 hover:text-red-600 underline underline-offset-4 active:text-red-700 transition duration-100"
             >
               利用規約

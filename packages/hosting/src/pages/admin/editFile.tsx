@@ -1,10 +1,6 @@
-import { FC , useEffect, useCallback, FormEvent } from "react";
+import { FC, useEffect, useCallback, FormEvent } from "react";
 import { Link, useParams } from "react-router-dom";
-import {
-  doc,
-  serverTimestamp,
-  updateDoc,
-} from "firebase/firestore";
+import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 
 import { FormProvider, useForm } from "react-hook-form";
@@ -18,35 +14,34 @@ import { Button, CheckBox, Input, TextArea } from "@/components/Form";
 const EditFile: FC = () => {
   const { fileId } = useParams() as {
     fileId: string;
-  }
-  const docRef = doc(db, "files", fileId)
+  };
+  const docRef = doc(db, "files", fileId);
   const [value, , error] = useDocumentData(docRef);
   const methods = useForm<FormData>({
     resolver: zodResolver(CreateFormSchema),
-    defaultValues: {}
+    defaultValues: {},
   });
   const { getValues, setValue } = methods;
-  
+
   useEffect(() => {
     if (!value || error) return;
     const { name, description, deletedAt } = value as FirestoreFileType;
-    setValue("name", name)
+    setValue("name", name);
     setValue("description", description);
-    setValue("deleted", !!deletedAt)
-  }, [value])
+    setValue("deleted", !!deletedAt);
+  }, [value]);
 
   const onSubmit = useCallback(async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const { name, description, deleted } = getValues()
-    
+    e.preventDefault();
+    const { name, description, deleted } = getValues();
+
     await updateDoc(docRef, {
       name: name.trim() ? name : value!.name,
       description,
       deletedAt: deleted ? serverTimestamp() : null,
-      updatedAt: serverTimestamp()
-    })
-  },[])
-
+      updatedAt: serverTimestamp(),
+    });
+  }, []);
 
   if (error || !value) {
     return (
@@ -62,11 +57,8 @@ const EditFile: FC = () => {
     <>
       <Container>
         <div className="mx-auto mb-4 p-4 overflow-x-auto border border-gray-300 rounded-sm">
-          <pre>
-            {JSON.stringify(value, null, 2)}
-          </pre>
+          <pre>{JSON.stringify(value, null, 2)}</pre>
         </div>
-        
       </Container>
       <Container>
         <div className="mx-auto max-w-xl">
@@ -93,7 +85,7 @@ const EditFile: FC = () => {
         </div>
       </Container>
     </>
-  )
-}
+  );
+};
 
-export default EditFile
+export default EditFile;

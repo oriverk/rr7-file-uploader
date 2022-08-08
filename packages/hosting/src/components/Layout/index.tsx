@@ -5,18 +5,18 @@ import { GoogleAnalytics, usePageView } from "@/utils/google/gtag";
 import { AdsByGoogle, useGoogleAdsense } from "@/utils/google/adsense";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
-import { Loading } from "../Icons"
+import { Loading } from "../Icons";
 import { Container } from "../Container";
 
 const LoadingPage: FC = () => (
   <Container>
     <Loading />
   </Container>
-)
+);
 
 export const Layout: FC = () => {
-  usePageView()
-  useGoogleAdsense()
+  usePageView();
+  useGoogleAdsense();
   return (
     <>
       <GoogleAnalytics />
@@ -34,5 +34,4 @@ export const Layout: FC = () => {
       </div>
     </>
   );
-
-}
+};

@@ -40,9 +40,7 @@ const Signup: FC = () => {
     return (
       <Container>
         <Seo noindex />
-        <h2 className="text-gray-800 text-2xl lg:text-3xl font-bold text-center mb-4 md:mb-8">
-          Signup
-        </h2>
+        <h2 className="text-gray-800 text-2xl lg:text-3xl font-bold text-center mb-4 md:mb-8">Signup</h2>
         <div className="p-4 md:p-8 mx-auto max-w-lg border rounded-lg text-center">
           {error && <strong className="text-red-500">{`Error: ${error}`}</strong>}
           {loading && <p>Loading...</p>}
@@ -54,9 +52,7 @@ const Signup: FC = () => {
   return (
     <Container>
       <Seo noindex />
-      <h2 className="text-gray-800 text-2xl lg:text-3xl font-bold text-center mb-4 md:mb-8">
-        Signup
-      </h2>
+      <h2 className="text-gray-800 text-2xl lg:text-3xl font-bold text-center mb-4 md:mb-8">Signup</h2>
       <FormProvider {...methos}>
         <form onSubmit={onSubmit} className="max-w-lg border rounded-lg mx-auto">
           <div className="flex flex-col gap-4 p-4 md:p-8">

@@ -28,8 +28,6 @@ const Content: FC<Pick<ContentProps, "imgSrc" | "imgAlt">> = ({ imgSrc, imgAlt }
 );
 
 export const GridConetnt: FC<ContentProps> = ({ href, imgSrc, imgAlt, text, isExternal = false }) => {
-  
-
   if (isExternal) {
     return (
       <a
@@ -56,7 +54,7 @@ export const GridConetnt: FC<ContentProps> = ({ href, imgSrc, imgAlt, text, isEx
   );
 };
 
-const ixanaryPath = import.meta.env.VITE_IXANARY_PATH
+const ixanaryPath = import.meta.env.VITE_IXANARY_PATH;
 
 export const Gallery: FC = () => {
   const { name, url } = useRandomHeroImage(24);
@@ -65,13 +63,7 @@ export const Gallery: FC = () => {
     <>
       <h2 className="text-gray-800 text-2xl lg:text-3xl font-bold text-center mb-4 md:mb-8 xl:mb-12">IXAnary</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 xl:gap-8 mb-4 md:mb-8">
-        <GridConetnt
-          href={ixanaryPath}
-          imgSrc={url}
-          imgAlt={name}
-          text="Top"
-          isExternal
-        />
+        <GridConetnt href={ixanaryPath} imgSrc={url} imgAlt={name} text="Top" isExternal />
         <GridConetnt
           href={urlJoin(ixanaryPath, "albums")}
           imgSrc="./assets/image/album.webp"

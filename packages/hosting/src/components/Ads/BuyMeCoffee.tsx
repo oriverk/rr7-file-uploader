@@ -1,5 +1,5 @@
-import type { FC } from 'react';
-import { Coffee } from "../Icons"
+import type { FC } from "react";
+import { Coffee } from "../Icons";
 
 export const BuyMeCoffeeButton: FC = () => (
   <a href="https://www.buymeacoffee.com/ixanary" target="_blank" rel="noopener noreferrer">
@@ -20,4 +20,4 @@ export const BuyMeCoffee: FC = () => (
       BuyMeCoffee
     </div>
   </a>
-)
+);

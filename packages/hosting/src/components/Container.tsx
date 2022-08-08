@@ -11,9 +11,7 @@ export const Container: FC<Props> = (props) => {
 
   return (
     <section>
-      <div className={clsx("mx-auto max-w-screen-2xl px-4 py-2 md:px-8", className)}>
-        {children}
-      </div>
+      <div className={clsx("mx-auto max-w-screen-2xl px-4 py-2 md:px-8", className)}>{children}</div>
     </section>
   );
 };

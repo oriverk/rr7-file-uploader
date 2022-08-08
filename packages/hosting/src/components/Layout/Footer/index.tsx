@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import type { FC, ReactNode } from "react";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 import { ExternalLinkIcon } from "@heroicons/react/outline";
 import clsx from "clsx";
-import urlJoin from 'url-join';
+import urlJoin from "url-join";
 import { IXAnary } from "../../Icons";
 import { CopyRight } from "./Copyright";
 import { SocialLinks } from "./SocialLinks";
@@ -16,30 +16,25 @@ type StyledLinkProps = {
 
 const StyledLink: FC<StyledLinkProps> = (props) => {
   const { children, href, isExternal = false } = props;
-  const className = "text-gray-500 hover:text-indigo-500 active:text-indigo-600 transition duration-100"
+  const className = "text-gray-500 hover:text-indigo-500 active:text-indigo-600 transition duration-100";
 
   if (!isExternal) {
     return (
       <Link to={href} className={className}>
         {children}
       </Link>
-    )
+    );
   }
 
   return (
-    <a
-      href={href}
-      target="_black"
-      rel="noopener noreferrer"
-      className={clsx(className, "flex items-center")}
-    >
+    <a href={href} target="_black" rel="noopener noreferrer" className={clsx(className, "flex items-center")}>
       {children}
       <ExternalLinkIcon className="ml-1 h-4 w-4" />
     </a>
   );
-}
+};
 
-const ixanaryPath = import.meta.env.VITE_IXANARY_PATH
+const ixanaryPath = import.meta.env.VITE_IXANARY_PATH;
 
 export const Footer: FC = () => (
   <footer className="bg-white">
@@ -48,11 +43,7 @@ export const Footer: FC = () => (
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-12 lg:gap-8 mb-16">
           <div className="col-span-full lg:col-span-2">
             <div className="lg:-mt-2 mb-4">
-              <a
-                href="/"
-                className="flex items-center gap-2.5 text-2xl"
-                aria-label="logo"
-              >
+              <a href="/" className="flex items-center gap-2.5 text-2xl" aria-label="logo">
                 <span>⚔</span>
                 <IXAnary className="w-30 h-8" />
               </a>

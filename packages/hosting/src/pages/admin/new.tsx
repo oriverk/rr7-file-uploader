@@ -45,7 +45,7 @@ const NewFile: FC = () => {
       (snapshot) => {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         // eslint-disable-next-line no-console
-        console.log('progress', progress)
+        console.log("progress", progress);
       },
       (error) => {
         // eslint-disable-next-line no-alert

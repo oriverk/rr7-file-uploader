@@ -1,24 +1,24 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { FC } from "react";
-import { CheckIcon } from '@heroicons/react/outline'
-import { InformationCircleIcon } from '@heroicons/react/solid'
+import { CheckIcon } from "@heroicons/react/outline";
+import { InformationCircleIcon } from "@heroicons/react/solid";
 
 import { Container } from "@/components/Container";
 import { Seo } from "@/components/Seo";
 
-const potato = import.meta.env.VITE_AMAZON_WISHLIST || ""
-const buyMeCoffee = "https://www.buymeacoffee.com/ixanary"
+const potato = import.meta.env.VITE_AMAZON_WISHLIST || "";
+const buyMeCoffee = "https://www.buymeacoffee.com/ixanary";
 
 const CheckList: FC<{ list: string[] }> = ({ list }) => (
   <div className="flex-1 bg-gray-100 rounded-lg space-y-3 px-4 py-6">
-    {list.map(val => (
+    {list.map((val) => (
       <div className="flex gap-2" key={val}>
         <CheckIcon className="w-6 h-6 text-indigo-500" />
         <span className="text-gray-600">{val}</span>
       </div>
     ))}
   </div>
-)
+);
 
 const Pricing: FC = () => (
   <Container>
@@ -40,18 +40,21 @@ const Pricing: FC = () => (
             </div>
             <a
               href={potato}
-              target="_blank" rel="noopener noreferrer"
+              target="_blank"
+              rel="noopener noreferrer"
               className="block bg-gray-200 hover:bg-gray-300 focus-visible:ring ring-indigo-300 text-gray-500 active:text-gray-700 text-sm md:text-base font-semibold text-center rounded-lg outline-none transition duration-100 px-8 py-3"
             >
               Select Basic
             </a>
           </div>
-          <CheckList list={[
-            "100 white lottery per day",
-            "2.000 MB bandwidth per month",
-            "200 tasks per month",
-            "Comunity support"
-          ]} />
+          <CheckList
+            list={[
+              "100 white lottery per day",
+              "2.000 MB bandwidth per month",
+              "200 tasks per month",
+              "Comunity support",
+            ]}
+          />
         </div>
         {/* minimum */}
         <div className="flex flex-col space-y-4">
@@ -72,20 +75,23 @@ const Pricing: FC = () => (
             </div>
             <a
               href={buyMeCoffee}
-              target="_blank" rel="noopener noreferrer"
+              target="_blank"
+              rel="noopener noreferrer"
               className="block bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-700 focus-visible:ring ring-indigo-300 text-white text-sm md:text-base font-semibold text-center rounded-lg outline-none transition duration-100 px-8 py-3"
             >
               Select Minimum
             </a>
           </div>
-          <CheckList list={[
-            "Unlimited file storage",
-            "10 GB bandwidth per month",
-            "10.000 tasks per month",
-            "Comunity support",
-            "Email support",
-            "100 Webhooks"
-          ]} />
+          <CheckList
+            list={[
+              "Unlimited file storage",
+              "10 GB bandwidth per month",
+              "10.000 tasks per month",
+              "Comunity support",
+              "Email support",
+              "100 Webhooks",
+            ]}
+          />
         </div>
         {/* high */}
         <div className="flex flex-col space-y-4">
@@ -101,19 +107,22 @@ const Pricing: FC = () => (
             </div>
             <a
               href={potato}
-              target="_blank" rel="noopener noreferrer"
+              target="_blank"
+              rel="noopener noreferrer"
               className="block bg-gray-800 hover:bg-gray-700 active:bg-gray-600 focus-visible:ring ring-indigo-300 text-white text-sm md:text-base font-semibold text-center rounded-lg outline-none transition duration-100 px-8 py-3"
             >
               Select High
             </a>
           </div>
-          <CheckList list={[
-            "Unlimited file storage",
-            "Unlimited bandwidth per month",
-            "1.000.000 tasks per month",
-            "Email and phone support",
-            "Unlimited Webhooks"
-          ]} />
+          <CheckList
+            list={[
+              "Unlimited file storage",
+              "Unlimited bandwidth per month",
+              "1.000.000 tasks per month",
+              "Email and phone support",
+              "Unlimited Webhooks",
+            ]}
+          />
         </div>
       </div>
     </div>

@@ -1,19 +1,19 @@
 /* eslint-disable react/no-danger */
-import { useEffect } from 'react';
-import { useLocation } from "react-router-dom"
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import ReactGA from "react-ga4";
 
 // https://zenn.dev/kazuki23/articles/35f9227e5c45b2
 
 // イベントを型で管理
 type ContactEvent = {
-  action: 'submit_form';
-  category: 'contact';
+  action: "submit_form";
+  category: "contact";
 };
 
 type ClickEvent = {
-  action: 'click';
-  category: 'other';
+  action: "click";
+  category: "other";
 };
 
 export type Event = (ContactEvent | ClickEvent) & {
@@ -21,10 +21,10 @@ export type Event = (ContactEvent | ClickEvent) & {
   value?: string;
 };
 
-const Ga4TrackingId = import.meta.env.VITE_GA4_TRACKING_ID
+const Ga4TrackingId = import.meta.env.VITE_GA4_TRACKING_ID;
 
 // IDが取得できない場合を想定する
-export const existsGaId = !!Ga4TrackingId
+export const existsGaId = !!Ga4TrackingId;
 
 // _app.tsx で読み込む
 export const usePageView = () => {
@@ -47,9 +47,7 @@ export const GoogleAnalytics = () => {
 
   return (
     <>
-      <script
-        src={`https://www.googletagmanager.com/gtag/js?id=${Ga4TrackingId}`}
-      />
+      <script src={`https://www.googletagmanager.com/gtag/js?id=${Ga4TrackingId}`} />
       <script
         id="gtag-init"
         dangerouslySetInnerHTML={{
@@ -64,6 +62,5 @@ export const GoogleAnalytics = () => {
         }}
       />
     </>
-  )
-}
-
+  );
+};

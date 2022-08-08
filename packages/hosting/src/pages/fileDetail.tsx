@@ -36,7 +36,7 @@ const converter: FirestoreDataConverter<IProps> = {
       id: snapshot.id,
       updatedAt: dateString(updatedAt.toDate()),
       createdAt: dateString(createdAt.toDate()),
-      ...rest
+      ...rest,
     };
   },
 };
@@ -59,8 +59,8 @@ const FileDetail: FC = () => {
     );
   }
 
-  const { name, description, contentType, size, downloaded, createdAt, updatedAt } = value
-  
+  const { name, description, contentType, size, downloaded, createdAt, updatedAt } = value;
+
   return (
     <Container className="flex flex-col gap-8 sm:flex-row">
       <Seo pathname={`/files/${fileId}`} title={name} description={`Download ${name}`} />
@@ -91,7 +91,9 @@ const FileDetail: FC = () => {
                   <th scope="row" className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                     種類
                   </th>
-                  <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">{contentType}</td>
+                  <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                    {contentType}
+                  </td>
                 </tr>
                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                   <th scope="row" className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
@@ -115,7 +117,9 @@ const FileDetail: FC = () => {
                   <th scope="row" className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                     ダウンロード
                   </th>
-                  <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">{downloaded}</td>
+                  <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                    {downloaded}
+                  </td>
                 </tr>
               </tbody>
             </table>

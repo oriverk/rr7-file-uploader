@@ -1,9 +1,9 @@
-import { Dialog, Transition } from '@headlessui/react'
-import { CheckIcon, LinkIcon, XIcon } from '@heroicons/react/outline';
-import { FC, Fragment, useCallback, useEffect } from 'react'
-import { useLocation } from 'react-router-dom';
-import useCopyToClipboard from 'hooks/useCopyToClipboard';
-import { BuyMePotato } from './Ads/BuyMePotato';
+import { Dialog, Transition } from "@headlessui/react";
+import { CheckIcon, LinkIcon, XIcon } from "@heroicons/react/outline";
+import { FC, Fragment, useCallback, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import useCopyToClipboard from "hooks/useCopyToClipboard";
+import { BuyMePotato } from "./Ads/BuyMePotato";
 
 interface Props {
   isOpen: boolean;
@@ -12,19 +12,19 @@ interface Props {
 
 export const DownloadModal: FC<Props> = (props) => {
   const { isOpen, onClose } = props;
-  const location = useLocation()
-  const [copiedText, copy] = useCopyToClipboard()
+  const location = useLocation();
+  const [copiedText, copy] = useCopyToClipboard();
 
   const handleCopy = useCallback(() => {
-    copy(window.location.href)
-  },[])
+    copy(window.location.href);
+  }, []);
 
   useEffect(() => {
     onClose();
     return () => {
-      onClose()
-    }
-  },[location])
+      onClose();
+    };
+  }, [location]);
 
   return (
     <div>
@@ -68,14 +68,13 @@ export const DownloadModal: FC<Props> = (props) => {
                   </Dialog.Title>
                   <div className="">
                     <div className="mb-4">
-                      <p className='mb-2 text-base'>
-                        もしよろしければサポートしてくださると有難いです。
-                      </p>
+                      <p className="mb-2 text-base">もしよろしければサポートしてくださると有難いです。</p>
                       <BuyMePotato />
                     </div>
                     <div className="mb-4">
                       {!copiedText ? (
-                        <button type="button"
+                        <button
+                          type="button"
                           onClick={handleCopy}
                           className="w-full flex justify-center py-1 px-4 border border-gray-900 rounded-md bg-gray-300 hover:bg-gray-400"
                         >
@@ -83,8 +82,10 @@ export const DownloadModal: FC<Props> = (props) => {
                           URLリンクをコピーする
                         </button>
                       ) : (
-                        <button type="button" disabled
-                            className="w-full flex justify-center py-1 px-4 border border-gray-900 rounded-md bg-gray-300"
+                        <button
+                          type="button"
+                          disabled
+                          className="w-full flex justify-center py-1 px-4 border border-gray-900 rounded-md bg-gray-300"
                         >
                           <CheckIcon className="w-6 h-6 mr-4 text-teal-400" />
                           クリップボードにコピーしました。
@@ -100,5 +101,5 @@ export const DownloadModal: FC<Props> = (props) => {
         </Dialog>
       </Transition>
     </div>
-  )
-}
+  );
+};

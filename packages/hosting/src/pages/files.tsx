@@ -28,7 +28,7 @@ interface IProps extends Omit<FirestoreFileType, "createdAt" | "updatedAt"> {
   updatedAt: string;
 }
 
-type TrProps = Omit<IProps, "description" | "fullPath" | "path">
+type TrProps = Omit<IProps, "description" | "fullPath" | "path">;
 
 const StyledTr: FC<TrProps> = (props) => {
   const { id, name, createdAt, updatedAt, size, downloaded = 0 } = props;
@@ -67,14 +67,14 @@ const converter: FirestoreDataConverter<IProps> = {
       id: snapshot.id,
       updatedAt: dateString(updatedAt.toDate()),
       createdAt: dateString(createdAt.toDate()),
-      ...rest
+      ...rest,
     };
   },
 };
 
 const Files: FC = () => {
   const collectionRef = collection(db, "files").withConverter(converter);
-  const q = query(collectionRef, where("deletedAt", "==", null),)
+  const q = query(collectionRef, where("deletedAt", "==", null));
   const [files, , error] = useCollectionData(q);
 
   if (!files?.length || error) {
@@ -88,13 +88,13 @@ const Files: FC = () => {
 
   const sortedFiles = files.sort((a, b) => {
     if (a.updatedAt < b.updatedAt) {
-      return 1
+      return 1;
     }
     if (a.updatedAt > b.updatedAt) {
-      return -1
+      return -1;
     }
-    return 0
-  })
+    return 0;
+  });
 
   return (
     <Container className="flex flex-col gap-8 sm:flex-row">
@@ -122,9 +122,7 @@ const Files: FC = () => {
             <tbody>
               {sortedFiles.map((file) => {
                 const { description, path, fullPath, ...rest } = file;
-                return (
-                  <StyledTr key={path} {...rest} />
-                );
+                return <StyledTr key={path} {...rest} />;
               })}
             </tbody>
           </table>

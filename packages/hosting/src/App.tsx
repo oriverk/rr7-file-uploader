@@ -13,7 +13,7 @@ const NewFile = lazy(() => import("./pages/admin/new"));
 const EditFile = lazy(() => import("./pages/admin/editFile"));
 
 const Home = lazy(() => import("./pages/home"));
-const Lorem = lazy(() => import("./pages/lorem"))
+const Lorem = lazy(() => import("./pages/lorem"));
 const PrivacyPolicy = lazy(() => import("./pages/privacy-policy"));
 const Pricing = lazy(() => import("./pages/pricing"));
 const TermOfService = lazy(() => import("./pages/term-of-service"));
@@ -49,6 +49,6 @@ const App: FC = () => (
       </Route>
     </Routes>
   </BrowserRouter>
-)
+);
 
 export default App;

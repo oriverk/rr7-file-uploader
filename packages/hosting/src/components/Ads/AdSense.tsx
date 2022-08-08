@@ -3,12 +3,12 @@ import { FC, useEffect } from "react";
 declare global {
   // eslint-disable-next-line no-unused-vars
   interface Window {
-    adsbygoogle?: Array<unknown>
+    adsbygoogle?: Array<unknown>;
   }
 }
 
-const isDev = import.meta.env.DEV
-const publisherId = import.meta.env.VITE_PUBLISHER_ID
+const isDev = import.meta.env.DEV;
+const publisherId = import.meta.env.VITE_PUBLISHER_ID;
 
 export const AdSense: FC = () => {
   useEffect(() => {
@@ -17,8 +17,8 @@ export const AdSense: FC = () => {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
       }
     }
-  }, [])
-  
+  }, []);
+
   return (
     <>
       <script
@@ -49,5 +49,5 @@ export const AdSense: FC = () => {
         data-full-width-responsive="true"
       /> */}
     </>
-  )
-}
+  );
+};

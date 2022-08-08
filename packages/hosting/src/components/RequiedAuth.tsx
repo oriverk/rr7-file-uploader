@@ -22,7 +22,7 @@ export const RequiredAuth: FC = () => {
           </div>
         </div>
       </Container>
-    )
+    );
   }
 
   if (!loading && error) {

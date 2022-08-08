@@ -25,7 +25,7 @@ interface IProps extends Omit<FirestoreFileType, "createdAt" | "updatedAt" | "de
   deleted: boolean;
 }
 
-type TrProps = Omit<IProps, "description" | "fullPath" | "path">
+type TrProps = Omit<IProps, "description" | "fullPath" | "path">;
 
 const StyledTr: FC<TrProps> = (props) => {
   const { id, name, createdAt, updatedAt, size, downloaded = 0, deleted } = props;
@@ -68,7 +68,7 @@ const converter: FirestoreDataConverter<IProps> = {
       updatedAt: dateString(updatedAt.toDate()),
       createdAt: dateString(createdAt.toDate()),
       deleted: !!deletedAt,
-      ...rest
+      ...rest,
     };
   },
 };
@@ -88,13 +88,9 @@ const Admin: FC = () => {
   return (
     <>
       <Container className="mb-8 flex flex-col justify-center gap-8">
-        <h1 className="text-xl text-center">
-          Admin Page
-        </h1>
+        <h1 className="text-xl text-center">Admin Page</h1>
         <div className="mx-auto">
-          <h2 className="mb-4 text-lg">
-            commands
-          </h2>
+          <h2 className="mb-4 text-lg">commands</h2>
           <ul className="list-disc">
             <li>
               <Link to="new" className="font-medium text-blue-600 dark:text-blue-300 hover:underline">
@@ -130,9 +126,7 @@ const Admin: FC = () => {
               <tbody>
                 {files?.map((file) => {
                   const { description, path, fullPath, ...rest } = file;
-                  return (
-                    <StyledTr key={path} {...rest}/>
-                  );
+                  return <StyledTr key={path} {...rest} />;
                 })}
               </tbody>
             </table>
@@ -143,4 +137,4 @@ const Admin: FC = () => {
   );
 };
 
-export default Admin
+export default Admin;

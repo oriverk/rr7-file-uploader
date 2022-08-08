@@ -2,7 +2,7 @@ import { FC, ReactNode } from "react";
 import { NavLink, NavLinkProps } from "react-router-dom";
 import urlJoin from "url-join";
 
-const IxanaryPath = import.meta.env.VITE_IXANARY_PATH
+const IxanaryPath = import.meta.env.VITE_IXANARY_PATH;
 
 interface IHeaderNavLink extends NavLinkProps {
   children: ReactNode;
@@ -16,12 +16,13 @@ const HeaderNavLink: FC<IHeaderNavLink> = (props) => {
     return (
       <a
         href={to}
-        target="_blank" rel="noopener noreferrer"
+        target="_blank"
+        rel="noopener noreferrer"
         className="text-gray-600 hover:text-indigo-500 active:text-indigo-700 text-lg font-semibold transition duration-100"
       >
         {children}
       </a>
-    )
+    );
   }
   const active = (isActive: boolean) => (isActive ? "text-indigo-500" : "text-gray-600");
 
@@ -39,10 +40,7 @@ const HeaderNavLink: FC<IHeaderNavLink> = (props) => {
 
 export const Header: FC = () => (
   <header className="flex flex-col md:flex-row gap-4 justify-between items-center py-4 md:py-8">
-    <NavLink
-      to=""
-      className="inline-flex items-center text-black-800 text-2xl md:text-3xl font-bold gap-2.5"
-    >
+    <NavLink to="" className="inline-flex items-center text-black-800 text-2xl md:text-3xl font-bold gap-2.5">
       👆&nbsp;Uploader
     </NavLink>
     <nav className="flex gap-12">

@@ -8,11 +8,9 @@ const pages = 4500;
 export const OurTeam: FC = () => (
   <>
     <div className="mb-8 md:mb-12">
-      <h2 className="mb-4 text-center text-2xl font-bold md:mb-6 lg:text-3xl">
-        Our IXAnary by the numbers
-      </h2>
+      <h2 className="mb-4 text-center text-2xl font-bold md:mb-6 lg:text-3xl">Our IXAnary by the numbers</h2>
       <p className="mx-auto max-w-screen-md text-center text-gray-400 dark:text-gray-500 md:text-lg">
-        As of <time dateTime={new Date().toISOString()}>{format(new Date(), 'yyyy-MM-dd')}</time>
+        As of <time dateTime={new Date().toISOString()}>{format(new Date(), "yyyy-MM-dd")}</time>
       </p>
     </div>
     <div className="grid grid-cols-2 gap-6 rounded-lg bg-indigo-500 p-6 md:grid-cols-4 md:gap-8 md:p-8">
