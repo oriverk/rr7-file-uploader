@@ -2,7 +2,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { CheckIcon, LinkIcon, XIcon } from "@heroicons/react/outline";
 import { FC, Fragment, useCallback, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import useCopyToClipboard from "hooks/useCopyToClipboard";
+import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 import { BuyMePotato } from "./Ads/BuyMePotato";
 
 interface Props {
@@ -16,7 +16,8 @@ export const DownloadModal: FC<Props> = (props) => {
   const [copiedText, copy] = useCopyToClipboard();
 
   const handleCopy = useCallback(() => {
-    copy(window.location.href);
+    const upperHref = window.location.href.replace(/download\/?.*/,"")
+    copy(upperHref);
   }, []);
 
   useEffect(() => {
