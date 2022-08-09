@@ -11,7 +11,8 @@
     "fix": "run-s fix:eslint fix:prettier",
     "fix:eslint": "eslint --fix 'src/**/{*.ts,*.tsx}'",
     "fix:prettier": "prettier --write 'src/**/{*.ts,*.tsx}'",
-    "deploy": "firebase deploy --only hosting"
+    "deploy:hosting": "firebase deploy --only hosting",
+    "deploy": "run-s build deploy:hosting"
   },
   "dependencies": {
     "@headlessui/react": "^1.6.6",
