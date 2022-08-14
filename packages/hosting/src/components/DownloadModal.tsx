@@ -69,7 +69,7 @@ export const DownloadModal: FC<Props> = (props) => {
                   </Dialog.Title>
                   <div className="">
                     <div className="mb-4">
-                      <p className="mb-2 text-base">もしよろしければサポートしてくださると有難いです。</p>
+                      <p className="mb-2 text-base">もしよろしければ下サポートお願いします。弊サイトやMera等のコード改修、勉強の励みになります。</p>
                       <BuyMePotato />
                     </div>
                     <div className="mb-4">
