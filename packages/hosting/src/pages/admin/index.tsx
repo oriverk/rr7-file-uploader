@@ -39,7 +39,12 @@ const StyledTr: FC<TrProps> = (props) => {
         </Link>
       </th>
       <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
-        <time dateTime={updatedAt} title={`作成：${createdAt}`}>
+        <time dateTime={createdAt} title={`作成：${createdAt}`}>
+          {createdAt}
+        </time>
+      </td>
+      <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+        <time dateTime={updatedAt} title={`更新：${updatedAt}`}>
           {updatedAt}
         </time>
       </td>
@@ -49,7 +54,7 @@ const StyledTr: FC<TrProps> = (props) => {
       <td className="px-6 py-4 text-center font-medium text-gray-900 dark:text-white whitespace-nowrap">
         {downloaded}
       </td>
-      <td className="px-6 py-4 text-center font-medium text-gray-900 dark:text-white whitespace-nowrap">
+      <td className={`px-6 py-4 text-center font-medium whitespace-nowrap ${deleted ? "text-red-500" : "text-blue-500"}`}>
         {deleted.toString()}
       </td>
     </tr>
@@ -77,13 +82,23 @@ const Admin: FC = () => {
   const collectionRef = collection(db, "files").withConverter(converter);
   const [files, , error] = useCollectionData(collectionRef);
 
-  if (error) {
+  if (!files?.length || error) {
     return (
       <Container>
         <strong>Error: {JSON.stringify(error)}</strong>
       </Container>
     );
   }
+
+  const sortedFiles = files.sort((a, b) => {
+    if (a.createdAt < b.createdAt) {
+      return 1;
+    }
+    if (a.createdAt > b.createdAt) {
+      return -1;
+    }
+    return 0;
+  });
 
   return (
     <>
@@ -109,6 +124,9 @@ const Admin: FC = () => {
                   <th scope="col" className="px-6 py-3" title="file">
                     ファイル
                   </th>
+                  <th scope="col" className="px-6 py-3" title="created at">
+                    作成
+                  </th>
                   <th scope="col" className="px-6 py-3" title="updated at">
                     更新
                   </th>
@@ -124,7 +142,7 @@ const Admin: FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {files?.map((file) => {
+                {sortedFiles?.map((file) => {
                   const { description, path, fullPath, ...rest } = file;
                   return <StyledTr key={path} {...rest} />;
                 })}

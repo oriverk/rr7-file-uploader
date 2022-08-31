@@ -42,7 +42,12 @@ const StyledTr: FC<TrProps> = (props) => {
         </Link>
       </th>
       <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
-        <time dateTime={updatedAt} title={`作成：${createdAt}`}>
+        <time dateTime={createdAt} title={`作成：${createdAt}`}>
+          {createdAt}
+        </time>
+      </td>
+      <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+        <time dateTime={updatedAt} title={`更新：${updatedAt}`}>
           {updatedAt}
         </time>
       </td>
@@ -87,10 +92,10 @@ const Files: FC = () => {
   }
 
   const sortedFiles = files.sort((a, b) => {
-    if (a.updatedAt < b.updatedAt) {
+    if (a.createdAt < b.createdAt) {
       return 1;
     }
-    if (a.updatedAt > b.updatedAt) {
+    if (a.createdAt > b.createdAt) {
       return -1;
     }
     return 0;
@@ -107,6 +112,9 @@ const Files: FC = () => {
               <tr>
                 <th scope="col" className="px-6 py-3" title="file">
                   ファイル
+                </th>
+                <th scope="col" className="px-6 py-3" title="created at">
+                  作成
                 </th>
                 <th scope="col" className="px-6 py-3" title="updated at">
                   更新
