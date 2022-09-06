@@ -4,6 +4,7 @@ import { gfm, gfmHtml } from "micromark-extension-gfm";
 
 function parseMarkdown(markdown: string) {
   const result = micromark(markdown, {
+    allowDangerousHtml: true,
     extensions: [gfm()],
     htmlExtensions: [gfmHtml()],
   });
