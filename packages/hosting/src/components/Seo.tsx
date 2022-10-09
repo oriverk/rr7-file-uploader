@@ -31,13 +31,10 @@ export const Seo: FC<Props> = (props) => {
         <title>{metaTitle}</title>
         <link rel="canonical" href={pageUrl} />
         <meta name="description" content={description || metaTitle} />
-        <meta name="og:url" content={pageUrl} />
-        <meta name="og:title" content={metaTitle} />
-        <meta name="og:description" content={description || metaTitle} />
-        <meta name="og:image" content={ogImageUrl} />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta property="og:type" content="article" />
-        <meta property="og:site_name" content="👆 Uploader" />
+        <meta property="og:url" content={pageUrl} />
+        <meta property="og:title" content={metaTitle} />
+        <meta property="og:description" content={description || metaTitle} />
+        <meta property="og:image" content={ogImageUrl} />
         <meta name="robots" content={noindex ? "noindex,nofollow" : "all"} />
         {/* <AdSense /> */}
       </Helmet>
