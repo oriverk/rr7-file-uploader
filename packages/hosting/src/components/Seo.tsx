@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet-async";
 import urlJoin from "url-join";
 import { useRandomHeroImage } from "@/hooks/useRandomHeroImage";
 
-// import { AdSense } from "./AdSense"
+import { CustomAdsense } from "@/components/Ads/AdSense";
 
 interface Props {
   pathname?: string;
@@ -15,7 +15,7 @@ interface Props {
 
 export const Seo: FC<Props> = (props) => {
   const { pathname = "", title = "", description = "", ogImage, noindex = false } = props;
-  const { url } = useRandomHeroImage(24)
+  const { url } = useRandomHeroImage(24);
 
   const isDev = import.meta.env.DEV;
   const origin = isDev ? "http://localhost:3000" : import.meta.env.VITE_SITE_PATH;
@@ -36,9 +36,8 @@ export const Seo: FC<Props> = (props) => {
         <meta property="og:description" content={description || metaTitle} />
         <meta property="og:image" content={ogImageUrl} />
         <meta name="robots" content={noindex ? "noindex,nofollow" : "all"} />
-        {/* <AdSense /> */}
       </Helmet>
-      {/* <AdSense /> */}
+      {/* <CustomAdsense /> */}
     </>
   );
 };

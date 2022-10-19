@@ -1,4 +1,5 @@
-import { FC, useEffect } from "react";
+import clsx from "clsx";
+import { FC, useEffect, CSSProperties } from "react";
 
 declare global {
   // eslint-disable-next-line no-unused-vars
@@ -7,12 +8,34 @@ declare global {
   }
 }
 
-const isDev = import.meta.env.DEV;
-const publisherId = import.meta.env.VITE_PUBLISHER_ID;
+interface Props {
+  className?: string;
+  client: string;
+  slot: string;
+  style?: CSSProperties;
+  layout?: string;
+  format?: string;
+  responsive?: boolean;
+}
 
-export const AdSense: FC = () => {
+/**
+ * @param props
+ * client: /^pub-\d+$/
+ * @returns
+ */
+export const AdSense: FC<Props> = (props) => {
+  const {
+    className = "",
+    client,
+    slot,
+    style = { display: "block" },
+    layout = "",
+    format = "auto",
+    responsive = false,
+  } = props;
+
   useEffect(() => {
-    if (!isDev && publisherId) {
+    if (client) {
       if (window) {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
       }
@@ -20,34 +43,19 @@ export const AdSense: FC = () => {
   }, []);
 
   return (
-    <>
-      <script
-        async
-        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-${publisherId}`}
-        crossOrigin="anonymous"
-      />
-      {/* <ins
-        className="adsbygoogle"
-        style={{ display: 'block', }}
-        data-ad-client="ca-pub-3305972869013074"
-        data-ad-slot="6566353638"
-        data-ad-format="auto"
-        data-full-width-responsive="true"
-      /> */}
-      {/* <ins className="adsbygoogle"
-        style={{ display: 'block', }}
-        data-ad-client="ca-pub-3305972869013074"
-        data-ad-slot="3997134267"
-        data-ad-format="auto"
-        data-full-width-responsive="true"
-      /> */}
-      {/* <ins className="adsbygoogle"
-        style={{ display: 'block', }}
-        data-ad-client="ca-pub-3305972869013074"
-        data-ad-slot="5238079650"
-        data-ad-format="auto"
-        data-full-width-responsive="true"
-      /> */}
-    </>
+    <ins
+      className={clsx(className, "adsbygoogle")}
+      style={style}
+      data-ad-client={`ca-${client}`}
+      data-ad-slot={slot}
+      data-ad-layout={layout}
+      data-ad-format={format}
+      data-full-width-responsive={responsive}
+    />
   );
 };
+
+const publisherId = import.meta.env.VITE_PUBLISHER_ID;
+export const CustomAdsense: FC = () => (
+  <AdSense client={publisherId} slot="3735361497" style={{ display: "block", textAlign: "center" }} responsive />
+);
