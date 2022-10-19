@@ -54,7 +54,9 @@ const StyledTr: FC<TrProps> = (props) => {
       <td className="px-6 py-4 text-center font-medium text-gray-900 dark:text-white whitespace-nowrap">
         {downloaded}
       </td>
-      <td className={`px-6 py-4 text-center font-medium whitespace-nowrap ${deleted ? "text-red-500" : "text-blue-500"}`}>
+      <td
+        className={`px-6 py-4 text-center font-medium whitespace-nowrap ${deleted ? "text-red-500" : "text-blue-500"}`}
+      >
         {deleted.toString()}
       </td>
     </tr>

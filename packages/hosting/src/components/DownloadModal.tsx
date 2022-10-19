@@ -16,7 +16,7 @@ export const DownloadModal: FC<Props> = (props) => {
   const [copiedText, copy] = useCopyToClipboard();
 
   const handleCopy = useCallback(() => {
-    const upperHref = window.location.href.replace(/download\/?.*/,"")
+    const upperHref = window.location.href.replace(/download\/?.*/, "");
     copy(upperHref);
   }, []);
 
@@ -69,7 +69,9 @@ export const DownloadModal: FC<Props> = (props) => {
                   </Dialog.Title>
                   <div className="">
                     <div className="mb-4">
-                      <p className="mb-2 text-base">もしよろしければ下サポートお願いします。弊サイトやMera等のコード改修、勉強の励みになります。</p>
+                      <p className="mb-2 text-base">
+                        もしよろしければ下サポートお願いします。弊サイトやMera等のコード改修、勉強の励みになります。
+                      </p>
                       <BuyMePotato />
                     </div>
                     <div className="mb-4">
