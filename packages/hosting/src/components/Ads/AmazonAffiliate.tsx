@@ -45,57 +45,57 @@ export const AmazonAffiliateKasane: FC = () => (
   />
 );
 
-export const AmazonAffiliateNityouhin: FC = () => {
-  // const largerThanlg = useMediaQuery({ query: `(min-width: ${breakpoints.lg})` });
-  // if (largerThanlg) {
+export type BannerProps = {
+  title: string;
+  src: string;
+  width: number;
+  height: number;
+}
+export const BannerLink: FC<BannerProps> = (props) => {
+  const { title, src, width, height } = props;
   return (
     <iframe
-      title="日用品"
-      src="https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=12&l=ur1&category=consumables&banner=01FFPGM6WNKYF9VQMHR2&f=ifr&linkID=e61f5160c998c1cc94dfb649483c7c43&t=ixanary-uploader-22&tracking_id=ixanary-uploader-22"
-      width="300"
-      height="250"
+      title={title}
+      src={src}
+      width={width.toString()}
+      height={height.toString()}
       scrolling="no"
       frameBorder="0"
       style={{ border: "none", margin: 0 }}
       sandbox="allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation"
     />
-  );
-  // }
+  )
+}
 
-  // return (
-  //   <iframe
-  //     title="日用品"
-  //     src="https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=21&l=ur1&category=consumables&banner=03RKAEY2YXPBTX9JE002&f=ifr&linkID=f8d44f2d0bcb13201cd9fca1ec679a52&t=ixanary-uploader-22&tracking_id=ixanary-uploader-22"
-  //     width="125" height="125" scrolling="no" frameBorder="0"
-  //     style={{ border: "none", margin: 0 }}
-  //     sandbox="allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation" />
-  // )
-};
+export const NitiyouhinBanner: FC = () => (
+  <BannerLink
+    title="日用品"
+    src="https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=12&l=ur1&category=consumables&banner=01FFPGM6WNKYF9VQMHR2&f=ifr&linkID=e61f5160c998c1cc94dfb649483c7c43&t=ixanary-uploader-22&tracking_id=ixanary-uploader-22"
+    width={300}
+    height={250}
+  />
+)
 
-export const AmazonAffiliateCharge: FC = () => {
-  // const largerThanlg = useMediaQuery({ query: `(min-width: ${breakpoints.lg})` });
-  // const largerThanlg = true;
+export const ChargeBanner: FC = () => (
+  <BannerLink
+    title="charge"
+    src="https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=12&l=ur1&category=gift_certificates&banner=1TJ8XM5YGJR5WC15P202&f=ifr&linkID=6fd35f43024385a68a48038d7a80785d&t=ixanary-uploader-22&tracking_id=ixanary-uploader-22"
+    width={300}
+    height={250}
+
+  />
+)
+
+export const TimeSaleBanner: FC = () => {
   return (
-    <iframe
-      title="charge"
-      src="https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=12&l=ur1&category=gift_certificates&banner=1TJ8XM5YGJR5WC15P202&f=ifr&linkID=6fd35f43024385a68a48038d7a80785d&t=ixanary-uploader-22&tracking_id=ixanary-uploader-22"
-      width="300"
-      height="250"
-      scrolling="no"
-      frameBorder="0"
-      style={{ border: "none", margin: 0 }}
-      sandbox="allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation"
+    <BannerLink
+      title="AmazonTimeSale"
+      src="https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=12&l=ur1&category=monthlydealevent&banner=0MGQADSD74EBNM0NGX82&f=ifr&linkID=d727ae4b824181f935246b5982e4a743&t=ixanary-uploader-22&tracking_id=ixanary-uploader-22"
+      width={300}
+      height={250}
     />
-  );
-  // return (
-  //   <iframe
-  //     title="charge"
-  //     src="https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=21&l=ur1&category=gift_certificates&banner=0K2839167Y2W14T3QWG2&f=ifr&linkID=bbcef82e2ac5069497a6b89468a26ce7&t=ixanary-uploader-22&tracking_id=ixanary-uploader-22"
-  //     width="125" height="125" scrolling="no" frameBorder="0"
-  //     style={{ border: "none", margin: 0 }}
-  //     sandbox="allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation" />
-  // )
-};
+  )
+}
 
 interface BannersProps {
   isKasane?: boolean;
@@ -109,7 +109,8 @@ interface BannersProps {
 export const AmazonAffiliateBanners: FC<BannersProps> = ({ isKasane }) => (
   <div className="flex flex-col items-center gap-4">
     {isKasane ? <AmazonAffiliateKasane /> : null}
-    <AmazonAffiliateNityouhin />
-    <AmazonAffiliateCharge />
+    <TimeSaleBanner />
+    <NitiyouhinBanner />
+    <ChargeBanner />
   </div>
 );

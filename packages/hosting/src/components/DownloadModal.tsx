@@ -3,7 +3,8 @@ import { CheckIcon, LinkIcon, XIcon } from "@heroicons/react/outline";
 import { FC, Fragment, useCallback, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
-import { BuyMePotato } from "./Ads/BuyMePotato";
+import { BuyMePotato } from "@/components/Ads/BuyMePotato";
+import { TimeSaleBanner } from "@/components/Ads/AmazonAffiliate"
 
 interface Props {
   isOpen: boolean;
@@ -70,9 +71,12 @@ export const DownloadModal: FC<Props> = (props) => {
                   <div className="">
                     <div className="mb-4">
                       <p className="mb-2 text-base">
-                        もしよろしければ下サポートお願いします。弊サイトやMera等のコード改修、勉強の励みになります。
+                        もしよろしければ下サポートお願いします。弊サイトやMera等の改修の励みになります。
                       </p>
                       <BuyMePotato />
+                    </div>
+                    <div className="mb-4 flex justify-center">
+                      <TimeSaleBanner />
                     </div>
                     <div className="mb-4">
                       {!copiedText ? (

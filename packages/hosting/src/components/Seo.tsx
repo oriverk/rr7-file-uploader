@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet-async";
 import urlJoin from "url-join";
 import { useRandomHeroImage } from "@/hooks/useRandomHeroImage";
 
-import { CustomAdsense } from "@/components/Ads/AdSense";
+// import { CustomAdsense } from "@/components/Ads/AdSense";
 
 interface Props {
   pathname?: string;
