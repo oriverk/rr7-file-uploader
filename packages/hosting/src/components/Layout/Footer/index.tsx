@@ -39,22 +39,22 @@ const ixanaryPath = import.meta.env.VITE_IXANARY_PATH;
 export const Footer: FC = () => (
   <footer className="bg-white">
     <div className="pt-12 lg:pt-16">
-      <div className="max-w-screen-2xl px-4 md:px-8 mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-12 lg:gap-8 mb-16">
+      <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
+        <div className="mb-16 grid grid-cols-2 gap-12 md:grid-cols-4 lg:grid-cols-6 lg:gap-8">
           <div className="col-span-full lg:col-span-2">
-            <div className="lg:-mt-2 mb-4">
+            <div className="mb-4 lg:-mt-2">
               <a href="/" className="flex items-center gap-2.5 text-2xl" aria-label="logo">
                 <span>⚔</span>
                 <IXAnary className="w-30 h-8" />
               </a>
             </div>
-            <p className="text-gray-500 sm:pr-8 mb-6">
+            <p className="mb-6 text-gray-500 sm:pr-8">
               Quo usque tandem abutere, Catilina, patientia nostra? Quam diu etiam furor iste tuus nos eludet?
             </p>
             <SocialLinks />
           </div>
           <div>
-            <div className="text-gray-800 font-bold tracking-widest mb-4">IXAnary</div>
+            <div className="mb-4 font-bold tracking-widest text-gray-800">IXAnary</div>
             <nav className="flex flex-col gap-4">
               <div>
                 <StyledLink href={ixanaryPath} isExternal>
@@ -79,7 +79,7 @@ export const Footer: FC = () => (
             </nav>
           </div>
           <div>
-            <div className="text-gray-800 font-bold tracking-widest mb-4">Platforms</div>
+            <div className="mb-4 font-bold tracking-widest text-gray-800">Platforms</div>
             <nav className="flex flex-col gap-4">
               <div>
                 <StyledLink href="https://sengokuixa.jp/" isExternal>
@@ -114,7 +114,7 @@ export const Footer: FC = () => (
             </nav>
           </div>
           <div>
-            <div className="text-gray-800 font-bold tracking-widest mb-4">Links</div>
+            <div className="mb-4 font-bold tracking-widest text-gray-800">Links</div>
             <nav className="flex flex-col gap-4">
               <div>
                 <StyledLink href="https://world.sengokuixa.jp/help/ixa_help.php?ch=1&s=23" isExternal>
@@ -139,7 +139,7 @@ export const Footer: FC = () => (
             </nav>
           </div>
           <div>
-            <div className="text-gray-800 font-bold tracking-widest mb-4">Legal</div>
+            <div className="mb-4 font-bold tracking-widest text-gray-800">Legal</div>
             <nav className="flex flex-col gap-4">
               <div>
                 <StyledLink href="/lorem">lorem ipsum</StyledLink>

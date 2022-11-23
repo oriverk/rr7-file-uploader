@@ -17,7 +17,7 @@ export const Markdown: FC<{ markdown: string }> = (props) => {
 
   return (
     <article
-      className="mx-auto max-w-3xl prose lg:prose-lg prose-img:rounded-xl prose-headings:underline prose-a:text-blue-600"
+      className="prose mx-auto max-w-3xl prose-headings:underline prose-a:text-blue-600 prose-img:rounded-xl lg:prose-lg"
       // eslint-disable-next-line react/no-danger
       dangerouslySetInnerHTML={{ __html: html }}
     />

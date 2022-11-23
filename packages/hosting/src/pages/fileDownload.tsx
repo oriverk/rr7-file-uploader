@@ -75,11 +75,11 @@ const FileDownload: FC = () => {
         <Seo noindex />
         <AmazonAffiliateBanners isKasane />
         <div className="w-full max-w-5xl">
-          <h1 className="mb-8 text-xl text-center">ダウンロード</h1>
-          <p className="mb-8 text-lg text-center text-red-500 font-medium">{errorText}</p>
+          <h1 className="mb-8 text-center text-xl">ダウンロード</h1>
+          <p className="mb-8 text-center text-lg font-medium text-red-500">{errorText}</p>
           <Link
             to="/files"
-            className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="block w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
           >
             ファイル一覧へ戻る
           </Link>
@@ -93,7 +93,7 @@ const FileDownload: FC = () => {
       <Seo noindex />
       <AmazonAffiliateBanners isKasane />
       <div className="mx-auto max-w-5xl">
-        <h1 className="mb-8 text-xl text-center">ダウンロード</h1>
+        <h1 className="mb-8 text-center text-xl">ダウンロード</h1>
         <div className="flex flex-col gap-6">
           <div className="mb-4 text-base sm:text-lg">
             {saveName} のダウンロードを続けるには
@@ -101,19 +101,19 @@ const FileDownload: FC = () => {
               to="/terms"
               target="_blank"
               rel="noopener noreferrer"
-              className="mx-4 text-indigo-500 hover:text-red-600 underline underline-offset-4 active:text-red-700 transition duration-100"
+              className="mx-4 text-indigo-500 underline underline-offset-4 transition duration-100 hover:text-red-600 active:text-red-700"
             >
               利用規約
             </Link>
             に同意した上で「ダウンロード」ボタンを押下してください。ダウンロードが開始されます。
           </div>
           <div className="mb-4">
-            <label className="ml-2 flex justify-center items-center text-base font-medium text-gray-900 dark:text-gray-300">
+            <label className="ml-2 flex items-center justify-center text-base font-medium text-gray-900 dark:text-gray-300">
               <input
                 type="checkbox"
                 checked={isConfirmed}
                 onChange={handleConfirm}
-                className="w-4 h-4 mr-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                className="mr-4 h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
               />
               利用規約に同意する
             </label>
@@ -122,7 +122,7 @@ const FileDownload: FC = () => {
             <a
               href={objectUrl}
               download={saveName}
-              className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              className="block w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
               onClick={handleDownload}
             >
               ダウンロード

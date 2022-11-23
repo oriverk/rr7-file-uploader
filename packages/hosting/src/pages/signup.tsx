@@ -40,8 +40,8 @@ const Signup: FC = () => {
     return (
       <Container>
         <Seo noindex />
-        <h2 className="text-gray-800 text-2xl lg:text-3xl font-bold text-center mb-4 md:mb-8">Signup</h2>
-        <div className="p-4 md:p-8 mx-auto max-w-lg border rounded-lg text-center">
+        <h2 className="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-8 lg:text-3xl">Signup</h2>
+        <div className="mx-auto max-w-lg rounded-lg border p-4 text-center md:p-8">
           {error && <strong className="text-red-500">{`Error: ${error}`}</strong>}
           {loading && <p>Loading...</p>}
         </div>
@@ -52,20 +52,20 @@ const Signup: FC = () => {
   return (
     <Container>
       <Seo noindex />
-      <h2 className="text-gray-800 text-2xl lg:text-3xl font-bold text-center mb-4 md:mb-8">Signup</h2>
+      <h2 className="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-8 lg:text-3xl">Signup</h2>
       <FormProvider {...methos}>
-        <form onSubmit={onSubmit} className="max-w-lg border rounded-lg mx-auto">
+        <form onSubmit={onSubmit} className="mx-auto max-w-lg rounded-lg border">
           <div className="flex flex-col gap-4 p-4 md:p-8">
             <Input id="email" label="Eメール" placeholder="example@example.com" validation={{ required: "required" }} />
             <PasswordInput id="password" label="パスワード" validation={{ required: "required" }} />
             <Button type="submit">サインアップ</Button>
           </div>
-          <div className="flex justify-center items-center bg-gray-100 p-4">
-            <p className="text-gray-500 text-sm text-center">
+          <div className="flex items-center justify-center bg-gray-100 p-4">
+            <p className="text-center text-sm text-gray-500">
               Don&apos;t have an account?
               <Link
                 to="/login"
-                className="text-indigo-500 hover:text-indigo-600 active:text-indigo-700 transition duration-100"
+                className="text-indigo-500 transition duration-100 hover:text-indigo-600 active:text-indigo-700"
               >
                 login
               </Link>

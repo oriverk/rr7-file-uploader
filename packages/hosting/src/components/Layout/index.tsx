@@ -2,7 +2,7 @@ import { FC, Suspense } from "react";
 import { Outlet } from "react-router-dom";
 
 import { GoogleAnalytics, usePageView } from "@/utils/google/gtag";
-import { AdsByGoogle, useGoogleAdsense } from "@/utils/google/adsense";
+import { useGoogleAdsense } from "@/utils/google/adsense";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { Loading } from "../Icons";
@@ -17,12 +17,12 @@ const LoadingPage: FC = () => (
 
 export const Layout: FC = () => {
   usePageView();
-  // useGoogleAdsense();
+  useGoogleAdsense();
   return (
     <>
       <GoogleAnalytics />
       {/* <AdsByGoogle /> */}
-      <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+      <div className="flex min-h-screen flex-col bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100">
         <div className="max-w-screen-2xl px-4 md:px-8">
           <Header />
         </div>

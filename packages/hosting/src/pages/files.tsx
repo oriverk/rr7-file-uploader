@@ -35,26 +35,26 @@ const StyledTr: FC<TrProps> = (props) => {
   const sizeString = convertByteWithUnit(size);
 
   return (
-    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+    <tr className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
       <th scope="row" className="px-6 py-4">
-        <Link to={`/files/${id}`} className="font-medium text-blue-600 dark:text-blue-300 hover:underline">
+        <Link to={`/files/${id}`} className="font-medium text-blue-600 hover:underline dark:text-blue-300">
           {name}
         </Link>
       </th>
-      <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+      <td className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
         <time dateTime={createdAt} title={`作成：${createdAt}`}>
           {createdAt}
         </time>
       </td>
-      <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+      <td className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
         <time dateTime={updatedAt} title={`更新：${updatedAt}`}>
           {updatedAt}
         </time>
       </td>
-      <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+      <td className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
         <div title={`${size}byte`}>{sizeString}</div>
       </td>
-      <td className="px-6 py-4 text-center font-medium text-gray-900 dark:text-white whitespace-nowrap">
+      <td className="whitespace-nowrap px-6 py-4 text-center font-medium text-gray-900 dark:text-white">
         {downloaded}
       </td>
     </tr>
@@ -107,8 +107,8 @@ const Files: FC = () => {
       <Seo pathname="/files" title="Files" />
       <div className="w-full max-w-5xl">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <table className="dark table-auto w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <table className="dark w-full table-auto text-left text-sm text-gray-500 dark:text-gray-400">
+            <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col" className="px-6 py-3" title="file">
                   ファイル
@@ -123,7 +123,7 @@ const Files: FC = () => {
                   サイズ
                 </th>
                 <th scope="col" className="px-6 py-3" title="download">
-                  <CloudArrowDownIcon className="h-5 w-5 mx-auto text-gray-700 dark:text-gray-400 uppercase pointer-events-none" />
+                  <CloudArrowDownIcon className="pointer-events-none mx-auto h-5 w-5 uppercase text-gray-700 dark:text-gray-400" />
                 </th>
               </tr>
             </thead>

@@ -13,10 +13,10 @@ export const RequiredAuth: FC = () => {
   if (loading) {
     return (
       <Container>
-        <div className="mt-8 mx-auto max-w-xl">
-          <h2 className="text-gray-800 text-2xl lg:text-3xl font-bold text-center mb-4 md:mb-8">Authentication</h2>
+        <div className="mx-auto mt-8 max-w-xl">
+          <h2 className="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-8 lg:text-3xl">Authentication</h2>
           <div className="grid grid-cols-1 gap-6">
-            <div className="p-4 md:p-8 mx-auto max-w-lg border rounded-lg text-center">
+            <div className="mx-auto max-w-lg rounded-lg border p-4 text-center md:p-8">
               <strong>...loading</strong>
             </div>
           </div>
@@ -28,10 +28,10 @@ export const RequiredAuth: FC = () => {
   if (!loading && error) {
     return (
       <Container>
-        <div className="mt-8 mx-auto max-w-xl">
-          <h2 className="text-gray-800 text-2xl lg:text-3xl font-bold text-center mb-4 md:mb-8">Authentication</h2>
+        <div className="mx-auto mt-8 max-w-xl">
+          <h2 className="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-8 lg:text-3xl">Authentication</h2>
           <div className="grid grid-cols-1 gap-6">
-            <div className="p-4 md:p-8 mx-auto max-w-lg border rounded-lg text-center">
+            <div className="mx-auto max-w-lg rounded-lg border p-4 text-center md:p-8">
               {error && <strong className="text-red-500">{`Error: ${error}`}</strong>}
             </div>
           </div>

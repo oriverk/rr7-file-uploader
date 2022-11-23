@@ -7,7 +7,7 @@ import { useRandomHeroImage } from "@/hooks/useRandomHeroImage";
 export const GameStart: FC = () => {
   const startImgUrl = getCloudinaryImage(`ixanary/game-start.webp`);
   return (
-    <div className="relative group h-[248px] w-[238px]">
+    <div className="group relative h-[248px] w-[238px]">
       <a
         href="https://sengokuixa.jp/"
         title="Yahoo! JAPAN IDをお持ちでない方もこちら　登録は5秒でOK！　ゲームスタート"

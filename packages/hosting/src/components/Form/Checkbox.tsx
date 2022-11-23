@@ -12,7 +12,7 @@ export const CheckBox: FC<IProps> = (props) => {
 
   return (
     <div>
-      <label htmlFor={id} className="inline-flex items-center w-full">
+      <label htmlFor={id} className="inline-flex w-full items-center">
         <input
           type="checkbox"
           {...register(id)}
@@ -20,7 +20,7 @@ export const CheckBox: FC<IProps> = (props) => {
           id={id}
           readOnly={readOnly}
           disabled={disabled}
-          className="rounded border-gray-30 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-offset-0 focus:ring-indigo-200 focus:ring-opacity-50"
+          className="border-gray-30 rounded text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 focus:ring-offset-0"
         />
         <span className="ml-2">{label}</span>
       </label>

@@ -18,7 +18,7 @@ const HeaderNavLink: FC<IHeaderNavLink> = (props) => {
         href={to}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-gray-600 hover:text-indigo-500 active:text-indigo-700 text-lg font-semibold transition duration-100"
+        className="text-lg font-semibold text-gray-600 transition duration-100 hover:text-indigo-500 active:text-indigo-700"
       >
         {children}
       </a>
@@ -30,7 +30,7 @@ const HeaderNavLink: FC<IHeaderNavLink> = (props) => {
     <NavLink
       to={to}
       className={({ isActive }) =>
-        `${active(isActive)} hover:text-indigo-500 active:text-indigo-700 text-lg font-semibold transition duration-100`
+        `${active(isActive)} text-lg font-semibold transition duration-100 hover:text-indigo-500 active:text-indigo-700`
       }
     >
       {children}
@@ -39,8 +39,8 @@ const HeaderNavLink: FC<IHeaderNavLink> = (props) => {
 };
 
 export const Header: FC = () => (
-  <header className="flex flex-col md:flex-row gap-4 justify-between items-center py-4 md:py-8">
-    <NavLink to="" className="inline-flex items-center text-black-800 text-2xl md:text-3xl font-bold gap-2.5">
+  <header className="flex flex-col items-center justify-between gap-4 py-4 md:flex-row md:py-8">
+    <NavLink to="" className="text-black-800 inline-flex items-center gap-2.5 text-2xl font-bold md:text-3xl">
       👆&nbsp;Uploader
     </NavLink>
     <nav className="flex gap-12">

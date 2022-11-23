@@ -52,7 +52,7 @@ const FileDetail: FC = () => {
   if (error || !value) {
     return (
       <Container>
-        <div className="mt-8 mx-auto max-w-5xl">
+        <div className="mx-auto mt-8 max-w-5xl">
           <strong>Error: {JSON.stringify(error)}</strong>
         </div>
       </Container>
@@ -66,11 +66,11 @@ const FileDetail: FC = () => {
       <Seo pathname={`/files/${fileId}`} title={name} description={`Download ${name}`} />
       <AmazonAffiliateBanners isKasane />
       <div className="w-full max-w-5xl">
-        <h2 className="text-2xl text-center">{name}</h2>
-        <div className="mt-8 mx-auto">
+        <h2 className="text-center text-2xl">{name}</h2>
+        <div className="mx-auto mt-8">
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table className="dark table-auto w-full text-sm text-left text-gray-500 dark:text-gray-400">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <table className="dark w-full table-auto text-left text-sm text-gray-500 dark:text-gray-400">
+              <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                   <th scope="col" className="px-6 py-3">
                     label
@@ -81,43 +81,43 @@ const FileDetail: FC = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                  <th scope="row" className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                <tr className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
+                  <th scope="row" className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
                     ファイル
                   </th>
-                  <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">{name}</td>
+                  <td className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">{name}</td>
                 </tr>
-                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                  <th scope="row" className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                <tr className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
+                  <th scope="row" className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
                     種類
                   </th>
-                  <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                  <td className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
                     {contentType}
                   </td>
                 </tr>
-                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                  <th scope="row" className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                <tr className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
+                  <th scope="row" className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
                     サイズ
                   </th>
-                  <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                  <td className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
                     {convertByteWithUnit(size)}
                   </td>
                 </tr>
-                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                  <th scope="row" className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                <tr className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
+                  <th scope="row" className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
                     最終更新
                   </th>
-                  <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                  <td className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
                     <time dateTime={updatedAt} title={`作成：${createdAt}`}>
                       {updatedAt}
                     </time>
                   </td>
                 </tr>
-                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                  <th scope="row" className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                <tr className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
+                  <th scope="row" className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
                     ダウンロード
                   </th>
-                  <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                  <td className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
                     {downloaded}
                   </td>
                 </tr>
@@ -126,14 +126,14 @@ const FileDetail: FC = () => {
           </div>
         </div>
         {description && (
-          <div className="mt-8 mx-auto max-w-5xl">
+          <div className="mx-auto mt-8 max-w-5xl">
             <Markdown markdown={description} />
           </div>
         )}
-        <div className="mt-8 mx-auto max-w-5xl">
+        <div className="mx-auto mt-8 max-w-5xl">
           <Link
             to={`download?t=${Date.now()}`}
-            className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="block w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
           >
             次へ進む
           </Link>

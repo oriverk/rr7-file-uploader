@@ -61,8 +61,8 @@ export const Gallery: FC = () => {
 
   return (
     <>
-      <h2 className="text-gray-800 text-2xl lg:text-3xl font-bold text-center mb-4 md:mb-8 xl:mb-12">IXAnary</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 xl:gap-8 mb-4 md:mb-8">
+      <h2 className="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-8 lg:text-3xl xl:mb-12">IXAnary</h2>
+      <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:mb-8 md:gap-6 lg:grid-cols-4 xl:gap-8">
         <GridConetnt href={ixanaryPath} imgSrc={url} imgAlt={name} text="Top" isExternal />
         <GridConetnt
           href={urlJoin(ixanaryPath, "albums")}

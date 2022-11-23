@@ -15,8 +15,8 @@ export const BuyMeCoffeeButton: FC = () => (
 
 export const BuyMeCoffee: FC = () => (
   <a href="https://www.buymeacoffee.com/ixanary" target="_blank" rel="noopener noreferrer" role="button">
-    <div className="py-1 px-2 flex items-center justify-center rounded-md bg-[#fd0] hover:bg-[#f7d501] transition-colors delay-50 duration-75 ease-out text-black font-bold">
-      <Coffee className="w-7 h-7 mr-1" />
+    <div className="delay-50 flex items-center justify-center rounded-md bg-[#fd0] py-1 px-2 font-bold text-black transition-colors duration-75 ease-out hover:bg-[#f7d501]">
+      <Coffee className="mr-1 h-7 w-7" />
       BuyMeCoffee
     </div>
   </a>

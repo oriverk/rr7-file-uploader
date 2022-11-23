@@ -64,8 +64,8 @@ export const BannerLink: FC<BannerProps> = (props) => {
       style={{ border: "none", margin: 0 }}
       sandbox="allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation"
     />
-  )
-}
+  );
+};
 
 export const NitiyouhinBanner: FC = () => (
   <BannerLink
@@ -74,7 +74,7 @@ export const NitiyouhinBanner: FC = () => (
     width={300}
     height={250}
   />
-)
+);
 
 export const ChargeBanner: FC = () => (
   <BannerLink
@@ -82,9 +82,8 @@ export const ChargeBanner: FC = () => (
     src="https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=12&l=ur1&category=gift_certificates&banner=1TJ8XM5YGJR5WC15P202&f=ifr&linkID=6fd35f43024385a68a48038d7a80785d&t=ixanary-uploader-22&tracking_id=ixanary-uploader-22"
     width={300}
     height={250}
-
   />
-)
+);
 
 export const TimeSaleBanner: FC = () => {
   return (
@@ -94,8 +93,8 @@ export const TimeSaleBanner: FC = () => {
       width={300}
       height={250}
     />
-  )
-}
+  );
+};
 
 interface BannersProps {
   isKasane?: boolean;

@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { FC, useEffect, CSSProperties } from "react";
+import { FC, CSSProperties } from "react";
 
 declare global {
   // eslint-disable-next-line no-unused-vars

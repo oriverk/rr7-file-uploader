@@ -55,46 +55,47 @@ export const DownloadModal: FC<Props> = (props) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle text-gray-900 shadow-xl transition-all dark:bg-gray-900 dark:text-gray-100">
                   <div className="relative">
                     <button
                       type="button"
-                      className="absolute right-0 w-8 h-8 flex items-center justify-center text-slate-500 hover:text-slate-600 dark:text-slate-400 dark:hover:text-slate-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+                      className="absolute right-0 flex h-8 w-8 items-center justify-center text-slate-500 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 dark:text-slate-400 dark:hover:text-slate-300"
                       onClick={onClose}
                     >
-                      <XMarkIcon className="w-6 h-6" />
+                      <XMarkIcon className="h-6 w-6" />
                     </button>
                   </div>
-                  <Dialog.Title as="h3" className="mb-8 text-center text-lg sm:text-xl font-medium leading-6">
+                  <Dialog.Title as="h3" className="mb-8 text-center text-lg font-medium leading-6 sm:text-xl">
                     Downloaded?
                   </Dialog.Title>
                   <div className="">
                     <div className="mb-4">
-                      <p className="mb-2 text-base">
+                      {/* <p className="mb-2 text-base">
                         もしよろしければ下サポートお願いします。弊サイトやMera等の改修の励みになります。
-                      </p>
+                      </p> */}
                       <BuyMePotato />
                     </div>
-                    <div className="mb-4 flex justify-center">
-                      <TimeSaleBanner />
+                    <div className="mb-4 flex justify-center gap-x-4">
+                      <PocketMonsterScarlet />
+                      <PocketMonsterViolet />
                     </div>
                     <div className="mb-4">
                       {!copiedText ? (
                         <button
                           type="button"
                           onClick={handleCopy}
-                          className="w-full flex justify-center py-1 px-4 border border-gray-900 rounded-md bg-gray-300 hover:bg-gray-400"
+                          className="flex w-full justify-center rounded-md border border-gray-900 bg-gray-300 py-1 px-4 hover:bg-gray-400"
                         >
-                          <LinkIcon className="w-6 h-6 mr-4" />
+                          <LinkIcon className="mr-4 h-6 w-6" />
                           URLリンクをコピーする
                         </button>
                       ) : (
                         <button
                           type="button"
                           disabled
-                          className="w-full flex justify-center py-1 px-4 border border-gray-900 rounded-md bg-gray-300"
+                          className="flex w-full justify-center rounded-md border border-gray-900 bg-gray-300 py-1 px-4"
                         >
-                          <CheckIcon className="w-6 h-6 mr-4 text-teal-400" />
+                          <CheckIcon className="mr-4 h-6 w-6 text-teal-400" />
                           クリップボードにコピーしました。
                         </button>
                       )}

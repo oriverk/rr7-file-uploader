@@ -48,8 +48,8 @@ export const TextArea: FC<IProps> = (props) => {
           aria-describedby={id}
         />
         {errors[id] && (
-          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-            <ExclamationCircleIcon className="w-6 h-6 text-red-500" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+            <ExclamationCircleIcon className="h-6 w-6 text-red-500" />
           </div>
         )}
       </div>

@@ -92,7 +92,7 @@ export const DropzoneInput: FC<DropzoneInputProps> = (props) => {
         <label className="block text-sm font-normal text-gray-700" htmlFor={id}>
           {label}
         </label>
-        <div className="py-3 pl-3 pr-4 text-sm border border-gray-300 divide-y divide-gray-300 rounded-md">
+        <div className="divide-y divide-gray-300 rounded-md border border-gray-300 py-3 pl-3 pr-4 text-sm">
           No file uploaded
         </div>
       </div>
@@ -112,14 +112,14 @@ export const DropzoneInput: FC<DropzoneInputProps> = (props) => {
           <>
             {files.length === maxFiles ? null : (
               <div
-                className="mt-1 focus:outline-none focus:ring-dark-400 group"
+                className="focus:ring-dark-400 group mt-1 focus:outline-none"
                 {...getRootProps()}
                 {...controllerProps}
               >
                 <input {...getInputProps()} />
                 <div
                   className={clsx(
-                    "w-full p-2 bg-gray-100 border border-gray-300 border-dashed rounded cursor-pointer",
+                    "w-full cursor-pointer rounded border border-dashed border-gray-300 bg-gray-100 p-2",
                     errors[id] ? "border-red-500 group-focus:border-red-500" : "group-focus:border-primary-500"
                   )}
                 >
@@ -137,7 +137,7 @@ export const DropzoneInput: FC<DropzoneInputProps> = (props) => {
               ) : null}
             </div>
             {!readOnly && !!files?.length && (
-              <ul className="mt-1 border border-gray-300 divide-y divide-gray-300 rounded-md">
+              <ul className="mt-1 divide-y divide-gray-300 rounded-md border border-gray-300">
                 {files.map((file) => (
                   <FilePreview key={file.toString()} readOnly={readOnly} file={file} deleteFile={deleteFile} />
                 ))}

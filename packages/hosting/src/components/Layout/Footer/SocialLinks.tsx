@@ -7,9 +7,9 @@ export const SocialLinks: FC = () => (
       href="https://twitter.com/IXAnary"
       target="_blank"
       rel="noreferrer noopener"
-      className="text-gray-400 hover:text-gray-500 active:text-gray-600 transition duration-100"
+      className="text-gray-400 transition duration-100 hover:text-gray-500 active:text-gray-600"
     >
-      <Twitter className="w-5 h-5" />
+      <Twitter className="h-5 w-5" />
     </a>
   </div>
 );

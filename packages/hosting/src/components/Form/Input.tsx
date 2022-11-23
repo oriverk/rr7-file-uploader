@@ -58,7 +58,7 @@ export const Input: FC<IProps> = (props) => {
         />
 
         {errors[id] && (
-          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
             <ExclamationCircleIcon className="h-6 w-6 text-red-500" />
           </div>
         )}
