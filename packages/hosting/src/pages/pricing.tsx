@@ -1,7 +1,6 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import { FC } from "react";
-import { CheckIcon } from "@heroicons/react/outline";
-import { InformationCircleIcon } from "@heroicons/react/solid";
+import { CheckIcon } from "@heroicons/react/24/outline";
+import { InformationCircleIcon } from "@heroicons/react/24/solid";
 
 import { Container } from "@/components/Container";
 import { Seo } from "@/components/Seo";

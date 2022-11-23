@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { FC, MouseEvent } from "react";
-import { PaperClipIcon, PhotographIcon, XIcon } from "@heroicons/react/outline";
+import { PaperClipIcon, PhotoIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 import type { FileWithPreview } from "@/types/firestore";
 
@@ -30,7 +30,7 @@ export const FilePreview: FC<FilePreviewProps> = (props) => {
   return imagesType.includes(file.type) ? (
     <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm" key={file.name}>
       <div className="flex items-center flex-1 w-0">
-        <PhotographIcon className="flex-shrink-0 w-6 h-6 text-gray-400" aria-hidden="true" />
+        <PhotoIcon className="flex-shrink-0 w-6 h-6 text-gray-400" aria-hidden="true" />
         <span className="flex-1 w-0 ml-2 truncate">{file.name}</span>
       </div>
       <div className="flex items-center flex-shrink-0 ml-4 space-x-2">
@@ -40,7 +40,7 @@ export const FilePreview: FC<FilePreviewProps> = (props) => {
             onClick={handleDelete}
             className="text-xl font-medium text-red-500 rounded focus:ring focus:ring-red-500 focus:outline-none hover:text-red-700"
           >
-            <XIcon className="w-6 h-6" />
+            <XMarkIcon className="w-6 h-6" />
           </button>
         )}
       </div>
@@ -58,7 +58,7 @@ export const FilePreview: FC<FilePreviewProps> = (props) => {
             type="button"
             onClick={(e) => deleteFile?.(e, file)}
           >
-            <XIcon className="w-6 h-6" />
+            <XMarkIcon className="w-6 h-6" />
           </button>
         )}
       </div>

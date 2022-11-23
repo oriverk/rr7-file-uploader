@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import type { FC, ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { ExternalLinkIcon } from "@heroicons/react/outline";
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import urlJoin from "url-join";
 import { IXAnary } from "../../Icons";
@@ -29,7 +29,7 @@ const StyledLink: FC<StyledLinkProps> = (props) => {
   return (
     <a href={href} target="_black" rel="noopener noreferrer" className={clsx(className, "flex items-center")}>
       {children}
-      <ExternalLinkIcon className="ml-1 h-4 w-4" />
+      <ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4" />
     </a>
   );
 };

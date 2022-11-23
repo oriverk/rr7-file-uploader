@@ -1,5 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { CheckIcon, LinkIcon, XIcon } from "@heroicons/react/outline";
+import { CheckIcon, LinkIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { FC, Fragment, useCallback, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
@@ -62,7 +62,7 @@ export const DownloadModal: FC<Props> = (props) => {
                       className="absolute right-0 w-8 h-8 flex items-center justify-center text-slate-500 hover:text-slate-600 dark:text-slate-400 dark:hover:text-slate-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
                       onClick={onClose}
                     >
-                      <XIcon className="w-6 h-6" />
+                      <XMarkIcon className="w-6 h-6" />
                     </button>
                   </div>
                   <Dialog.Title as="h3" className="mb-8 text-center text-lg sm:text-xl font-medium leading-6">

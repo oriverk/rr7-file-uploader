@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { FC } from "react";
 import { RegisterOptions, useFormContext } from "react-hook-form";
-import { ExclamationCircleIcon } from "@heroicons/react/outline";
+import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 
 interface IProps

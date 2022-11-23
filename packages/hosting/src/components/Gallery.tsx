@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { ExternalLinkIcon } from "@heroicons/react/outline";
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { FC } from "react";
 import { Link } from "react-router-dom";
 import urlJoin from "url-join";
@@ -39,7 +39,7 @@ export const GridConetnt: FC<ContentProps> = ({ href, imgSrc, imgAlt, text, isEx
         <Content imgSrc={imgSrc} imgAlt={imgAlt} />
         <p className="relative ml-4 mb-3 flex items-center text-sm text-white md:ml-5 md:text-lg">
           {text}
-          <ExternalLinkIcon className="ml-1 h-4 w-4 text-white" />
+          <ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4 text-white" />
         </p>
       </a>
     );

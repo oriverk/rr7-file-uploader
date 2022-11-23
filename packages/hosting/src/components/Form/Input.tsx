@@ -2,7 +2,7 @@
 import React, { FC } from "react";
 import clsx from "clsx";
 import { RegisterOptions, useFormContext } from "react-hook-form";
-import { ExclamationCircleIcon } from "@heroicons/react/outline";
+import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 
 export interface IProps extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
   id: string;

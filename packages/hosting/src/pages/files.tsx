@@ -12,7 +12,7 @@ import {
   where,
 } from "firebase/firestore";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { CloudDownloadIcon } from "@heroicons/react/outline";
+import { CloudArrowDownIcon } from "@heroicons/react/24/outline";
 
 import { db } from "@/lib/firebase";
 import { dateString } from "@/utils/dateString";
@@ -123,7 +123,7 @@ const Files: FC = () => {
                   サイズ
                 </th>
                 <th scope="col" className="px-6 py-3" title="download">
-                  <CloudDownloadIcon className="h-5 w-5 mx-auto text-gray-700 dark:text-gray-400 uppercase pointer-events-none" />
+                  <CloudArrowDownIcon className="h-5 w-5 mx-auto text-gray-700 dark:text-gray-400 uppercase pointer-events-none" />
                 </th>
               </tr>
             </thead>

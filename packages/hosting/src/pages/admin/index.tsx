@@ -10,7 +10,7 @@ import {
   WithFieldValue,
 } from "firebase/firestore";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { CloudDownloadIcon, TrashIcon } from "@heroicons/react/outline";
+import { CloudArrowDownIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 import { db } from "@/lib/firebase";
 import { dateString } from "@/utils/dateString";
@@ -136,7 +136,7 @@ const Admin: FC = () => {
                     サイズ
                   </th>
                   <th scope="col" className="px-6 py-3" title="download">
-                    <CloudDownloadIcon className="h-5 w-5 mx-auto text-gray-700 dark:text-gray-400 uppercase pointer-events-none" />
+                    <CloudArrowDownIcon className="h-5 w-5 mx-auto text-gray-700 dark:text-gray-400 uppercase pointer-events-none" />
                   </th>
                   <th scope="col" className="px-6 py-3" title="deleted">
                     <TrashIcon className="h-5 w-5 mx-auto text-red-700 dark:text-red-500 uppercase pointer-events-none" />
