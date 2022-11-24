@@ -18,11 +18,11 @@ export const Button = forwardRef<Ref, IProps>((props, ref) => {
       type={type}
       className={clsx(
         className,
-        "w-full rounded-lg disabled:cursor-not-allowed bg-blue-700 disabled:bg-gray-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 disabled:hover:bg-gray-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 disabled:dark:bg-gray-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
+        "w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:cursor-not-allowed disabled:bg-gray-700 disabled:hover:bg-gray-800 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:dark:bg-gray-600 sm:w-auto"
       )}
       ref={ref}
     >
       {children}
     </button>
   );
-})
+});

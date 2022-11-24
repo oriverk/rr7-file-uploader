@@ -63,7 +63,8 @@ const EditFile: FC = () => {
       </Container>
       <Container>
         <div className="mx-auto max-w-xl">
-          <ButtonLink to="/admin"
+          <ButtonLink
+            to="/admin"
             className="bg-teal-700 hover:bg-teal-800 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
           >
             back to /admin

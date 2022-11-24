@@ -24,7 +24,12 @@ export const StyledLink: FC<StyledLinkProps> = (props) => {
   }
 
   return (
-    <a href={href} target="_black" rel="noopener noreferrer" className={clsx(className, "inline-flex items-center", _className)}>
+    <a
+      href={href}
+      target="_black"
+      rel="noopener noreferrer"
+      className={clsx(className, "inline-flex items-center", _className)}
+    >
       {children}
       <ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4" />
     </a>

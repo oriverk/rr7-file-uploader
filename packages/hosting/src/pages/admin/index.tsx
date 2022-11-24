@@ -53,9 +53,7 @@ const StyledTr: FC<TrProps> = (props) => {
       <Td>
         <div title={`${size}byte`}>{sizeString}</div>
       </Td>
-      <Td className="text-center">
-        {downloaded}
-      </Td>
+      <Td className="text-center">{downloaded}</Td>
       <td
         className={`whitespace-nowrap px-6 py-4 text-center font-medium ${deleted ? "text-red-500" : "text-blue-500"}`}
       >
@@ -108,7 +106,7 @@ const Admin: FC = () => {
     <>
       <Container className="mb-8">
         <div className="mx-auto w-full max-w-5xl">
-          <h1 className="text-center text-xl mb-4">Admin Page</h1>
+          <h1 className="mb-4 text-center text-xl">Admin Page</h1>
           <div className="flex flex-col gap-4">
             <ButtonLink to="new" className="w-full">
               create new File

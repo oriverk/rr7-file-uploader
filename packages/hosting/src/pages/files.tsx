@@ -55,9 +55,7 @@ const StyledTr: FC<TrProps> = (props) => {
       <Td>
         <div title={`${size}byte`}>{sizeString}</div>
       </Td>
-      <Td className="text-center">
-        {downloaded}
-      </Td>
+      <Td className="text-center">{downloaded}</Td>
     </tr>
   );
 };

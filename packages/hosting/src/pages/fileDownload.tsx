@@ -49,13 +49,12 @@ const FileDownload: FC = () => {
     if (!dbValue || !objectUrl) return;
     await updateDoc(firestoreRef, {
       downloaded: dbValue!.downloaded + 1,
-    })
-      .then(() => {
-        URL.revokeObjectURL(objectUrl)
-        setIsConfirmed(false);
-        setObjectUrl("");
-        setIsOpen(true)
-      })
+    }).then(() => {
+      URL.revokeObjectURL(objectUrl);
+      setIsConfirmed(false);
+      setObjectUrl("");
+      setIsOpen(true);
+    });
   }, [dbValue, objectUrl]);
 
   const handleCloseModal = useCallback(() => {
@@ -80,7 +79,9 @@ const FileDownload: FC = () => {
         <div className="flex flex-col gap-6">
           <div className="mb-4 text-base sm:text-lg">
             {saveName}&nbsp;のダウンロードを続けるには
-            <StyledLink href="/terms" className="mx-2" isExternal>利用規約</StyledLink>
+            <StyledLink href="/terms" className="mx-2" isExternal>
+              利用規約
+            </StyledLink>
             に同意した上で「ダウンロード」ボタンを押下してください。ダウンロードが開始されます。
           </div>
           <div className="mb-4">
@@ -98,8 +99,9 @@ const FileDownload: FC = () => {
                 ダウンロード
               </a>
             ) : (
-              <Button type="button" disabled>読み込み中</Button>
-
+              <Button type="button" disabled>
+                読み込み中
+              </Button>
             )}
             <ButtonLink to="/files">ファイル一覧へ戻る</ButtonLink>
           </div>

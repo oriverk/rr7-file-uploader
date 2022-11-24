@@ -2,12 +2,15 @@ import { DetailedHTMLProps, FC, InputHTMLAttributes } from "react";
 
 type Props = {
   label: string;
-} & DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
+} & DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
 
 export const Checkbox: FC<Props> = (props) => {
   const { id, label, ...rest } = props;
   return (
-    <label htmlFor={id} className="ml-2 flex items-center justify-center text-base font-medium text-gray-900 dark:text-gray-300">
+    <label
+      htmlFor={id}
+      className="ml-2 flex items-center justify-center text-base font-medium text-gray-900 dark:text-gray-300"
+    >
       <input
         type="checkbox"
         name={id}
@@ -19,5 +22,5 @@ export const Checkbox: FC<Props> = (props) => {
       />
       {label}
     </label>
-  )
-}
+  );
+};
