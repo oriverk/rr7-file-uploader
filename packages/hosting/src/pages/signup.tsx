@@ -1,5 +1,5 @@
 import { FC, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,6 +9,7 @@ import { SignInWithEmailAndPasswordSchema } from "@/lib/zod";
 import { Container } from "@/components/Container";
 import { Input, PasswordInput, Button } from "@/components/Form";
 import { Seo } from "@/components/Seo";
+import { StyledLink } from "@/components/StyledLink";
 
 const validEmail = import.meta.env.VITE_VALID_EMAIL_ADRESS;
 
@@ -62,13 +63,10 @@ const Signup: FC = () => {
           </div>
           <div className="flex items-center justify-center bg-gray-100 p-4">
             <p className="text-center text-sm text-gray-500">
-              Don&apos;t have an account?
-              <Link
-                to="/login"
-                className="text-indigo-500 transition duration-100 hover:text-indigo-600 active:text-indigo-700"
-              >
+              Do you have an account?&nbsp;
+              <StyledLink href="/login" className="text-indigo-500 hover:text-indigo-600">
                 login
-              </Link>
+              </StyledLink>
             </p>
           </div>
         </form>

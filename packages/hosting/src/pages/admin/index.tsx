@@ -17,6 +17,8 @@ import { dateString } from "@/utils/dateString";
 import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
 import { Container } from "@/components/Container";
 import { FirestoreFileType } from "@/types/firestore";
+import { ButtonLink } from "@/components/ButtonLink";
+import { Table, Thead, Th, Td } from "@/components/Table";
 
 interface IProps extends Omit<FirestoreFileType, "createdAt" | "updatedAt" | "deletedAt"> {
   id: string;
@@ -33,27 +35,27 @@ const StyledTr: FC<TrProps> = (props) => {
 
   return (
     <tr className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
-      <th scope="row" className="px-6 py-4">
+      <Th scope="row">
         <Link to={`files/${id}`} className="font-medium text-blue-600 hover:underline dark:text-blue-300">
           {name}
         </Link>
-      </th>
-      <td className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
+      </Th>
+      <Td>
         <time dateTime={createdAt} title={`作成：${createdAt}`}>
           {createdAt}
         </time>
-      </td>
-      <td className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
+      </Td>
+      <Td>
         <time dateTime={updatedAt} title={`更新：${updatedAt}`}>
           {updatedAt}
         </time>
-      </td>
-      <td className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
+      </Td>
+      <Td>
         <div title={`${size}byte`}>{sizeString}</div>
-      </td>
-      <td className="whitespace-nowrap px-6 py-4 text-center font-medium text-gray-900 dark:text-white">
+      </Td>
+      <Td className="text-center">
         {downloaded}
-      </td>
+      </Td>
       <td
         className={`whitespace-nowrap px-6 py-4 text-center font-medium ${deleted ? "text-red-500" : "text-blue-500"}`}
       >
@@ -104,52 +106,49 @@ const Admin: FC = () => {
 
   return (
     <>
-      <Container className="mb-8 flex flex-col justify-center gap-8">
-        <h1 className="text-center text-xl">Admin Page</h1>
-        <div className="mx-auto">
-          <h2 className="mb-4 text-lg">commands</h2>
-          <ul className="list-disc">
-            <li>
-              <Link to="new" className="font-medium text-blue-600 hover:underline dark:text-blue-300">
-                new File
-              </Link>
-            </li>
-          </ul>
+      <Container className="mb-8">
+        <div className="mx-auto w-full max-w-5xl">
+          <h1 className="text-center text-xl mb-4">Admin Page</h1>
+          <div className="flex flex-col gap-4">
+            <ButtonLink to="new" className="w-full">
+              create new File
+            </ButtonLink>
+          </div>
         </div>
       </Container>
       <Container>
         <div className="mx-auto w-full max-w-5xl">
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table className="dark w-full table-auto text-left text-sm text-gray-500 dark:text-gray-400">
-              <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
+            <Table className="dark w-full table-auto">
+              <Thead className="uppercase">
                 <tr>
-                  <th scope="col" className="px-6 py-3" title="file">
+                  <Th scope="col" title="file">
                     ファイル
-                  </th>
-                  <th scope="col" className="px-6 py-3" title="created at">
+                  </Th>
+                  <Th scope="col" title="created at">
                     作成
-                  </th>
-                  <th scope="col" className="px-6 py-3" title="updated at">
+                  </Th>
+                  <Th scope="col" title="updated at">
                     更新
-                  </th>
-                  <th scope="col" className="px-6 py-3" title="size">
+                  </Th>
+                  <Th scope="col" title="size">
                     サイズ
-                  </th>
-                  <th scope="col" className="px-6 py-3" title="download">
+                  </Th>
+                  <Th scope="col" title="download">
                     <CloudArrowDownIcon className="pointer-events-none mx-auto h-5 w-5 uppercase text-gray-700 dark:text-gray-400" />
-                  </th>
-                  <th scope="col" className="px-6 py-3" title="deleted">
+                  </Th>
+                  <Th scope="col" title="deleted">
                     <TrashIcon className="pointer-events-none mx-auto h-5 w-5 uppercase text-red-700 dark:text-red-500" />
-                  </th>
+                  </Th>
                 </tr>
-              </thead>
+              </Thead>
               <tbody>
                 {sortedFiles?.map((file) => {
                   const { description, path, fullPath, ...rest } = file;
                   return <StyledTr key={path} {...rest} />;
                 })}
               </tbody>
-            </table>
+            </Table>
           </div>
         </div>
       </Container>

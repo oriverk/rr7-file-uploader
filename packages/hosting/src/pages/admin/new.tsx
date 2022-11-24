@@ -12,6 +12,7 @@ import { storage, db } from "@/lib/firebase";
 import { Container } from "@/components/Container";
 import { TextArea, Button } from "@/components/Form";
 import { DropzoneInput } from "@/components/Dropzone";
+import { ButtonLink } from "@/components/ButtonLink";
 
 const defaultDescription = `## 注意・お知らせ
 
@@ -95,7 +96,12 @@ const NewFile: FC = () => {
                   }}
                 />
                 <TextArea id="description" label="description" />
-                <Button type="submit">submit</Button>
+                <div className="flex flex-col gap-4">
+                  <Button type="submit">submit</Button>
+                  <ButtonLink to="/admin" className="bg-red-600 hover:bg-red-700">
+                    Admin ファイル一覧へ戻る
+                  </ButtonLink>
+                </div>
               </div>
             </div>
           </form>

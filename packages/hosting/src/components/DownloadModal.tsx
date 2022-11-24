@@ -70,9 +70,6 @@ export const DownloadModal: FC<Props> = (props) => {
                   </Dialog.Title>
                   <div className="">
                     <div className="mb-4">
-                      {/* <p className="mb-2 text-base">
-                        もしよろしければ下サポートお願いします。弊サイトやMera等の改修の励みになります。
-                      </p> */}
                       <BuyMePotato />
                     </div>
                     <div className="mb-4 flex justify-center gap-x-4">

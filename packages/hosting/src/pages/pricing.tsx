@@ -1,6 +1,5 @@
 import { FC } from "react";
-import { CheckIcon } from "@heroicons/react/24/outline";
-import { InformationCircleIcon } from "@heroicons/react/24/solid";
+import { CheckIcon, InformationCircleIcon } from "@heroicons/react/24/outline";
 
 import { Container } from "@/components/Container";
 import { Seo } from "@/components/Seo";

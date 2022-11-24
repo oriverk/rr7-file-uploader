@@ -1,5 +1,5 @@
 import { FC, useEffect, useCallback, FormEvent } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 
@@ -10,6 +10,7 @@ import { Container } from "@/components/Container";
 import { CreateFormSchema } from "@/lib/zod";
 import { FirestoreFileType, FormData } from "@/types/firestore";
 import { Button, CheckBox, Input, TextArea } from "@/components/Form";
+import { ButtonLink } from "@/components/ButtonLink";
 
 const EditFile: FC = () => {
   const { fileId } = useParams() as {
@@ -62,12 +63,11 @@ const EditFile: FC = () => {
       </Container>
       <Container>
         <div className="mx-auto max-w-xl">
-          <Link
-            to="/admin"
-            className="block w-full rounded-lg bg-teal-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-teal-800 focus:outline-none focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800 sm:w-auto"
+          <ButtonLink to="/admin"
+            className="bg-teal-700 hover:bg-teal-800 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
           >
             back to /admin
-          </Link>
+          </ButtonLink>
         </div>
         <div className="mb-4">
           <FormProvider {...methods}>
