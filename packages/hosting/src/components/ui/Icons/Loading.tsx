@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import "../../styles/loading.css";
+import "@/styles/loading.css";
 
 export const Loading: FC = () => (
   <div className="sk-cube-grid">
