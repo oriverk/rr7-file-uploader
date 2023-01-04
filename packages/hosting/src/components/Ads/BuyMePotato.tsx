@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { BookOpenIcon } from "@heroicons/react/24/outline";
-import { Potato } from "../Icons";
+import { Potato } from "../ui/Icons";
 
 export const BuyMePotato: FC = () => {
   const url = import.meta.env.VITE_AMAZON_WISHLIST || "";

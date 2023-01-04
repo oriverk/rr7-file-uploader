@@ -4,7 +4,7 @@ import { FC, Fragment, useCallback, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 import { BuyMePotato } from "@/components/Ads/BuyMePotato";
-import { TimeSaleBanner } from "@/components/Ads/AmazonAffiliate"
+import { BannerLink } from "@/components/Ads/AmazonAffiliate";
 
 interface Props {
   isOpen: boolean;
@@ -73,8 +73,12 @@ export const DownloadModal: FC<Props> = (props) => {
                       <BuyMePotato />
                     </div>
                     <div className="mb-4 flex justify-center gap-x-4">
-                      <PocketMonsterScarlet />
-                      <PocketMonsterViolet />
+                      <BannerLink
+                        title="hatsuuri"
+                        src="https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=12&l=ur1&category=hatsuuri&banner=1DGPNCXT9MJFTVW8JJR2&f=ifr&linkID=66de47df926373f26f3a4faa5fb71dc0&t=ixanary-uploader-22&tracking_id=ixanary-uploader-22"
+                        width={300}
+                        height={250}
+                      />
                     </div>
                     <div className="mb-4">
                       {!copiedText ? (

@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import type { FC } from "react";
 import urlJoin from "url-join";
-import { StyledLink } from "@/components/StyledLink";
-import { IXAnary } from "../../Icons";
+import { StyledLink } from "@/components/ui/StyledLink";
+import { IXAnary } from "../../ui/Icons";
 import { CopyRight } from "./Copyright";
 import { SocialLinks } from "./SocialLinks";
 

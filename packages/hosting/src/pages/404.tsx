@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Container } from "@/components/Container";
+import { Container } from "@/components/ui/Container";
 import { Seo } from "@/components/Seo";
 
 export const PageNotFound: FC = () => (

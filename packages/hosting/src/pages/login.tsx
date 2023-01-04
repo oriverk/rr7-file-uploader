@@ -7,10 +7,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { auth } from "@/lib/firebase";
 import { SignInWithEmailAndPasswordSchema } from "@/lib/zod";
-import { Container } from "@/components/Container";
+import { Container } from "@/components/ui/Container";
 import { Input, PasswordInput, Button } from "@/components/Form";
 import { Seo } from "@/components/Seo";
-import { StyledLink } from "@/components/StyledLink";
+import { StyledLink } from "@/components/ui/StyledLink";
 
 const validEmail = import.meta.env.VITE_VALID_EMAIL_ADRESS;
 

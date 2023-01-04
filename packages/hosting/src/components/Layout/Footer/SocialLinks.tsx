@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Twitter } from "../../Icons";
+import { Twitter } from "../../ui/Icons";
 
 export const SocialLinks: FC = () => (
   <div className="flex gap-4">

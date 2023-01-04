@@ -13,7 +13,7 @@ const FileSchema = z.object({
 
 export const CreateFormSchema = z.object({
   name: z.string().min(3),
-  description: z.string().max(1000).nullable(),
+  description: z.string().max(10000).nullable(),
   file: z.array(FileSchema),
   // downloaded: z.number().min(0),
   // createdAt: z.date(),

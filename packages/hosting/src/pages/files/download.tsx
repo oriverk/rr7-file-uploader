@@ -5,15 +5,15 @@ import { ref, getBlob } from "firebase/storage";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 
 import { storage, db } from "@/lib/firebase";
-import { Container } from "@/components/Container";
+import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/Form";
 import { Seo } from "@/components/Seo";
 import { DownloadModal } from "@/components/DownloadModal";
 import { checkTimestampAge } from "@/utils/checkTimestampAge";
 import { AmazonAffiliateBanners } from "@/components/Ads/AmazonAffiliate";
-import { ButtonLink } from "@/components/ButtonLink";
-import { StyledLink } from "@/components/StyledLink";
-import { Checkbox } from "@/components/Checkbox";
+import { ButtonLink } from "@/components/ui/ButtonLink";
+import { StyledLink } from "@/components/ui/StyledLink";
+import { Checkbox } from "@/components/ui/Checkbox";
 
 const FileDownload: FC = () => {
   const [objectUrl, setObjectUrl] = useState<string>();

@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { CheckIcon, InformationCircleIcon } from "@heroicons/react/24/outline";
 
-import { Container } from "@/components/Container";
+import { Container } from "@/components/ui/Container";
 import { Seo } from "@/components/Seo";
 
 const potato = import.meta.env.VITE_AMAZON_WISHLIST || "";

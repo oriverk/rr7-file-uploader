@@ -12,13 +12,13 @@ import { useDocumentData } from "react-firebase-hooks/firestore";
 
 import { db } from "@/lib/firebase";
 import { dateString } from "@/utils/dateString";
-import { Container } from "@/components/Container";
+import { Container } from "@/components/ui/Container";
 import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
-import { Markdown } from "@/components/Markdown";
+import { Markdown } from "@/components/ui/Markdown";
 import { Seo } from "@/components/Seo";
 import { AmazonAffiliateBanners } from "@/components/Ads/AmazonAffiliate";
 import type { FirestoreFileType } from "@/types/firestore";
-import { ButtonLink } from "@/components/ButtonLink";
+import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Table, Thead, Th, Td } from "@/components/Table";
 
 interface IProps extends Omit<FirestoreFileType, "createdAt" | "updatedAt"> {

@@ -15,9 +15,9 @@ import { CloudArrowDownIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { db } from "@/lib/firebase";
 import { dateString } from "@/utils/dateString";
 import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
-import { Container } from "@/components/Container";
+import { Container } from "@/components/ui/Container";
 import { FirestoreFileType } from "@/types/firestore";
-import { ButtonLink } from "@/components/ButtonLink";
+import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Table, Thead, Th, Td } from "@/components/Table";
 
 interface IProps extends Omit<FirestoreFileType, "createdAt" | "updatedAt" | "deletedAt"> {

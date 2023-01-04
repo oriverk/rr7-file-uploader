@@ -19,8 +19,8 @@ const Pricing = lazy(() => import("./pages/pricing"));
 const TermOfService = lazy(() => import("./pages/term-of-service"));
 
 const Files = lazy(() => import("./pages/files"));
-const FileDetail = lazy(() => import("./pages/fileDetail"));
-const FileDownload = lazy(() => import("./pages/fileDownload"));
+const FileDetail = lazy(() => import("./pages/files/detail"));
+const FileDownload = lazy(() => import("./pages/files/download"));
 
 const App: FC = () => (
   <BrowserRouter>

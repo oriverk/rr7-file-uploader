@@ -6,11 +6,11 @@ import { useDocumentData } from "react-firebase-hooks/firestore";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { db } from "@/lib/firebase";
-import { Container } from "@/components/Container";
+import { Container } from "@/components/ui/Container";
 import { CreateFormSchema } from "@/lib/zod";
 import { FirestoreFileType, FormData } from "@/types/firestore";
 import { Button, CheckBox, Input, TextArea } from "@/components/Form";
-import { ButtonLink } from "@/components/ButtonLink";
+import { ButtonLink } from "@/components/ui/ButtonLink";
 
 const EditFile: FC = () => {
   const { fileId } = useParams() as {

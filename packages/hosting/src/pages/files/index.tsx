@@ -17,7 +17,7 @@ import { CloudArrowDownIcon } from "@heroicons/react/24/outline";
 import { db } from "@/lib/firebase";
 import { dateString } from "@/utils/dateString";
 import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
-import { Container } from "@/components/Container";
+import { Container } from "@/components/ui/Container";
 import { Seo } from "@/components/Seo";
 import { AmazonAffiliateBanners } from "@/components/Ads/AmazonAffiliate";
 import { FirestoreFileType } from "@/types/firestore";

@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Container } from "@/components/Container";
+import { Container } from "@/components/ui/Container";
 import { Hero } from "@/components/Hero";
 import { HelpCenter } from "@/components/HelpCenter";
 import { OurTeam } from "@/components/OurTeam";

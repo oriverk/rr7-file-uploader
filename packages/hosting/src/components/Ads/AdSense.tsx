@@ -33,14 +33,15 @@ export const AdSense: FC<Props> = (props) => {
     format = "auto",
     responsive = false,
   } = props;
+  if (!client) return null;
 
-  useEffect(() => {
-    if (client) {
-      if (window) {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (client) {
+  //     if (window) {
+  //       (window.adsbygoogle = window.adsbygoogle || []).push({});
+  //     }
+  //   }
+  // }, []);
 
   return (
     <ins

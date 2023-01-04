@@ -3,7 +3,7 @@ import { useLocation, Navigate, Outlet } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 import { auth } from "@/lib/firebase";
-import { Container } from "./Container";
+import { Container } from "./ui/Container";
 import { Seo } from "./Seo";
 
 export const RequiredAuth: FC = () => {

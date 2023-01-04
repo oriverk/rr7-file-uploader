@@ -9,10 +9,10 @@ import { v4 as uuidv4 } from "uuid";
 import { FormData } from "@/types/firestore";
 import { CreateFormSchema } from "@/lib/zod";
 import { storage, db } from "@/lib/firebase";
-import { Container } from "@/components/Container";
+import { Container } from "@/components/ui/Container";
 import { TextArea, Button } from "@/components/Form";
 import { DropzoneInput } from "@/components/Dropzone";
-import { ButtonLink } from "@/components/ButtonLink";
+import { ButtonLink } from "@/components/ui/ButtonLink";
 
 const defaultDescription = `## 注意・お知らせ
 
@@ -53,11 +53,9 @@ const NewFile: FC = () => {
       "state_changed",
       (snapshot) => {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        // eslint-disable-next-line no-console
         console.log("progress", progress);
       },
       (error) => {
-        // eslint-disable-next-line no-alert
         alert(`Error: ${error}`);
       },
       async () => {
