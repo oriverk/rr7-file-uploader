@@ -10,7 +10,7 @@ import { Button } from "@/components/Form";
 import { Seo } from "@/components/Seo";
 import { DownloadModal } from "@/components/DownloadModal";
 import { checkTimestampAge } from "@/utils/checkTimestampAge";
-import { AmazonAffiliateBanners } from "@/components/Ads/AmazonAffiliate";
+import { AmazonAffiliateBanners } from "@/components/ads/AmazonAffiliate";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { StyledLink } from "@/components/ui/StyledLink";
 import { Checkbox } from "@/components/ui/Checkbox";

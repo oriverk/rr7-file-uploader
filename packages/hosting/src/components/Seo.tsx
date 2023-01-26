@@ -3,8 +3,6 @@ import { Helmet } from "react-helmet-async";
 import urlJoin from "url-join";
 import { useRandomHeroImage } from "@/hooks/useRandomHeroImage";
 
-// import { CustomAdsense } from "@/components/Ads/AdSense";
-
 interface Props {
   pathname?: string;
   title?: string;
@@ -26,18 +24,15 @@ export const Seo: FC<Props> = (props) => {
   const defaultTitle = "Uploader";
   const metaTitle = title ? `${title} | ${defaultTitle}` : defaultTitle;
   return (
-    <>
-      <Helmet>
-        <title>{metaTitle}</title>
-        <link rel="canonical" href={pageUrl} />
-        <meta name="description" content={description || metaTitle} />
-        <meta property="og:url" content={pageUrl} />
-        <meta property="og:title" content={metaTitle} />
-        <meta property="og:description" content={description || metaTitle} />
-        <meta property="og:image" content={ogImageUrl} />
-        <meta name="robots" content={noindex ? "noindex,nofollow" : "all"} />
-      </Helmet>
-      {/* <CustomAdsense /> */}
-    </>
+    <Helmet>
+      <title>{metaTitle}</title>
+      <link rel="canonical" href={pageUrl} />
+      <meta name="description" content={description || metaTitle} />
+      <meta property="og:url" content={pageUrl} />
+      <meta property="og:title" content={metaTitle} />
+      <meta property="og:description" content={description || metaTitle} />
+      <meta property="og:image" content={ogImageUrl} />
+      <meta name="robots" content={noindex ? "noindex,nofollow" : "all"} />
+    </Helmet>
   );
 };

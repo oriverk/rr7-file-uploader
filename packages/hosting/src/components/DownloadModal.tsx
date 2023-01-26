@@ -3,8 +3,8 @@ import { CheckIcon, LinkIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { FC, Fragment, useCallback, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
-import { BuyMePotato } from "@/components/Ads/BuyMePotato";
-import { BannerLink } from "@/components/Ads/AmazonAffiliate";
+import { BuyMePotato } from "@/components/ads/BuyMePotato";
+import { BannerLink } from "@/components/ads/AmazonAffiliate";
 
 interface Props {
   isOpen: boolean;
@@ -69,16 +69,17 @@ export const DownloadModal: FC<Props> = (props) => {
                     Downloaded?
                   </Dialog.Title>
                   <div className="">
-                    <div className="mb-4">
-                      <BuyMePotato />
-                    </div>
+                    <h4 className="mb-8 text-center text-base">
+                      もしよければ、Amazonでモノ買う時の前には当サイト内バナーをポチッとしていってください！サイト・ツールの更新が捗ります。
+                    </h4>
                     <div className="mb-4 flex justify-center gap-x-4">
                       <BannerLink
-                        title="hatsuuri"
-                        src="https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=12&l=ur1&category=hatsuuri&banner=1DGPNCXT9MJFTVW8JJR2&f=ifr&linkID=66de47df926373f26f3a4faa5fb71dc0&t=ixanary-uploader-22&tracking_id=ixanary-uploader-22"
-                        width={300}
-                        height={250}
+                        title="AmazonTimeSale"
+                        src="https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=12&l=ur1&category=blackfriday&banner=0KXBJKTD7WQ6NREAZ002&f=ifr&linkID=bf2fe05f5e3d8d33e3bb02b71b7215f5&t=ixanary-uploader-22&tracking_id=ixanary-uploader-22"
                       />
+                    </div>
+                    <div className="mb-4">
+                      <BuyMePotato />
                     </div>
                     <div className="mb-4">
                       {!copiedText ? (
@@ -101,7 +102,7 @@ export const DownloadModal: FC<Props> = (props) => {
                         </button>
                       )}
                     </div>
-                    <p>フォルダ内にREADMEファイルがある場合はよく読んで使用してください。</p>
+                    <p className="text-center">README ファイルをよく読んで使用してください。</p>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

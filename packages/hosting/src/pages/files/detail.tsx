@@ -16,7 +16,7 @@ import { Container } from "@/components/ui/Container";
 import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
 import { Markdown } from "@/components/ui/Markdown";
 import { Seo } from "@/components/Seo";
-import { AmazonAffiliateBanners } from "@/components/Ads/AmazonAffiliate";
+import { AmazonAffiliateBanners } from "@/components/ads/AmazonAffiliate";
 import type { FirestoreFileType } from "@/types/firestore";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Table, Thead, Th, Td } from "@/components/Table";

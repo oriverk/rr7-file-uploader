@@ -1,13 +1,6 @@
 import clsx from "clsx";
 import { FC, CSSProperties } from "react";
 
-declare global {
-  // eslint-disable-next-line no-unused-vars
-  interface Window {
-    adsbygoogle?: Array<unknown>;
-  }
-}
-
 interface Props {
   className?: string;
   client: string;
@@ -35,14 +28,6 @@ export const AdSense: FC<Props> = (props) => {
   } = props;
   if (!client) return null;
 
-  // useEffect(() => {
-  //   if (client) {
-  //     if (window) {
-  //       (window.adsbygoogle = window.adsbygoogle || []).push({});
-  //     }
-  //   }
-  // }, []);
-
   return (
     <ins
       className={clsx(className, "adsbygoogle")}
@@ -55,8 +40,3 @@ export const AdSense: FC<Props> = (props) => {
     />
   );
 };
-
-const publisherId = import.meta.env.VITE_PUBLISHER_ID;
-export const CustomAdsense: FC = () => (
-  <AdSense client={publisherId} slot="3735361497" style={{ display: "block", textAlign: "center" }} responsive />
-);
