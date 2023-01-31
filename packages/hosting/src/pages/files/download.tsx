@@ -10,7 +10,6 @@ import { Button } from "@/components/Form";
 import { Seo } from "@/components/Seo";
 import { DownloadModal } from "@/components/DownloadModal";
 import { checkTimestampAge } from "@/utils/checkTimestampAge";
-import { AmazonAffiliateBanners } from "@/components/ads/AmazonAffiliate";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { StyledLink } from "@/components/ui/StyledLink";
 import { Checkbox } from "@/components/ui/Checkbox";
@@ -71,9 +70,8 @@ const FileDownload: FC = () => {
   }
 
   return (
-    <Container className="flex flex-col gap-8 sm:flex-row">
+    <Container className="">
       <Seo noindex />
-      <AmazonAffiliateBanners isKasane />
       <div className="mx-auto max-w-5xl">
         <h1 className="mb-8 text-center text-xl">ダウンロード</h1>
         <div className="flex flex-col gap-6">

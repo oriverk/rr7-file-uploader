@@ -64,10 +64,10 @@ const Login: FC = () => {
           </div>
           <div className="flex items-center justify-center bg-gray-100 p-4">
             <p className="text-center text-sm text-gray-500">
-              Don&apos;t have an account?
+              Don&apos;t have an account?&nbsp;
               <StyledLink href="/signup" className="text-indigo-500 hover:text-indigo-600 active:text-indigo-700">
                 Register
-              </StyledLink>
+              </StyledLink>.
             </p>
           </div>
         </form>

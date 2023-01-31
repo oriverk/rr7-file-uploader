@@ -19,7 +19,6 @@ import { dateString } from "@/utils/dateString";
 import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
 import { Container } from "@/components/ui/Container";
 import { Seo } from "@/components/Seo";
-import { AmazonAffiliateBanners } from "@/components/ads/AmazonAffiliate";
 import { FirestoreFileType } from "@/types/firestore";
 import { Table, Thead, Th, Td } from "@/components/Table";
 
@@ -101,8 +100,7 @@ const Files: FC = () => {
   });
 
   return (
-    <Container className="flex flex-col gap-8 sm:flex-row">
-      <AmazonAffiliateBanners isKasane />
+    <Container className="">
       <Seo pathname="/files" title="Files" />
       <div className="w-full max-w-5xl">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">

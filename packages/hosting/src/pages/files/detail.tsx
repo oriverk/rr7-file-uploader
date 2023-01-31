@@ -16,7 +16,6 @@ import { Container } from "@/components/ui/Container";
 import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
 import { Markdown } from "@/components/ui/Markdown";
 import { Seo } from "@/components/Seo";
-import { AmazonAffiliateBanners } from "@/components/ads/AmazonAffiliate";
 import type { FirestoreFileType } from "@/types/firestore";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Table, Thead, Th, Td } from "@/components/Table";
@@ -64,9 +63,8 @@ const FileDetail: FC = () => {
   const { name, description, contentType, size, downloaded, createdAt, updatedAt } = value;
 
   return (
-    <Container className="flex flex-col gap-8 sm:flex-row">
+    <Container className="">
       <Seo pathname={`/files/${fileId}`} title={name} description={`Download ${name}`} />
-      <AmazonAffiliateBanners isKasane />
       <div className="w-full max-w-5xl">
         <h2 className="text-center text-2xl">{name}</h2>
         <div className="mx-auto mt-8">
