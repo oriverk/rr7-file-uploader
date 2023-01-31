@@ -12,7 +12,6 @@ type StyledLinkProps = Omit<LinkProps, "to"> & {
 
 export const StyledLink: FC<StyledLinkProps> = (props) => {
   const { children, href, isExternal = false, className } = props;
-  // eslint-disable-next-line no-underscore-dangle
   const _className = "text-gray-500 hover:text-indigo-500 active:text-indigo-600 transition duration-100";
 
   if (!isExternal) {
