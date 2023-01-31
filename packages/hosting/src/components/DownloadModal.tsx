@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 import { BuyMePotato } from "@/components/ads/BuyMePotato";
 import { BannerLink } from "@/components/ads/AmazonAffiliate";
+import { Banners } from "@/constants/banners";
 
 interface Props {
   isOpen: boolean;
@@ -65,18 +66,15 @@ export const DownloadModal: FC<Props> = (props) => {
                       <XMarkIcon className="h-6 w-6" />
                     </button>
                   </div>
-                  <Dialog.Title as="h3" className="mb-8 text-center text-lg font-medium leading-6 sm:text-xl">
+                  <Dialog.Title as="h3" className="mb-8 text-center text-lg font-semibold leading-6 sm:text-xl">
                     Downloaded?
                   </Dialog.Title>
                   <div className="">
-                    <h4 className="mb-8 text-center text-base">
-                      もしよければ、Amazonでモノ買う時の前には当サイト内バナーをポチッとしていってください！サイト・ツールの更新が捗ります。
+                    <h4 className="mb-8 text-center text-base font-medium">
+                      Amazonでモノ買う時の前には当サイト内バナーをポチッと押して行ってください！サイト・ツールの開発の継続に繋がります。
                     </h4>
                     <div className="mb-4 flex justify-center gap-x-4">
-                      <BannerLink
-                        title="AmazonTimeSale"
-                        src="https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=12&l=ur1&category=blackfriday&banner=0KXBJKTD7WQ6NREAZ002&f=ifr&linkID=bf2fe05f5e3d8d33e3bb02b71b7215f5&t=ixanary-uploader-22&tracking_id=ixanary-uploader-22"
-                      />
+                      <BannerLink {...Banners[0]} />
                     </div>
                     <div className="mb-4">
                       <BuyMePotato />
