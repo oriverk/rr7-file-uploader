@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { FC, ReactNode } from "react";
 import { NavLink, NavLinkProps } from "react-router-dom";
 import urlJoin from "url-join";
@@ -8,9 +9,11 @@ interface IHeaderNavLink extends NavLinkProps {
   children: ReactNode;
   to: string;
   isExternal?: boolean;
+  className?: string;
 }
 const HeaderNavLink: FC<IHeaderNavLink> = (props) => {
-  const { children, to, isExternal = false } = props;
+  const { children, to, isExternal = false, className ="" } = props;
+  const _className = clsx("text-base md:text-xl font-semibold text-gray-600 transition duration-100 hover:text-indigo-500 active:text-indigo-700", className)
 
   if (isExternal) {
     return (
@@ -18,7 +21,7 @@ const HeaderNavLink: FC<IHeaderNavLink> = (props) => {
         href={to}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-lg font-semibold text-gray-600 transition duration-100 hover:text-indigo-500 active:text-indigo-700"
+        className={_className}
       >
         {children}
       </a>
@@ -29,9 +32,7 @@ const HeaderNavLink: FC<IHeaderNavLink> = (props) => {
   return (
     <NavLink
       to={to}
-      className={({ isActive }) =>
-        `${active(isActive)} text-lg font-semibold transition duration-100 hover:text-indigo-500 active:text-indigo-700`
-      }
+      className={({ isActive }) => `${active(isActive)} ${_className}`}
     >
       {children}
     </NavLink>
@@ -41,11 +42,12 @@ const HeaderNavLink: FC<IHeaderNavLink> = (props) => {
 export const Header: FC = () => (
   <header className="flex flex-col items-center justify-between gap-4 py-4 md:flex-row md:py-8">
     <NavLink to="" className="text-black-800 inline-flex items-center gap-2.5 text-2xl font-bold md:text-3xl">
+      <span className="sr-only">Home</span>
       👆&nbsp;Uploader
     </NavLink>
     <nav className="flex gap-12">
-      <HeaderNavLink to={IxanaryPath} isExternal>
-        IXAnary
+      <HeaderNavLink to={IxanaryPath} isExternal className=" ">
+        ⚔&nbsp;<span className="text-transparent bg-clip-text bg-gradient-to-r from-[#a3620c] via-[#eedb95] to-[#DAAF08] hover:from-[#DAAF08] hover:to-[#a3620c]">IXAnary</span>
       </HeaderNavLink>
       <HeaderNavLink to="files">Files</HeaderNavLink>
       <HeaderNavLink to="price">Pricing</HeaderNavLink>

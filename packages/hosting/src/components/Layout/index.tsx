@@ -2,22 +2,12 @@ import { FC, Suspense } from "react";
 import { Outlet } from "react-router-dom";
 
 import { GoogleAnalytics, usePageView } from "@/utils/google/gtag";
-import { useGoogleAdsense } from "@/utils/google/adsense";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { Loading } from "../ui/Icons";
-import { Container } from "../ui/Container";
-import { CustomAdsense } from "@/components/Ads/AdSense";
-
-const LoadingPage: FC = () => (
-  <Container>
-    <Loading />
-  </Container>
-);
 
 export const Layout: FC = () => {
   usePageView();
-  useGoogleAdsense();
   return (
     <>
       <GoogleAnalytics />
@@ -26,10 +16,11 @@ export const Layout: FC = () => {
           <Header />
         </div>
         <div className="flex-1">
-          <CustomAdsense />
-          <Suspense fallback={<LoadingPage />}>
-            <Outlet />
-          </Suspense>
+          <main>
+            <Suspense fallback={<Loading />}>
+              <Outlet />
+            </Suspense>
+          </main>
         </div>
         <Footer />
       </div>

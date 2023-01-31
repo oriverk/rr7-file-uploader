@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import type { FC } from "react";
 import urlJoin from "url-join";
 import { StyledLink } from "@/components/ui/StyledLink";
@@ -14,7 +13,7 @@ export const Footer: FC = () => (
       <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
         <div className="mb-16 grid grid-cols-2 gap-12 md:grid-cols-4 lg:grid-cols-6 lg:gap-8">
           <div className="col-span-full lg:col-span-2">
-            <div className="mb-4 lg:-mt-2">
+            <div className="mb-4">
               <a href="/" className="flex items-center gap-2.5 text-2xl" aria-label="logo">
                 <span>⚔</span>
                 <IXAnary className="w-30 h-8" />
@@ -122,11 +121,6 @@ export const Footer: FC = () => (
               <div>
                 <StyledLink href="/privacy">プライバシーポリシー</StyledLink>
               </div>
-              {/* <div>
-                <Link href="#">
-                  Cookie settings
-                </Link>
-              </div> */}
             </nav>
           </div>
         </div>

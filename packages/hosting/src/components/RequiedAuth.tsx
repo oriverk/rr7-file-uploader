@@ -6,7 +6,7 @@ import { auth } from "@/lib/firebase";
 import { Container } from "./ui/Container";
 import { Seo } from "./Seo";
 
-export const RequiredAuth: FC = () => {
+const RequiredAuth: FC = () => {
   const [user, loading, error] = useAuthState(auth);
   const location = useLocation();
 
@@ -51,3 +51,5 @@ export const RequiredAuth: FC = () => {
     </>
   );
 };
+
+export default RequiredAuth
