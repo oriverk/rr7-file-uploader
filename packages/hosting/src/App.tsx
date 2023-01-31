@@ -1,13 +1,14 @@
 import { FC, lazy } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import { RequiredAuth } from "./components/RequiedAuth";
 import { Layout } from "./components/Layout";
+import { FileLayout } from "./components/Layout/FileLayout";
 import { PageNotFound } from "./pages/404";
 
 const Signup = lazy(() => import("./pages/signup"));
 const Login = lazy(() => import("./pages/login"));
 
+const RequiredAuth = lazy(() => import("./components/RequiedAuth"))
 const Admin = lazy(() => import("./pages/admin"));
 const NewFile = lazy(() => import("./pages/admin/new"));
 const EditFile = lazy(() => import("./pages/admin/editFile"));
@@ -31,7 +32,7 @@ const App: FC = () => (
         <Route path="privacy" element={<PrivacyPolicy />} />
         <Route path="terms" element={<TermOfService />} />
         <Route path="price" element={<Pricing />} />
-        <Route path="files">
+        <Route path="files" element={<FileLayout />}>
           <Route index element={<Files />} />
           <Route path=":fileId">
             <Route index element={<FileDetail />} />
