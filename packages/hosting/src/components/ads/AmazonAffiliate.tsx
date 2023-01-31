@@ -1,6 +1,7 @@
 /* eslint-disable arrow-body-style */
 // ASIN と Amazon API を使って出来るようにしたい。そのうち。
 import type { FC } from "react";
+import { Banners } from "@/constants/banners";
 // import { useMediaQuery } from 'react-responsive';
 
 // const breakpoints = {
@@ -57,21 +58,6 @@ export const BannerLink: FC<BannerProps> = (props) => {
   );
 };
 
-const Banners: readonly Record<"title" | "src", string>[] = [
-  {
-    title: "AmazonTimeSale",
-    src: "https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=12&l=ur1&category=blackfriday&banner=0KXBJKTD7WQ6NREAZ002&f=ifr&linkID=bf2fe05f5e3d8d33e3bb02b71b7215f5&t=ixanary-uploader-22&tracking_id=ixanary-uploader-22"
-  },
-  {
-    title: "日用品",
-    src: "https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=12&l=ur1&category=consumables&banner=01FFPGM6WNKYF9VQMHR2&f=ifr&linkID=e61f5160c998c1cc94dfb649483c7c43&t=ixanary-uploader-22&tracking_id=ixanary-uploader-22"
-  },
-  {
-    title: "charge",
-    src: "https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=12&l=ur1&category=gift_certificates&banner=1TJ8XM5YGJR5WC15P202&f=ifr&linkID=6fd35f43024385a68a48038d7a80785d&t=ixanary-uploader-22&tracking_id=ixanary-uploader-22"
-  }
-]
-
 interface BannersProps {
   isKasane?: boolean;
 }
@@ -91,8 +77,8 @@ export const AmazonAffiliateBanners: FC<BannersProps> = ({ isKasane }) => (
         src1="https://ir-jp.amazon-adsystem.com/e/ir?t=ixanary-22&language=ja_JP&l=li3&o=9&a=B00CM10ALE"
       />
     )}
-    {Banners.map((props) => (
-      <BannerLink {...props} />
+    {Banners.map(({title, ...rest}) => (
+      <BannerLink {...rest} title={title} key={title} />
     ))}
   </div>
 );
