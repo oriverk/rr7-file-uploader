@@ -50,14 +50,10 @@ const FileDetail: FC = () => {
   const docRef = doc(db, "files", fileId).withConverter(converter);
   const [value, , error] = useDocumentData(docRef);
 
-  if (error || !value) {
-    return (
-      <Container>
-        <div className="mx-auto mt-8 max-w-5xl">
-          <strong>Error: {JSON.stringify(error)}</strong>
-        </div>
-      </Container>
-    );
+  if (error) {
+    throw new Error(JSON.stringify(error))
+  } else if (!value) {
+    return null;
   }
 
   const { name, description, contentType, size, downloaded, createdAt, updatedAt } = value;

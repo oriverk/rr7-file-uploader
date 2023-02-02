@@ -22,11 +22,12 @@ const FileDownload: FC = () => {
     fileId: string;
   };
   const firestoreRef = doc(db, "files", fileId);
-  const [dbValue] = useDocumentData(firestoreRef);
+  const [dbValue, loading, error] = useDocumentData(firestoreRef);
   const paramsNow = searchParams.get("t");
   const isOld = checkTimestampAge(parseInt(paramsNow!, 10), 1000 * 60 * 60 * 2);
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const isLoadingCompoliteButFailed = !loading && !dbValue;
 
   async function setFileBlob(storageFilePath: string) {
     const storageRef = ref(storage, storageFilePath);
@@ -35,7 +36,7 @@ const FileDownload: FC = () => {
   }
 
   useEffect(() => {
-    if (isOld || !dbValue) return;
+    if (isOld || loading || !dbValue) return;
     setSaveName(dbValue.name);
     setFileBlob(`files/${dbValue.path}`);
   }, [dbValue]);
@@ -48,26 +49,27 @@ const FileDownload: FC = () => {
     if (!dbValue || !objectUrl) return;
     await updateDoc(firestoreRef, {
       downloaded: dbValue!.downloaded + 1,
-    }).then(() => {
-      URL.revokeObjectURL(objectUrl);
-      setIsConfirmed(false);
-      setObjectUrl("");
-      setIsOpen(true);
-    });
+    })
+      .then(() => {
+        URL.revokeObjectURL(objectUrl);
+        setIsConfirmed(false);
+        setObjectUrl("");
+        setIsOpen(true);
+      });
   }, [dbValue, objectUrl]);
 
   const handleCloseModal = useCallback(() => {
     setIsOpen(false);
   }, []);
 
-  let errorText = "";
   if (isOld) {
-    errorText = "Error: リンクが古くなっています";
-  } else if (!dbValue) {
-    errorText = "Error: URLパスが間違っています";
-  } else if (!objectUrl) {
-    errorText = "Error: ファイルは削除された可能性があります";
+    throw new Error("リンクが古くなっています。")
+  } else if (isLoadingCompoliteButFailed) {
+    throw new Error(JSON.stringify(error))
   }
+  // else if (!objectUrl) {
+  //   throw new Error("ファイルは削除された可能性があります")
+  // }
 
   return (
     <Container className="">
@@ -86,7 +88,6 @@ const FileDownload: FC = () => {
             <Checkbox id="confirm" checked={isConfirmed} onChange={handleConfirm} label="利用規約に同意する" />
           </div>
           <div className="flex flex-col gap-4">
-            {!!errorText && <p className="mb-8 text-center text-lg font-medium text-red-500">{errorText}</p>}
             {isConfirmed && objectUrl ? (
               <a
                 href={objectUrl}

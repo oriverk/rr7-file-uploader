@@ -75,18 +75,16 @@ const converter: FirestoreDataConverter<IProps> = {
   },
 };
 
-const Files: FC = () => {
-  const collectionRef = collection(db, "files").withConverter(converter);
-  const q = query(collectionRef, where("deletedAt", "==", null));
-  const [files, , error] = useCollectionData(q);
+const collectionRef = collection(db, "files").withConverter(converter);
 
-  if (!files?.length || error) {
-    return (
-      <Container>
-        <Seo pathname="/files" title="Files" description="list uploaded files" />
-        <strong>Error: {JSON.stringify(error)}</strong>
-      </Container>
-    );
+const Files: FC = () => {
+  const q = query(collectionRef, where("deletedAt", "==", null));
+  const [files, loading, error] = useCollectionData(q);
+
+  if (!loading && error) {
+    throw new Error(JSON.stringify(error))
+  } else if (!files?.length) {
+    return null;
   }
 
   const sortedFiles = files.sort((a, b) => {
@@ -101,7 +99,7 @@ const Files: FC = () => {
 
   return (
     <Container className="">
-      <Seo pathname="/files" title="Files" />
+      <Seo pathname="/files" title="Uploader files" />
       <div className="w-full max-w-5xl">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <Table className="dark w-full table-auto">

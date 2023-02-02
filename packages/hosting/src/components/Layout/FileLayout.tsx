@@ -1,12 +1,16 @@
 import { FC, Suspense } from "react";
 import { Outlet } from "react-router-dom";
+import { ErrorBoundary } from "react-error-boundary";
+import clsx from "clsx";
 import { Loading } from "../ui/Icons";
 import { AdSense } from "@/components/ads/AdSense";
 
 import { AmazonAffiliateBanners } from "../ads/AmazonAffiliate";
 import { useGoogleAdsense } from "@/utils/google/adsense";
 import { Container } from "../ui/Container";
+import { ErrorFallback, handleErrorBounary } from "../ui/ErrorFallback";
 
+const isDev = import.meta.env.DEV;
 export const FileLayout: FC = () => {
   useGoogleAdsense()
   return (
@@ -14,11 +18,13 @@ export const FileLayout: FC = () => {
       <aside className="py-2"><AmazonAffiliateBanners isKasane /></aside>
       <div className="w-full max-w-5xl">
         <Container>
-          <AdSense className="responsiveDisplayAd" client={import.meta.env.VITE_PUBLISHER_ID} slot="3735361497" style={{ display: "block", textAlign: "center", border: "1px solid red" }} responsive />
+          <AdSense className={clsx("responsiveDisplayAd", isDev && "border border-red-500")} client={import.meta.env.VITE_PUBLISHER_ID} slot="3735361497" style={{ display: "block", textAlign: "center" }} responsive />
         </Container>
-        <Suspense fallback={<Loading />}>
-          <Outlet />
-        </Suspense>
+        <ErrorBoundary FallbackComponent={ErrorFallback} onError={handleErrorBounary}>
+          <Suspense fallback={<Loading />}>
+            <Outlet />
+          </Suspense>
+        </ErrorBoundary>
       </div>
     </div>
   )
