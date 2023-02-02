@@ -25,11 +25,12 @@ const Ga4TrackingId = import.meta.env.VITE_GA4_TRACKING_ID;
 
 // IDが取得できない場合を想定する
 export const existsGaId = !!Ga4TrackingId;
+const isDev = import.meta.env.DEV;
 
 // _app.tsx で読み込む
 export const usePageView = () => {
+  if (!Ga4TrackingId || isDev) return;
   const location = useLocation();
-  if (!Ga4TrackingId) return;
 
   useEffect(() => {
     // Google Analytics 測定 ID を入力して設定
@@ -43,7 +44,7 @@ export const usePageView = () => {
 
 // _app.tsx で読み込む
 export const GoogleAnalytics = () => {
-  if (!Ga4TrackingId) return null;
+  if (!Ga4TrackingId || isDev) return null;
 
   return (
     <>
