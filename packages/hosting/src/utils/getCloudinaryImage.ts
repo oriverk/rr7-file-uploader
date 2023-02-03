@@ -6,6 +6,7 @@ const CloudinaryName = import.meta.env.VITE_CLOUDINARY_NAME;
 /**
  * Cloudinaryに保存されている画像のフルURLを生成する
  * @param filepath
+ * ex.: getCloudinaryImage(`ixanary/game-start.webp`)
  * @param version
  * @returns
  */
