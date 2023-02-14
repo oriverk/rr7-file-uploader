@@ -12,7 +12,7 @@ service firebase.storage {
   match /b/{bucket}/o {
     match /files/{fileID} {
       allow get;
-      allow create, update: if isAuthenticated()
+      allow create, update, delete: if isAuthenticated()
     }
   }
 }
