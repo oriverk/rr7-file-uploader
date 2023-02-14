@@ -10,7 +10,7 @@ import { FormData } from "@/types/firestore";
 import { CreateFormSchema } from "@/lib/zod";
 import { storage, db } from "@/lib/firebase";
 import { Container } from "@/components/ui/Container";
-import { TextArea, Button } from "@/components/Form";
+import { TextArea, Button, CheckBox } from "@/components/Form";
 import { DropzoneInput } from "@/components/Dropzone";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Description } from "@/constants/description";
@@ -18,12 +18,13 @@ import { Description } from "@/constants/description";
 const NewFile: FC = () => {
   const navigate = useNavigate();
   // const [progress, setProgress] = useState(0);
-  const methods = useForm<Pick<FormData, "name" | "description" | "file">>({
+  const methods = useForm<Pick<FormData, "name" | "description" | "file" | "deleted">>({
     resolver: zodResolver(CreateFormSchema),
     defaultValues: {
       name: "",
       file: [],
       description: Description,
+      deleted: false,
     },
   });
   const { handleSubmit, getValues, setValue } = methods;
@@ -37,7 +38,7 @@ const NewFile: FC = () => {
   }, [getValues("file")]);
 
   const onSubmit = handleSubmit(async (data) => {
-    const { file, description } = data;
+    const { file, description, deleted } = data;
     const { path, preview } = file[0];
     const blob = await fetch(preview).then((r) => r.blob());
     const storageRef = ref(storage, `files/${uuidv4()}-${path}`);
@@ -55,6 +56,7 @@ const NewFile: FC = () => {
         const { name } = getValues();
         const { metadata } = uploadTask.snapshot;
         const { name: uuidName, contentType, size, fullPath } = metadata;
+        const timestamp = serverTimestamp()
         const docRef = await addDoc(collection(db, "files"), {
           name,
           contentType,
@@ -62,9 +64,9 @@ const NewFile: FC = () => {
           path: uuidName,
           fullPath,
           description,
-          createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp(),
-          deletedAt: null,
+          createdAt: timestamp,
+          updatedAt: timestamp,
+          deletedAt: deleted ? timestamp : null,
           downloaded: 0,
         });
         navigate(`/files/${docRef.id}`);
@@ -87,9 +89,10 @@ const NewFile: FC = () => {
                   }}
                 />
                 <TextArea id="description" label="description" />
+                <CheckBox id="deleted" label="delete (論理削除)" />
                 <div className="flex flex-col gap-4">
                   <Button type="submit">submit</Button>
-                  <ButtonLink to="/admin" className="bg-red-600 hover:bg-red-700">
+                  <ButtonLink to="/admin" className="bg-teal-700 hover:bg-teal-800 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800">
                     Admin ファイル一覧へ戻る
                   </ButtonLink>
                 </div>

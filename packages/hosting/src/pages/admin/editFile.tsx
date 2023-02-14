@@ -53,6 +53,7 @@ const EditFile: FC = () => {
       </Container>
     );
   }
+  
 
   return (
     <>
@@ -76,14 +77,22 @@ const EditFile: FC = () => {
               <div className="mx-auto mt-8 max-w-4xl">
                 <div className="grid grid-cols-1 gap-6">
                   <Input id="name" label="name" />
-                  <CheckBox id="deleted" label="delete" />
+                  <CheckBox id="deleted" label="delete (論理削除)" />
                   <TextArea id="description" label="description" />
                   <Button type="submit">submit</Button>
+                  
                 </div>
               </div>
             </form>
           </FormProvider>
         </div>
+        {value.deletedAt && (
+          <div className="mx-auto max-w-4xl">
+            <ButtonLink to="../delete" className="bg-red-600 hover:bg-red-700">
+              ファイル削除ページへ (物理削除)
+            </ButtonLink>
+          </div>
+        )}
       </Container>
     </>
   );

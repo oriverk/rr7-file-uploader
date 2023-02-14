@@ -36,7 +36,7 @@ const StyledTr: FC<TrProps> = (props) => {
   return (
     <tr className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
       <Th scope="row">
-        <Link to={`files/${id}`} className="font-medium text-blue-600 hover:underline dark:text-blue-300">
+        <Link to={`files/${id}/edit`} className="font-medium text-blue-600 hover:underline dark:text-blue-300">
           {name}
         </Link>
       </Th>

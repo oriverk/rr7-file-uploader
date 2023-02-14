@@ -12,6 +12,7 @@ const RequiredAuth = lazy(() => import("./components/RequiedAuth"))
 const Admin = lazy(() => import("./pages/admin"));
 const NewFile = lazy(() => import("./pages/admin/new"));
 const EditFile = lazy(() => import("./pages/admin/editFile"));
+const DeleteFile = lazy(() => import("./pages/admin/deleteFile"));
 
 const Home = lazy(() => import("./pages/home"));
 const Lorem = lazy(() => import("./pages/lorem"));
@@ -44,7 +45,10 @@ const App: FC = () => (
         <Route path="admin" element={<RequiredAuth />}>
           <Route index element={<Admin />} />
           <Route path="new" element={<NewFile />} />
-          <Route path="files/:fileId" element={<EditFile />} />
+          <Route path="files/:fileId">
+            <Route path="edit" element={<EditFile />} />
+            <Route path="delete" element={<DeleteFile />} />
+          </Route>
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Route>
