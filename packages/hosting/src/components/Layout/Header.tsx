@@ -1,6 +1,6 @@
-import clsx from "clsx";
 import { FC, ReactNode } from "react";
 import { NavLink, NavLinkProps } from "react-router-dom";
+import { twMerge } from "tailwind-merge";
 import urlJoin from "url-join";
 
 const IxanaryPath = import.meta.env.VITE_IXANARY_PATH;
@@ -13,7 +13,7 @@ interface IHeaderNavLink extends NavLinkProps {
 }
 const HeaderNavLink: FC<IHeaderNavLink> = (props) => {
   const { children, to, isExternal = false, className ="" } = props;
-  const _className = clsx("text-base md:text-xl font-semibold text-gray-600 transition duration-100 hover:text-indigo-500 active:text-indigo-700", className)
+  const _className = twMerge("text-base md:text-xl font-semibold text-gray-600 transition duration-100 hover:text-indigo-500 active:text-indigo-700", className)
 
   if (isExternal) {
     return (

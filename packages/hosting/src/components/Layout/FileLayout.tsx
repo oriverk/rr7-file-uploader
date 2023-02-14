@@ -1,7 +1,7 @@
 import { FC, Suspense } from "react";
 import { Outlet } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
-import clsx from "clsx";
+import { twJoin } from "tailwind-merge";
 import { Loading } from "../ui/Icons";
 import { AdSense } from "@/components/ads/AdSense";
 
@@ -18,7 +18,7 @@ export const FileLayout: FC = () => {
       <aside className="py-2"><AmazonAffiliateBanners isKasane /></aside>
       <div className="w-full max-w-5xl">
         <Container>
-          <AdSense className={clsx("responsiveDisplayAd", isDev && "border border-red-500")} client={import.meta.env.VITE_PUBLISHER_ID} slot="3735361497" style={{ display: "block", textAlign: "center" }} responsive />
+          <AdSense className={twJoin("responsiveDisplayAd", isDev && "border border-red-500")} client={import.meta.env.VITE_PUBLISHER_ID} slot="3735361497" style={{ display: "block", textAlign: "center" }} responsive />
         </Container>
         <ErrorBoundary FallbackComponent={ErrorFallback} onError={handleErrorBounary}>
           <Suspense fallback={<Loading />}>

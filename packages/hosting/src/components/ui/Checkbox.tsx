@@ -1,8 +1,8 @@
-import { DetailedHTMLProps, FC, InputHTMLAttributes } from "react";
+import type { ComponentProps, FC } from "react";
 
-type Props = {
+type Props = ComponentProps<'input'> & {
   label: string;
-} & DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
+};
 
 export const Checkbox: FC<Props> = (props) => {
   const { id, label, ...rest } = props;

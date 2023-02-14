@@ -7,7 +7,7 @@ import { BuyMePotato } from "@/components/ads/BuyMePotato";
 import { BannerLink } from "@/components/ads/AmazonAffiliate";
 import { Banners } from "@/constants/banners";
 
-interface Props {
+type Props = {
   isOpen: boolean;
   onClose: () => void;
 }
@@ -71,7 +71,7 @@ export const DownloadModal: FC<Props> = (props) => {
                   </Dialog.Title>
                   <div className="">
                     <h4 className="mb-8 text-center text-base font-medium">
-                      Amazonでモノ買う時の前には当サイト内バナーをポチッと押して行ってください！サイト・ツールの開発の継続に繋がります。
+                      Amazonでモノ買う予定のある人はAmazon広告を、買う予定は無いよって人は上の広告をポチッと押して行ってください！サイト・ツールの開発の継続に繋がります。
                     </h4>
                     <div className="mb-4 flex justify-center gap-x-4">
                       <BannerLink {...Banners[0]} />

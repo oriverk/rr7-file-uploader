@@ -77,7 +77,7 @@ const NewFile: FC = () => {
       <div className="mb-4">
         <FormProvider {...methods}>
           <form onSubmit={onSubmit}>
-            <div className="mx-auto mt-8 max-w-xl">
+            <div className="mx-auto mt-8 max-w-4xl">
               <div className="grid grid-cols-1 gap-6">
                 <DropzoneInput
                   id="file"

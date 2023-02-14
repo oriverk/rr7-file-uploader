@@ -1,18 +1,16 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { FC } from "react";
+import { ComponentProps, FC } from "react";
 import { RegisterOptions, useFormContext } from "react-hook-form";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
-import clsx from "clsx";
+import { twJoin } from "tailwind-merge";
 
-interface IProps
-  extends React.DetailedHTMLProps<React.TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement> {
+type Props = ComponentProps<'textarea'> & {
   id: string;
   label: string;
   validation?: RegisterOptions;
   helperText?: string;
 }
 
-export const TextArea: FC<IProps> = (props) => {
+export const TextArea: FC<Props> = (props) => {
   const { label, helperText = "", placeholder = "", id, readOnly, disabled, validation, ...rest } = props;
 
   const {
@@ -28,7 +26,6 @@ export const TextArea: FC<IProps> = (props) => {
   } else {
     stateClass = "focus:ring-primary-500 border-gray-300 focus:border-primary-500";
   }
-  const className = clsx(stateClass, "block w-full rounded-md shadow-sm");
 
   return (
     <div>
@@ -43,7 +40,7 @@ export const TextArea: FC<IProps> = (props) => {
           id={id}
           readOnly={readOnly}
           disabled={disabled}
-          className={className}
+          className={twJoin("block w-full h-96 rounded-md shadow-sm", stateClass)}
           placeholder={placeholder}
           aria-describedby={id}
         />

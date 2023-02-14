@@ -62,7 +62,7 @@ const EditFile: FC = () => {
         </div>
       </Container>
       <Container>
-        <div className="mx-auto max-w-xl">
+        <div className="mx-auto max-w-4xl">
           <ButtonLink
             to="/admin"
             className="bg-teal-700 hover:bg-teal-800 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
@@ -73,7 +73,7 @@ const EditFile: FC = () => {
         <div className="mb-4">
           <FormProvider {...methods}>
             <form onSubmit={onSubmit}>
-              <div className="mx-auto mt-8 max-w-xl">
+              <div className="mx-auto mt-8 max-w-4xl">
                 <div className="grid grid-cols-1 gap-6">
                   <Input id="name" label="name" />
                   <CheckBox id="deleted" label="delete" />

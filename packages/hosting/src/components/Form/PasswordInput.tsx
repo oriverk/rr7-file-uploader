@@ -1,11 +1,11 @@
 import { FC, useState, useCallback } from "react";
 import { useFormContext } from "react-hook-form";
-import clsx from "clsx";
+import { twMerge } from "tailwind-merge";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
-import type { IProps } from "./Input";
+import type { InputProps } from "./Input";
 
-export const PasswordInput: FC<IProps> = (props) => {
+export const PasswordInput: FC<InputProps> = (props) => {
   const { label, placeholder = "", helperText = "", id, disabled, readOnly, validation, ...rest } = props;
 
   const {
@@ -25,7 +25,7 @@ export const PasswordInput: FC<IProps> = (props) => {
   } else {
     stateClass = "focus:ring-primary-500 border-gray-300 focus:border-primary-500";
   }
-  const className = clsx(stateClass, "block w-full rounded-md shadow-sm");
+  const className = twMerge("block w-full rounded-md shadow-sm", stateClass);
 
   return (
     <div>

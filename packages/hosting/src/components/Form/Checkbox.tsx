@@ -1,12 +1,12 @@
-import { FC, DetailedHTMLProps, InputHTMLAttributes } from "react";
+import { FC, ComponentProps } from "react";
 import { useFormContext } from "react-hook-form";
 
-interface IProps extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
+type Props = ComponentProps<'input'> & {
   id: string;
   label: string;
 }
 
-export const CheckBox: FC<IProps> = (props) => {
+export const CheckBox: FC<Props> = (props) => {
   const { label, id, readOnly, disabled, ...rest } = props;
   const { register } = useFormContext();
 

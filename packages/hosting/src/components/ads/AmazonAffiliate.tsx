@@ -1,6 +1,6 @@
 /* eslint-disable arrow-body-style */
 // ASIN と Amazon API を使って出来るようにしたい。そのうち。
-import type { FC } from "react";
+import type { ComponentProps, FC } from "react";
 import { Banners } from "@/constants/banners";
 // import { useMediaQuery } from 'react-responsive';
 
@@ -37,12 +37,7 @@ export const AmazonAffiliateImage: FC<Props> = (props) => {
   );
 };
 
-export type BannerProps = {
-  title: string;
-  src: string;
-  width?: number;
-  height?: number;
-};
+export type BannerProps = ComponentProps<'iframe'>
 
 export const BannerLink: FC<BannerProps> = (props) => {
   const { title, src, width = 300, height = 250 } = props;

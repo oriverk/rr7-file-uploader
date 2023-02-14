@@ -1,7 +1,7 @@
-import clsx from "clsx";
 import { FC, MouseEvent, useCallback, useState } from "react";
 import { RegisterOptions, Controller, useFormContext } from "react-hook-form";
 import { Accept, FileRejection, useDropzone } from "react-dropzone";
+import { twJoin } from "tailwind-merge";
 
 import type { File, FileWithPreview } from "@/types/firestore";
 import { FilePreview } from "./FilePreview";
@@ -118,7 +118,7 @@ export const DropzoneInput: FC<DropzoneInputProps> = (props) => {
               >
                 <input {...getInputProps()} />
                 <div
-                  className={clsx(
+                  className={twJoin(
                     "w-full cursor-pointer rounded border border-dashed border-gray-300 bg-gray-100 p-2",
                     errors[id] ? "border-red-500 group-focus:border-red-500" : "group-focus:border-primary-500"
                   )}

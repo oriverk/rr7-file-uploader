@@ -1,5 +1,5 @@
 import type { FC, ReactNode } from "react";
-import clsx from "clsx";
+import { twMerge } from "tailwind-merge";
 
 type Props = {
   children: ReactNode;
@@ -7,23 +7,23 @@ type Props = {
 };
 
 export const Table: FC<Props> = ({ children, className }) => (
-  <table className={clsx(className, "text-left text-sm text-gray-500 dark:text-gray-400")}>{children}</table>
+  <table className={twMerge("text-left text-sm text-gray-500 dark:text-gray-400", className)}>{children}</table>
 );
 
 export const Thead: FC<Props> = ({ children, className }) => (
-  <thead className={clsx(className, "bg-gray-50 text-xs text-gray-700 dark:bg-gray-700 dark:text-gray-400")}>
+  <thead className={twMerge("bg-gray-50 text-xs text-gray-700 dark:bg-gray-700 dark:text-gray-400", className)}>
     {children}
   </thead>
 );
 
 export const Th: FC<Props & { scope?: string; title?: string }> = ({ children, className, ...rest }) => (
-  <th className={clsx(className, "px-6 py-3")} {...rest}>
+  <th className={twMerge("px-6 py-3", className)} {...rest}>
     {children}
   </th>
 );
 
 export const Td: FC<Props> = ({ children, className }) => (
-  <td className={clsx(className, "whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white")}>
+  <td className={twMerge("whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white", className)}>
     {children}
   </td>
 );

@@ -1,17 +1,17 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { FC } from "react";
-import clsx from "clsx";
+import { ComponentProps, FC } from "react";
 import { RegisterOptions, useFormContext } from "react-hook-form";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
+import { twMerge } from "tailwind-merge";
 
-export interface IProps extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
+export type InputProps = ComponentProps<'input'> & {
   id: string;
   label: string;
   validation?: RegisterOptions;
   helperText?: string;
 }
 
-export const Input: FC<IProps> = (props) => {
+export const Input: FC<InputProps> = (props) => {
   const {
     label,
     helperText = "",
@@ -36,7 +36,7 @@ export const Input: FC<IProps> = (props) => {
   } else {
     stateClass = "focus:ring-primary-500 border-gray-300 focus:border-primary-500";
   }
-  const className = clsx(stateClass, "block w-full rounded-md shadow-sm");
+  const className = twMerge("block w-full rounded-md shadow-sm", stateClass);
 
   return (
     <div>
