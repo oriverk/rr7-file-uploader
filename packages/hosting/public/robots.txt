@@ -1,10 +1,10 @@
 # *
 User-agent: *
-Allow: /
-Disallow: /login/
-Disallow: /signup/
-Disallow: /admin/*
-# Disallow: /files/*/download
+Allow: *
+Disallow: /login
+Disallow: /signup
+Disallow: /admin
+Disallow: /download
 
 # Host
 Host: https://uploader.ixanary.com
