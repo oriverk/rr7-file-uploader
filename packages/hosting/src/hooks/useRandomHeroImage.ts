@@ -21,7 +21,7 @@ export function useRandomHeroImage(chapter: number) {
     const images = Ootono[chapter];
     const random = Math.floor(Math.random() * images.length);
     const name = images[random];
-    const ext = chapter < 24 ? "webp" : "jpg";
+    const ext = "webp"
     const url = getCloudinaryImage(`ixanary/chapter${chapter}/${name}.${ext}`);
     setImage((prev) => ({ ...prev, name, url }));
   }, [chapter]);

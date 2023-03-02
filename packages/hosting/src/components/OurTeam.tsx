@@ -1,9 +1,9 @@
 import { FC } from "react";
 import { format } from "date-fns";
 
-const cards = 2100;
-const skills = 1700;
-const pages = 4500;
+const cards = 2300;
+const skills = 1900;
+const pages = 4600;
 
 export const OurTeam: FC = () => (
   <>

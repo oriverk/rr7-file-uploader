@@ -99,7 +99,7 @@ const Files: FC = () => {
 
   return (
     <Container className="">
-      <Seo pathname="/files" title="Uploader files" />
+      <Seo pathname="/files" title="Files" />
       <div className="w-full max-w-5xl">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <Table className="dark w-full table-auto">
