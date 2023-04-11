@@ -41,9 +41,14 @@ export type BannerProps = ComponentProps<'iframe'>
 
 export const BannerLink: FC<BannerProps> = (props) => {
   const { title, src, width = 300, height = 250 } = props;
+  if (!src) return null;
+  const params = new URLSearchParams(src);
+  const category = params.get('category') || "";
+  const _title = title || category
+  
   return (
     <iframe
-      title={title}
+      title={_title}
       src={src}
       width={width}
       height={height}

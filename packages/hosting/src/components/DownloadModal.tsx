@@ -1,7 +1,8 @@
-import { Dialog, Transition } from "@headlessui/react";
-import { CheckIcon, LinkIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { FC, Fragment, useCallback, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { Dialog, Transition } from "@headlessui/react";
+import { CheckIcon, LinkIcon, XMarkIcon } from "@heroicons/react/24/outline";
+
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 import { BuyMePotato } from "@/components/ads/BuyMePotato";
 import { BannerLink } from "@/components/ads/AmazonAffiliate";
@@ -71,9 +72,11 @@ export const DownloadModal: FC<Props> = (props) => {
                   </Dialog.Title>
                   <div className="">
                     <h4 className="mb-8 text-center text-base font-medium">
-                      Amazonでモノ買う予定のある人はAmazon広告を、買う予定は無いよって人は上の広告をポチッと押して行ってください！サイト・ツールの開発の継続に繋がります。
+                      今からAmazonでモノ買う予定のある人は横のAmazonバナーを、買う予定は無いよって人はこの広告をポチッと押して行ってください！サイト・ツールの開発の継続に繋がります。
                     </h4>
-                    <div className="mb-4 flex justify-center gap-x-4">
+                    <div
+                      className="mb-4 flex justify-center gap-x-4"
+                    >
                       <BannerLink {...Banners[0]} />
                     </div>
                     <div className="mb-4">
