@@ -1,6 +1,6 @@
 import type { ComponentProps, FC } from "react";
 
-type Props = ComponentProps<'input'> & {
+type Props = ComponentProps<"input"> & {
   label: string;
 };
 

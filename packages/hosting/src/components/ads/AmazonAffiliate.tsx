@@ -37,15 +37,15 @@ export const AmazonAffiliateImage: FC<Props> = (props) => {
   );
 };
 
-export type BannerProps = ComponentProps<'iframe'>
+export type BannerProps = ComponentProps<"iframe">;
 
 export const BannerLink: FC<BannerProps> = (props) => {
   const { title, src, width = 300, height = 250 } = props;
   if (!src) return null;
   const params = new URLSearchParams(src);
-  const category = params.get('category') || "";
-  const _title = title || category
-  
+  const category = params.get("category") || "";
+  const _title = title || category;
+
   return (
     <iframe
       title={_title}
@@ -77,7 +77,7 @@ export const AmazonAffiliateBanners: FC<BannersProps> = ({ isKasane }) => (
         src1="https://ir-jp.amazon-adsystem.com/e/ir?t=ixanary-22&language=ja_JP&l=li3&o=9&a=B00CM10ALE"
       />
     )}
-    {Banners.map(({title, ...rest}) => (
+    {Banners.map(({ title, ...rest }) => (
       <BannerLink {...rest} title={title} key={title} />
     ))}
   </div>

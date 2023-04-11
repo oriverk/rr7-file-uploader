@@ -67,7 +67,8 @@ const Login: FC = () => {
               Don&apos;t have an account?&nbsp;
               <StyledLink href="/signup" className="text-indigo-500 hover:text-indigo-600 active:text-indigo-700">
                 Register
-              </StyledLink>.
+              </StyledLink>
+              .
             </p>
           </div>
         </form>

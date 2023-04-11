@@ -1,10 +1,10 @@
 import { FC, ComponentProps } from "react";
 import { useFormContext } from "react-hook-form";
 
-type Props = ComponentProps<'input'> & {
+type Props = ComponentProps<"input"> & {
   id: string;
   label: string;
-}
+};
 
 export const CheckBox: FC<Props> = (props) => {
   const { label, id, readOnly, disabled, ...rest } = props;

@@ -15,7 +15,13 @@ export const StyledLink: FC<StyledLinkProps> = (props) => {
 
   if (!isExternal) {
     return (
-      <Link to={href} className={twMerge("text-gray-500 hover:text-indigo-500 active:text-indigo-600 transition duration-100", className)}>
+      <Link
+        to={href}
+        className={twMerge(
+          "text-gray-500 transition duration-100 hover:text-indigo-500 active:text-indigo-600",
+          className
+        )}
+      >
         {children}
       </Link>
     );
@@ -26,7 +32,11 @@ export const StyledLink: FC<StyledLinkProps> = (props) => {
       href={href}
       target="_black"
       rel="noopener noreferrer"
-      className={twMerge("inline-flex items-center", "text-gray-500 hover:text-indigo-500 active:text-indigo-600 transition duration-100", className)}
+      className={twMerge(
+        "inline-flex items-center",
+        "text-gray-500 transition duration-100 hover:text-indigo-500 active:text-indigo-600",
+        className
+      )}
     >
       {children}
       <ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4" />

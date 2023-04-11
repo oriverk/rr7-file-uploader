@@ -14,46 +14,48 @@ import { Button, CheckBox, Input } from "@/components/Form";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 
 const DeleteFile: FC = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { fileId } = useParams() as {
     fileId: string;
-  }
+  };
   const docRef = doc(db, "files", fileId);
   const [value, , error] = useDocumentData(docRef);
   const methods = useForm<Pick<FormData, "name" | "deleted">>({
     resolver: zodResolver(DeleteFormSchema),
-    defaultValues: {}
-  })
+    defaultValues: {},
+  });
   const { getValues } = methods;
 
-  const onSubmit = useCallback(async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (!value) return;
+  const onSubmit = useCallback(
+    async (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      if (!value) return;
 
-    const { name, fullPath } = value as FirestoreFileType;
-    const { name: inputName, deleted } = getValues();
-    if (!deleted || name !== inputName) return;
+      const { name, fullPath } = value as FirestoreFileType;
+      const { name: inputName, deleted } = getValues();
+      if (!deleted || name !== inputName) return;
 
-    const isConfirmed = window.confirm("本当に物理削除しても大丈夫ですか？\n操作は取り消せません");
-    if (isConfirmed) {
-      console.log("confirmed");
-      const storageRef = ref(storage, fullPath);
-      deleteObject(storageRef)
-        .then(async () => {
-          console.log("file was deleted");
-          await deleteDoc(doc(db, "files", fileId))
-            .then(() => { 
+      const isConfirmed = window.confirm("本当に物理削除しても大丈夫ですか？\n操作は取り消せません");
+      if (isConfirmed) {
+        console.log("confirmed");
+        const storageRef = ref(storage, fullPath);
+        deleteObject(storageRef)
+          .then(async () => {
+            console.log("file was deleted");
+            await deleteDoc(doc(db, "files", fileId)).then(() => {
               alert("ファイルとデータは完全に削除されました");
-              navigate("/admin")
-            })
-        })
-        .catch((error) => {
-          console.log("Uh-oh, an error occurred!")
-          alert(JSON.stringify(error));
-        })
-    }
-  }, [value])
-  
+              navigate("/admin");
+            });
+          })
+          .catch((error) => {
+            console.log("Uh-oh, an error occurred!");
+            alert(JSON.stringify(error));
+          });
+      }
+    },
+    [value]
+  );
+
   if (error || !value) {
     return (
       <Container>
@@ -61,7 +63,7 @@ const DeleteFile: FC = () => {
           <strong>Error: {JSON.stringify(error)}</strong>
         </div>
       </Container>
-    )
+    );
   }
 
   return (
@@ -97,7 +99,7 @@ const DeleteFile: FC = () => {
         </div>
       </Container>
     </>
-  )
-}
+  );
+};
 
-export default DeleteFile
+export default DeleteFile;

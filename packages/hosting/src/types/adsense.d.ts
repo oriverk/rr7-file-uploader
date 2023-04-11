@@ -1,3 +1,3 @@
 interface Window {
-  adsbygoogle?: Array<unknown>
+  adsbygoogle?: Array<unknown>;
 }

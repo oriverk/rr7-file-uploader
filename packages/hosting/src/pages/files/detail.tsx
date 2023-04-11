@@ -51,7 +51,7 @@ const FileDetail: FC = () => {
   const [value, , error] = useDocumentData(docRef);
 
   if (error) {
-    throw new Error(JSON.stringify(error))
+    throw new Error(JSON.stringify(error));
   } else if (!value) {
     return null;
   }

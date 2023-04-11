@@ -32,12 +32,12 @@ export const CreateFormSchema = z.object({
   // downloaded: z.number().min(0),
   // createdAt: z.date(),
   // updatedAt: z.date().optional(),
-  deleted: z.boolean()
+  deleted: z.boolean(),
 });
 
 export const DeleteFormSchema = z.object({
   name: z.string().min(3),
-  deleted: z.boolean()
-})
+  deleted: z.boolean(),
+});
 
 // type Type = z.infer<typeof CreateFormSchema>

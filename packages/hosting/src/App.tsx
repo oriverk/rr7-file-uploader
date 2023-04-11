@@ -8,7 +8,7 @@ import { PageNotFound } from "./pages/404";
 const Signup = lazy(() => import("./pages/signup"));
 const Login = lazy(() => import("./pages/login"));
 
-const RequiredAuth = lazy(() => import("./components/RequiedAuth"))
+const RequiredAuth = lazy(() => import("./components/RequiedAuth"));
 const Admin = lazy(() => import("./pages/admin"));
 const NewFile = lazy(() => import("./pages/admin/new"));
 const EditFile = lazy(() => import("./pages/admin/editFile"));

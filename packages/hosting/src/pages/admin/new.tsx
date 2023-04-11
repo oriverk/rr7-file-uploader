@@ -56,7 +56,7 @@ const NewFile: FC = () => {
         const { name } = getValues();
         const { metadata } = uploadTask.snapshot;
         const { name: uuidName, contentType, size, fullPath } = metadata;
-        const timestamp = serverTimestamp()
+        const timestamp = serverTimestamp();
         const docRef = await addDoc(collection(db, "files"), {
           name,
           contentType,
@@ -92,7 +92,10 @@ const NewFile: FC = () => {
                 <CheckBox id="deleted" label="delete (論理削除)" />
                 <div className="flex flex-col gap-4">
                   <Button type="submit">submit</Button>
-                  <ButtonLink to="/admin" className="bg-teal-700 hover:bg-teal-800 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800">
+                  <ButtonLink
+                    to="/admin"
+                    className="bg-teal-700 hover:bg-teal-800 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+                  >
                     Admin ファイル一覧へ戻る
                   </ButtonLink>
                 </div>

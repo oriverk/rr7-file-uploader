@@ -12,13 +12,21 @@ import { ErrorFallback, handleErrorBounary } from "../ui/ErrorFallback";
 
 const isDev = import.meta.env.DEV;
 export const FileLayout: FC = () => {
-  useGoogleAdsense()
+  useGoogleAdsense();
   return (
-    <div className="flex flex-col gap-8 sm:flex-row justify-center">
-      <aside className="py-2"><AmazonAffiliateBanners isKasane /></aside>
+    <div className="flex flex-col justify-center gap-8 sm:flex-row">
+      <aside className="py-2">
+        <AmazonAffiliateBanners isKasane />
+      </aside>
       <div className="w-full max-w-5xl">
         <Container>
-          <AdSense className={twJoin("responsiveDisplayAd", isDev && "border border-red-500")} client={import.meta.env.VITE_PUBLISHER_ID} slot="3735361497" style={{ display: "block", textAlign: "center" }} responsive />
+          <AdSense
+            className={twJoin("responsiveDisplayAd", isDev && "border border-red-500")}
+            client={import.meta.env.VITE_PUBLISHER_ID}
+            slot="3735361497"
+            style={{ display: "block", textAlign: "center" }}
+            responsive
+          />
         </Container>
         <ErrorBoundary FallbackComponent={ErrorFallback} onError={handleErrorBounary}>
           <Suspense fallback={<Loading />}>
@@ -27,5 +35,5 @@ export const FileLayout: FC = () => {
         </ErrorBoundary>
       </div>
     </div>
-  )
-}
+  );
+};

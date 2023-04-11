@@ -13,7 +13,7 @@ export const useGoogleAdsense = () => {
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.log("adsense error", error.message)
+        console.log("adsense error", error.message);
       }
     }
   }, []);

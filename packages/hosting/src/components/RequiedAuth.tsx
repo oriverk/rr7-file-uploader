@@ -52,4 +52,4 @@ const RequiredAuth: FC = () => {
   );
 };
 
-export default RequiredAuth
+export default RequiredAuth;

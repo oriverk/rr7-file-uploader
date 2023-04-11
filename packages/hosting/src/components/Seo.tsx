@@ -11,7 +11,7 @@ interface Props {
   noindex?: boolean;
 }
 
-const uploaderOG = getCloudinaryImage("ixanary/uploader-og.webp")
+const uploaderOG = getCloudinaryImage("ixanary/uploader-og.webp");
 
 export const Seo: FC<Props> = (props) => {
   const { pathname = "", title = "", description = "", ogImage, noindex = false } = props;

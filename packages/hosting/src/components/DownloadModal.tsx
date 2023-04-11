@@ -11,7 +11,7 @@ import { Banners } from "@/constants/banners";
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-}
+};
 
 export const DownloadModal: FC<Props> = (props) => {
   const { isOpen, onClose } = props;
@@ -74,9 +74,7 @@ export const DownloadModal: FC<Props> = (props) => {
                     <h4 className="mb-8 text-center text-base font-medium">
                       今からAmazonでモノ買う予定のある人は横のAmazonバナーを、買う予定は無いよって人はこの広告をポチッと押して行ってください！サイト・ツールの開発の継続に繋がります。
                     </h4>
-                    <div
-                      className="mb-4 flex justify-center gap-x-4"
-                    >
+                    <div className="mb-4 flex justify-center gap-x-4">
                       <BannerLink {...Banners[0]} />
                     </div>
                     <div className="mb-4">
@@ -87,7 +85,7 @@ export const DownloadModal: FC<Props> = (props) => {
                         <button
                           type="button"
                           onClick={handleCopy}
-                          className="flex w-full justify-center rounded-md border border-gray-900 bg-gray-300 py-1 px-4 hover:bg-gray-400"
+                          className="flex w-full justify-center rounded-md border border-gray-900 bg-gray-300 px-4 py-1 hover:bg-gray-400"
                         >
                           <LinkIcon className="mr-4 h-6 w-6" />
                           URLリンクをコピーする
@@ -96,7 +94,7 @@ export const DownloadModal: FC<Props> = (props) => {
                         <button
                           type="button"
                           disabled
-                          className="flex w-full justify-center rounded-md border border-gray-900 bg-gray-300 py-1 px-4"
+                          className="flex w-full justify-center rounded-md border border-gray-900 bg-gray-300 px-4 py-1"
                         >
                           <CheckIcon className="mr-4 h-6 w-6 text-teal-400" />
                           クリップボードにコピーしました。

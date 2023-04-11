@@ -3,12 +3,12 @@ import { RegisterOptions, useFormContext } from "react-hook-form";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { twJoin } from "tailwind-merge";
 
-type Props = ComponentProps<'textarea'> & {
+type Props = ComponentProps<"textarea"> & {
   id: string;
   label: string;
   validation?: RegisterOptions;
   helperText?: string;
-}
+};
 
 export const TextArea: FC<Props> = (props) => {
   const { label, helperText = "", placeholder = "", id, readOnly, disabled, validation, ...rest } = props;
@@ -40,7 +40,7 @@ export const TextArea: FC<Props> = (props) => {
           id={id}
           readOnly={readOnly}
           disabled={disabled}
-          className={twJoin("block w-full h-96 rounded-md shadow-sm", stateClass)}
+          className={twJoin("block h-96 w-full rounded-md shadow-sm", stateClass)}
           placeholder={placeholder}
           aria-describedby={id}
         />

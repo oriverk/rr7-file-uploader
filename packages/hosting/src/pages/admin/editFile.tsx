@@ -53,7 +53,6 @@ const EditFile: FC = () => {
       </Container>
     );
   }
-  
 
   return (
     <>
@@ -80,7 +79,6 @@ const EditFile: FC = () => {
                   <CheckBox id="deleted" label="delete (論理削除)" />
                   <TextArea id="description" label="description" />
                   <Button type="submit">submit</Button>
-                  
                 </div>
               </div>
             </form>

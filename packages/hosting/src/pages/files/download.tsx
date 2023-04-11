@@ -49,13 +49,12 @@ const FileDownload: FC = () => {
     if (!dbValue || !objectUrl) return;
     await updateDoc(firestoreRef, {
       downloaded: dbValue!.downloaded + 1,
-    })
-      .then(() => {
-        URL.revokeObjectURL(objectUrl);
-        setIsConfirmed(false);
-        setObjectUrl("");
-        setIsOpen(true);
-      });
+    }).then(() => {
+      URL.revokeObjectURL(objectUrl);
+      setIsConfirmed(false);
+      setObjectUrl("");
+      setIsOpen(true);
+    });
   }, [dbValue, objectUrl]);
 
   const handleCloseModal = useCallback(() => {
@@ -63,9 +62,9 @@ const FileDownload: FC = () => {
   }, []);
 
   if (isOld) {
-    throw new Error("リンクが古くなっています。")
+    throw new Error("リンクが古くなっています。");
   } else if (isLoadingCompoliteButFailed) {
-    throw new Error(JSON.stringify(error))
+    throw new Error(JSON.stringify(error));
   }
   // else if (!objectUrl) {
   //   throw new Error("ファイルは削除された可能性があります")

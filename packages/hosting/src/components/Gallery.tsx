@@ -37,7 +37,7 @@ export const GridConetnt: FC<ContentProps> = ({ href, imgSrc, imgAlt, text, isEx
         className="group relative flex h-48 items-end overflow-hidden rounded-lg bg-gray-100 shadow-lg md:h-80"
       >
         <Content imgSrc={imgSrc} imgAlt={imgAlt} />
-        <p className="relative ml-4 mb-3 flex items-center text-sm text-white md:ml-5 md:text-lg">
+        <p className="relative mb-3 ml-4 flex items-center text-sm text-white md:ml-5 md:text-lg">
           {text}
           <ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4 text-white" />
         </p>
@@ -48,7 +48,7 @@ export const GridConetnt: FC<ContentProps> = ({ href, imgSrc, imgAlt, text, isEx
     <Link to={href}>
       <a className="group relative flex h-48 items-end overflow-hidden rounded-lg bg-gray-100 shadow-lg md:h-80">
         <Content imgSrc={imgSrc} imgAlt={imgAlt} />
-        <p className="relative ml-4 mb-3 inline-block text-sm text-white md:ml-5 md:text-lg">{text}</p>
+        <p className="relative mb-3 ml-4 inline-block text-sm text-white md:ml-5 md:text-lg">{text}</p>
       </a>
     </Link>
   );

@@ -12,17 +12,15 @@ interface IHeaderNavLink extends NavLinkProps {
   className?: string;
 }
 const HeaderNavLink: FC<IHeaderNavLink> = (props) => {
-  const { children, to, isExternal = false, className ="" } = props;
-  const _className = twMerge("text-base md:text-xl font-semibold text-gray-600 transition duration-100 hover:text-indigo-500 active:text-indigo-700", className)
+  const { children, to, isExternal = false, className = "" } = props;
+  const _className = twMerge(
+    "text-base md:text-xl font-semibold text-gray-600 transition duration-100 hover:text-indigo-500 active:text-indigo-700",
+    className
+  );
 
   if (isExternal) {
     return (
-      <a
-        href={to}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={_className}
-      >
+      <a href={to} target="_blank" rel="noopener noreferrer" className={_className}>
         {children}
       </a>
     );
@@ -30,10 +28,7 @@ const HeaderNavLink: FC<IHeaderNavLink> = (props) => {
   const active = (isActive: boolean) => (isActive ? "text-indigo-500" : "text-gray-600");
 
   return (
-    <NavLink
-      to={to}
-      className={({ isActive }) => `${active(isActive)} ${_className}`}
-    >
+    <NavLink to={to} className={({ isActive }) => `${active(isActive)} ${_className}`}>
       {children}
     </NavLink>
   );
@@ -47,7 +42,10 @@ export const Header: FC = () => (
     </NavLink>
     <nav className="flex gap-12">
       <HeaderNavLink to={IxanaryPath} isExternal className=" ">
-        ⚔&nbsp;<span className="text-transparent bg-clip-text bg-gradient-to-r from-[#a3620c] via-[#eedb95] to-[#DAAF08] hover:from-[#DAAF08] hover:to-[#a3620c]">IXAnary</span>
+        ⚔&nbsp;
+        <span className="bg-gradient-to-r from-[#a3620c] via-[#eedb95] to-[#DAAF08] bg-clip-text text-transparent hover:from-[#DAAF08] hover:to-[#a3620c]">
+          IXAnary
+        </span>
       </HeaderNavLink>
       <HeaderNavLink to="files">Files</HeaderNavLink>
       <HeaderNavLink to="price">Pricing</HeaderNavLink>

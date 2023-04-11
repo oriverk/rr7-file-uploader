@@ -4,12 +4,12 @@ import { RegisterOptions, useFormContext } from "react-hook-form";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { twMerge } from "tailwind-merge";
 
-export type InputProps = ComponentProps<'input'> & {
+export type InputProps = ComponentProps<"input"> & {
   id: string;
   label: string;
   validation?: RegisterOptions;
   helperText?: string;
-}
+};
 
 export const Input: FC<InputProps> = (props) => {
   const {

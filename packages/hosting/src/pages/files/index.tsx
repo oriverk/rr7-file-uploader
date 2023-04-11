@@ -82,7 +82,7 @@ const Files: FC = () => {
   const [files, loading, error] = useCollectionData(q);
 
   if (!loading && error) {
-    throw new Error(JSON.stringify(error))
+    throw new Error(JSON.stringify(error));
   } else if (!files?.length) {
     return null;
   }
