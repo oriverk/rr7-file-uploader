@@ -13,7 +13,7 @@ import { Container } from "@/components/ui/Container";
 import { TextArea, Button, CheckBox } from "@/components/Form";
 import { DropzoneInput } from "@/components/Dropzone";
 import { ButtonLink } from "@/components/ui/ButtonLink";
-import { Description } from "@/constants/description";
+import Description from '@/docs/description.md?raw'
 
 const NewFile: FC = () => {
   const navigate = useNavigate();
