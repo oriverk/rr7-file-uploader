@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Link } from "react-router-dom";
 
 import {
@@ -80,6 +80,8 @@ const collectionRef = collection(db, "files").withConverter(converter);
 const Files: FC = () => {
   const q = query(collectionRef, where("deletedAt", "==", null));
   const [files, loading, error] = useCollectionData(q);
+  const pageSize = 8
+  const [page, setPage] = useState(1)
 
   if (!loading && error) {
     throw new Error(JSON.stringify(error));
@@ -96,6 +98,10 @@ const Files: FC = () => {
     }
     return 0;
   });
+
+  const handleLoadMore = () => {
+    setPage(prev => prev + 1)
+  }
 
   return (
     <Container className="">
@@ -123,11 +129,18 @@ const Files: FC = () => {
               </tr>
             </Thead>
             <tbody>
-              {sortedFiles.map(({ description, path, fullPath, ...rest }) => (
+              {sortedFiles.slice(0, pageSize * page).map(({ description, path, fullPath, ...rest }) => (
                 <StyledTr key={path} {...rest} />
               ))}
             </tbody>
           </Table>
+        </div>
+        <div className="mt-8 text-center">
+          <button type="button" onClick={handleLoadMore}
+            className="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            もっと読み込む
+          </button>
         </div>
       </div>
     </Container>

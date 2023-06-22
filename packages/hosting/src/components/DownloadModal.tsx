@@ -2,16 +2,19 @@ import { FC, Fragment, useCallback, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Dialog, Transition } from "@headlessui/react";
 import { CheckIcon, LinkIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { twJoin } from "tailwind-merge"
 
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 import { BuyMePotato } from "@/components/ads/BuyMePotato";
-import { BannerLink } from "@/components/ads/AmazonAffiliate";
-import { Banners } from "@/constants/banners";
+import { Container } from "./ui/Container";
+import { AdSense } from "./ads/AdSense";
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
 };
+
+const isDev = import.meta.env.DEV;
 
 export const DownloadModal: FC<Props> = (props) => {
   const { isOpen, onClose } = props;
@@ -74,9 +77,15 @@ export const DownloadModal: FC<Props> = (props) => {
                     <h4 className="mb-8 text-center text-base font-medium">
                       今からAmazonでモノ買う予定のある人は横のAmazonバナーを、買う予定は無いよって人はこの広告をポチッと押して行ってください！サイト・ツールの開発の継続に繋がります。
                     </h4>
-                    <div className="mb-4 flex justify-center gap-x-4">
-                      <BannerLink {...Banners[0]} />
-                    </div>
+                    <Container>
+                      <AdSense
+                        className={twJoin("responsiveDisplayAd", isDev && "border border-red-500")}
+                        client={import.meta.env.VITE_PUBLISHER_ID}
+                        slot="3735361497"
+                        style={{ display: "block", textAlign: "center" }}
+                        responsive
+                      />
+                    </Container>
                     <div className="mb-4">
                       <BuyMePotato />
                     </div>
