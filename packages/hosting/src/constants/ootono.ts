@@ -28,4 +28,19 @@ export const Ootono: Record<number, string[]> = {
     "mizuno",
     "yamauchi",
   ],
+  26: [
+    'takeda',
+    'uesugi',
+    'houzyou',
+    'takedanobutora',
+    'ashinamoriuzi',
+    'satake',
+    'asakura',
+    'asai',
+    'satomi',
+    'honganji',
+    'tachibana',
+    'nagano',
+    'saburou'
+  ]
 };

@@ -26,7 +26,7 @@ export const GameStart: FC = () => {
 };
 
 export const Hero: FC = () => {
-  const { name, url } = useRandomHeroImage(25);
+  const { name, url } = useRandomHeroImage(26);
 
   return (
     <section className="relative flex min-h-[calc(100vh-4rem)] flex-1 shrink-0 items-center justify-center overflow-hidden rounded bg-gray-100 py-16 shadow-lg md:py-20 xl:py-48">

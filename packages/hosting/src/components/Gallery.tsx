@@ -57,7 +57,7 @@ export const GridConetnt: FC<ContentProps> = ({ href, imgSrc, imgAlt, text, isEx
 const ixanaryPath = import.meta.env.VITE_IXANARY_PATH;
 
 export const Gallery: FC = () => {
-  const { name, url } = useRandomHeroImage(25);
+  const { name, url } = useRandomHeroImage(26);
 
   return (
     <>
