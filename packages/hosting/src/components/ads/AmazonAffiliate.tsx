@@ -2,7 +2,6 @@
 // ASIN と Amazon API を使って出来るようにしたい。そのうち。
 import type { ComponentProps, FC } from "react";
 import { Banners } from "@/constants/banners";
-// import { useMediaQuery } from 'react-responsive';
 
 // const breakpoints = {
 //   sm: '640px',
