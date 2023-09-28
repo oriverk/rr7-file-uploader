@@ -11,6 +11,7 @@ interface IHeaderNavLink extends NavLinkProps {
   isExternal?: boolean;
   className?: string;
 }
+
 const HeaderNavLink: FC<IHeaderNavLink> = (props) => {
   const { children, to, isExternal = false, className = "" } = props;
   const _className = twMerge(
@@ -25,6 +26,7 @@ const HeaderNavLink: FC<IHeaderNavLink> = (props) => {
       </a>
     );
   }
+
   const active = (isActive: boolean) => (isActive ? "text-indigo-500" : "text-gray-600");
 
   return (

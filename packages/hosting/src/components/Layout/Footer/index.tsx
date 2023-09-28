@@ -33,8 +33,8 @@ export const Footer: FC = () => (
                 </StyledLink>
               </div>
               <div>
-                <StyledLink href={urlJoin(ixanaryPath, "tools/gousei-sozai-kensaku")} isExternal>
-                  追加合成素材検索
+                <StyledLink href={urlJoin(ixanaryPath, "search")} isExternal>
+                  IXAnary検索
                 </StyledLink>
               </div>
               <div>

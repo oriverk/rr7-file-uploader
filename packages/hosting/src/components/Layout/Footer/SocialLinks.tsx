@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Twitter } from "../../ui/Icons";
+import { X } from "../../ui/Icons";
 
 export const SocialLinks: FC = () => (
   <div className="flex gap-4">
@@ -7,9 +7,9 @@ export const SocialLinks: FC = () => (
       href="https://twitter.com/IXAnary"
       target="_blank"
       rel="noreferrer noopener"
-      className="text-gray-400 transition duration-100 hover:text-gray-500 active:text-gray-600"
+      className="p-1 bg-black text-white transition duration-100 hover:text-gray-200 active:text-gray-200"
     >
-      <Twitter className="h-5 w-5" />
+      <X className="h-5 w-5" />
     </a>
   </div>
 );

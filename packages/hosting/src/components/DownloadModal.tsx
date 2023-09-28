@@ -2,19 +2,13 @@ import { FC, Fragment, useCallback, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Dialog, Transition } from "@headlessui/react";
 import { CheckIcon, LinkIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { twJoin } from "tailwind-merge"
 
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
-import { BuyMePotato } from "@/components/ads/BuyMePotato";
-import { Container } from "./ui/Container";
-import { AdSense } from "./ads/AdSense";
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
 };
-
-const isDev = import.meta.env.DEV;
 
 export const DownloadModal: FC<Props> = (props) => {
   const { isOpen, onClose } = props;
@@ -74,21 +68,9 @@ export const DownloadModal: FC<Props> = (props) => {
                     Downloaded?
                   </Dialog.Title>
                   <div className="">
-                    <h4 className="mb-8 text-center text-base font-medium">
-                      今からAmazonでモノ買う予定のある人は横のAmazonバナーを、買う予定は無いよって人はこの広告をポチッと押して行ってください！サイト・ツールの開発の継続に繋がります。
-                    </h4>
-                    <Container>
-                      <AdSense
-                        className={twJoin("responsiveDisplayAd", isDev && "border border-red-500")}
-                        client={import.meta.env.VITE_PUBLISHER_ID}
-                        slot="3735361497"
-                        style={{ display: "block", textAlign: "center" }}
-                        responsive
-                      />
-                    </Container>
-                    <div className="mb-4">
-                      <BuyMePotato />
-                    </div>
+                    {/* <h4 className="mb-8 text-center text-base font-medium">
+                      title
+                    </h4> */}
                     <div className="mb-4">
                       {!copiedText ? (
                         <button
@@ -97,7 +79,7 @@ export const DownloadModal: FC<Props> = (props) => {
                           className="flex w-full justify-center rounded-md border border-gray-900 bg-gray-300 px-4 py-1 hover:bg-gray-400"
                         >
                           <LinkIcon className="mr-4 h-6 w-6" />
-                          URLリンクをコピーする
+                          URLリンクをクリップボードにコピーする
                         </button>
                       ) : (
                         <button
@@ -105,12 +87,12 @@ export const DownloadModal: FC<Props> = (props) => {
                           disabled
                           className="flex w-full justify-center rounded-md border border-gray-900 bg-gray-300 px-4 py-1"
                         >
-                          <CheckIcon className="mr-4 h-6 w-6 text-teal-400" />
+                          <CheckIcon className="mr-4 h-6 w-6 text-teal-500" />
                           クリップボードにコピーしました。
                         </button>
                       )}
                     </div>
-                    <p className="text-center">README ファイルをよく読んで使用してください。</p>
+                    <p className="text-center">README ファイルなどをよく読んで使用してください。</p>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

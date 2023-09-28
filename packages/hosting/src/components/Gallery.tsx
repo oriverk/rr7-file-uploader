@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { FC } from "react";
 import { Link } from "react-router-dom";
@@ -45,11 +44,12 @@ export const GridConetnt: FC<ContentProps> = ({ href, imgSrc, imgAlt, text, isEx
     );
   }
   return (
-    <Link to={href}>
-      <a className="group relative flex h-48 items-end overflow-hidden rounded-lg bg-gray-100 shadow-lg md:h-80">
-        <Content imgSrc={imgSrc} imgAlt={imgAlt} />
-        <p className="relative mb-3 ml-4 inline-block text-sm text-white md:ml-5 md:text-lg">{text}</p>
-      </a>
+    <Link
+      to={href}
+      className="group relative flex h-48 items-end overflow-hidden rounded-lg bg-gray-100 shadow-lg md:h-80"
+    >
+      <Content imgSrc={imgSrc} imgAlt={imgAlt} />
+      <p className="relative mb-3 ml-4 inline-block text-sm text-white md:ml-5 md:text-lg">{text}</p>
     </Link>
   );
 };
@@ -63,7 +63,7 @@ export const Gallery: FC = () => {
     <>
       <h2 className="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-8 lg:text-3xl xl:mb-12">IXAnary</h2>
       <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:mb-8 md:gap-6 lg:grid-cols-4 xl:gap-8">
-        <GridConetnt href={ixanaryPath} imgSrc={url} imgAlt={name} text="Top" isExternal />
+        <GridConetnt href={ixanaryPath} imgSrc={url} imgAlt={name} text="戦国IXAnary" isExternal />
         <GridConetnt
           href={urlJoin(ixanaryPath, "albums")}
           imgSrc="./assets/image/album.webp"
@@ -72,9 +72,9 @@ export const Gallery: FC = () => {
           isExternal
         />
         <GridConetnt
-          href={urlJoin(ixanaryPath, "tools/gousei-sozai-kensaku")}
+          href={urlJoin(ixanaryPath, "search")}
           imgSrc="./assets/image/search.webp"
-          imgAlt="追加合成素材検索"
+          imgAlt="IXAnary検索"
           text="Search Skills"
           isExternal
         />
