@@ -27,10 +27,11 @@ export const AdSense: FC<Props> = (props) => {
     responsive = false,
   } = props;
   if (!client) return null;
+  const isDev = import.meta.env.DEV;
 
   return (
     <ins
-      className={clsx(className, "adsbygoogle")}
+      className={clsx(className, "adsbygoogle", isDev && "border border-red-500")}
       style={style}
       data-ad-client={`ca-${client}`}
       data-ad-slot={slot}

@@ -1,7 +1,6 @@
 import { FC, Suspense } from "react";
 import { Outlet } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
-import { twJoin } from "tailwind-merge";
 import { Loading } from "../ui/Icons";
 import { AdSense } from "@/components/ads/AdSense";
 
@@ -9,7 +8,6 @@ import { useGoogleAdsense } from "@/utils/google/adsense";
 import { Container } from "../ui/Container";
 import { ErrorFallback, handleErrorBounary } from "../ui/ErrorFallback";
 
-const isDev = import.meta.env.DEV;
 export const FileLayout: FC = () => {
   useGoogleAdsense();
   return (
@@ -17,7 +15,7 @@ export const FileLayout: FC = () => {
       <div className="w-full max-w-5xl">
         <Container>
           <AdSense
-            className={twJoin("responsiveDisplayAd", isDev && "border border-red-500")}
+            className="responsiveDisplayAd"
             client={import.meta.env.VITE_PUBLISHER_ID}
             slot="3735361497"
             style={{ display: "block", textAlign: "center" }}
@@ -31,7 +29,7 @@ export const FileLayout: FC = () => {
         </ErrorBoundary>
         <Container>
           <AdSense
-            className={twJoin("responsiveDisplayAd", isDev && "border border-red-500")}
+            className="responsiveDisplayAd"
             client={import.meta.env.VITE_PUBLISHER_ID}
             slot="3735361497"
             style={{ display: "block", textAlign: "center" }}

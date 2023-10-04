@@ -19,6 +19,11 @@ export const useGoogleAdsense = () => {
   }, []);
 
   useEffect(() => {
-    loadAd();
-  }, [loadAd]);
+    // adsbygoogle adsbygoogle-noablate
+    const adsByGoogle = document.querySelectorAll(".adsbygoogle:not(.adsbygoogle-noablate)")
+    Array.from(adsByGoogle).forEach(() => {
+      loadAd()
+    })
+    // loadAd();
+  }, []);
 };
