@@ -9,10 +9,29 @@
     ],
     "rewrites": [
       {
+        "source": "/health",
+        "function": {
+          "functionId": "healthCheck"
+        }
+      },
+      {
+        "source": "/files/feed",
+        "function": {
+          "functionId": "returnRSS"
+        }
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
     ]
+  },
+  "functions": {
+    "engines": {
+      "node": "18"
+    },
+    "source": "/packages/functions",
+    "region": "asia-northeast1"
   },
   "firestore": {
     "rules": "firestore.rules",
