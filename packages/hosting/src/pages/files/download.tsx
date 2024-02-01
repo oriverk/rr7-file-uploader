@@ -4,6 +4,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { ref, getBlob } from "firebase/storage";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 
+import { useDetectAdBlock } from "@/hooks/useDetectAdBlock";
 import { storage, db } from "@/lib/firebase";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/Form";
@@ -15,6 +16,7 @@ import { StyledLink } from "@/components/ui/StyledLink";
 import { Checkbox } from "@/components/ui/Checkbox";
 
 const FileDownload: FC = () => {
+  const adBlockDetected = useDetectAdBlock()
   const [objectUrl, setObjectUrl] = useState<string>();
   const [saveName, setSaveName] = useState<string>("");
   const [searchParams] = useSearchParams();
@@ -69,6 +71,23 @@ const FileDownload: FC = () => {
   // else if (!objectUrl) {
   //   throw new Error("ファイルは削除された可能性があります")
   // }
+
+  if (adBlockDetected) {
+    return (
+      <Container>
+        <Seo noindex />
+        <div className="mx-auto max-w-5xl">
+          <h1 className="mb-8 text-center text-xl">ダウンロード</h1>
+          <div className="flex flex-col gap-6">
+            <div className="mb-4 text-base sm:text-lg">
+              広告ブロッカーをご利用のようです。当サイトでは全画面広告をオフにしています。広告ブロッカーの設定で当サイトを対象から外すか、拡張機能自体を無効にしてください。
+            </div>
+            <ButtonLink to="/files">ファイル一覧へ戻る</ButtonLink>
+          </div>
+        </div>
+      </Container>
+    )
+  }
 
   return (
     <Container className="">
