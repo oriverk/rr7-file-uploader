@@ -27,10 +27,12 @@ export const DropzoneInput: FC<DropzoneInputProps> = (props) => {
   const onDrop = useCallback(
     (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
       if (rejectedFiles && rejectedFiles.length > 0) {
-        setValue(id, files ? [...files] : null);
+        setValue(id, files ? [...files] : null, {
+          shouldValidate: true
+        });
         setError(id, {
           type: "manual",
-          message: rejectedFiles && rejectedFiles[0].errors[0].message,
+          message: rejectedFiles[0].errors[0].message,
         });
       } else {
         const acceptedFilesPreview = acceptedFiles.map((file: File) =>

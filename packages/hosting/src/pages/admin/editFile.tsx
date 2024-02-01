@@ -1,14 +1,15 @@
 import { FC, useEffect, useCallback, FormEvent } from "react";
 import { useParams } from "react-router-dom";
 import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
-import { useDocumentData } from "react-firebase-hooks/firestore";
-
 import { FormProvider, useForm } from "react-hook-form";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { z } from "zod";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { db } from "@/lib/firebase";
 import { Container } from "@/components/ui/Container";
 import { CreateFormSchema } from "@/lib/zod";
-import { FirestoreFileType, FormData } from "@/types/firestore";
+import type { FirestoreFileType } from "@/types/firestore";
 import { Button, CheckBox, Input, TextArea } from "@/components/Form";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 
@@ -18,7 +19,7 @@ const EditFile: FC = () => {
   };
   const docRef = doc(db, "files", fileId);
   const [value, , error] = useDocumentData(docRef);
-  const methods = useForm<FormData>({
+  const methods = useForm<z.infer<typeof CreateFormSchema>>({
     resolver: zodResolver(CreateFormSchema),
     defaultValues: {},
   });

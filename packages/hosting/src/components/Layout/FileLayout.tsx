@@ -6,7 +6,7 @@ import { AdSense } from "@/components/ads/AdSense";
 
 import { useGoogleAdsense } from "@/utils/google/adsense";
 import { Container } from "../ui/Container";
-import { ErrorFallback, handleErrorBounary } from "../ui/ErrorFallback";
+import { ErrorFallback } from "../ui/ErrorFallback";
 
 export const FileLayout: FC = () => {
   useGoogleAdsense();
@@ -22,7 +22,7 @@ export const FileLayout: FC = () => {
             responsive
           />
         </Container>
-        <ErrorBoundary FallbackComponent={ErrorFallback} onError={handleErrorBounary}>
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
           <Suspense fallback={<Loading />}>
             <Outlet />
           </Suspense>

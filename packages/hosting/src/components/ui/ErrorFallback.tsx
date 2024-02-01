@@ -2,10 +2,10 @@
 import { FallbackProps } from "react-error-boundary";
 import { Container } from "./Container";
 
-export const handleErrorBounary = (error: Error, info: { componentStack: string }) => {
-  console.log("error.message", error.message);
-  console.log("info.componentStack:", info.componentStack);
-};
+// export const handleErrorBounary = (error: Error, info: any) => {
+//   console.log("error.message", error.message);
+//   console.log("info.componentStack:", info.componentStack);
+// };
 
 export function ErrorFallback({ error }: FallbackProps) {
   return (

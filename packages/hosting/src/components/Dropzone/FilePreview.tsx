@@ -22,7 +22,8 @@ export const FilePreview: FC<FilePreviewProps> = (props) => {
 
   const handleDelete = (e: MouseEvent) => {
     e.stopPropagation();
-    deleteFile?.(e, file);
+    if (!deleteFile) return;
+    deleteFile(e, file);
   };
 
   const imagesType = ["image/png", "image/jpg", "image/jpeg"];
@@ -37,6 +38,7 @@ export const FilePreview: FC<FilePreviewProps> = (props) => {
         {!readOnly && (
           <button
             type="button"
+            aria-label="delete"
             onClick={handleDelete}
             className="rounded text-xl font-medium text-red-500 hover:text-red-700 focus:outline-none focus:ring focus:ring-red-500"
           >
@@ -54,9 +56,10 @@ export const FilePreview: FC<FilePreviewProps> = (props) => {
       <div className="ml-4 flex flex-shrink-0 items-center space-x-2">
         {!readOnly && (
           <button
-            className="cursor-pointer rounded text-red-500 hover:text-red-700 focus:outline-none focus:ring focus:ring-red-500"
             type="button"
-            onClick={(e) => deleteFile?.(e, file)}
+            aria-label="delete"
+            className="cursor-pointer rounded text-red-500 hover:text-red-700 focus:outline-none focus:ring focus:ring-red-500"
+            onClick={handleDelete}
           >
             <XMarkIcon className="h-6 w-6" />
           </button>

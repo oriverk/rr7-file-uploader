@@ -2,10 +2,11 @@ import { FC, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { FormProvider, useForm } from "react-hook-form";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { auth } from "@/lib/firebase";
-import { SignInWithEmailAndPasswordSchema } from "@/lib/zod";
+import { SignUpWithEmailAndPasswordSchema } from "@/lib/zod";
 import { Container } from "@/components/ui/Container";
 import { Input, PasswordInput, Button } from "@/components/Form";
 import { Seo } from "@/components/Seo";
@@ -16,19 +17,20 @@ const validEmail = import.meta.env.VITE_VALID_EMAIL_ADRESS;
 const Signup: FC = () => {
   const navigate = useNavigate();
   const [createUserWithEmailAndPassword, user, loading, error] = useCreateUserWithEmailAndPassword(auth);
-  const methos = useForm<{ email: string; password: string }>({
-    resolver: zodResolver(SignInWithEmailAndPasswordSchema),
+  const methods = useForm<z.infer<typeof SignUpWithEmailAndPasswordSchema>>({
+    resolver: zodResolver(SignUpWithEmailAndPasswordSchema),
   });
-  const { handleSubmit, setError } = methos;
+  const { handleSubmit, setError } = methods;
 
   const onSubmit = handleSubmit((data) => {
     const { email, password } = data;
     if (email !== validEmail) {
       setError("email", { type: "custom", message: "メールアドレスまたはパスワードが間違っています" });
       setError("password", { type: "custom", message: "メールアドレスまたはパスワードが間違っています" });
-    } else {
-      createUserWithEmailAndPassword(email, password);
+      return;
     }
+
+    createUserWithEmailAndPassword(email, password);
   });
 
   useEffect(() => {
@@ -54,10 +56,12 @@ const Signup: FC = () => {
     <Container>
       <Seo noindex />
       <h2 className="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-8 lg:text-3xl">Signup</h2>
-      <FormProvider {...methos}>
+      <FormProvider {...methods}>
         <form onSubmit={onSubmit} className="mx-auto max-w-lg rounded-lg border">
           <div className="flex flex-col gap-4 p-4 md:p-8">
-            <Input id="email" label="Eメール" placeholder="example@example.com" validation={{ required: "required" }} />
+            <Input id="name" label="ユーザー名" validation={{ required: "required", pattern: /^[a-z0-9_]+$/, max: 15 }}/>
+            <Input id="displayName" label="表示名" validation={{ required: "required", min: 10, max: 50 }} />
+            <Input id="email" label="Eメールアドレス" placeholder="example@example.com" validation={{ required: "required" }} />
             <PasswordInput id="password" label="パスワード" validation={{ required: "required" }} />
             <Button type="submit">サインアップ</Button>
           </div>

@@ -3,6 +3,7 @@ import { FC, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { FormProvider, useForm } from "react-hook-form";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { auth } from "@/lib/firebase";
@@ -17,10 +18,10 @@ const validEmail = import.meta.env.VITE_VALID_EMAIL_ADRESS;
 const Login: FC = () => {
   const navigate = useNavigate();
   const [signInWithEmailAndPassword, user, loading, error] = useSignInWithEmailAndPassword(auth);
-  const methos = useForm<{ email: string; password: string }>({
+  const methods = useForm<z.infer<typeof SignInWithEmailAndPasswordSchema>>({
     resolver: zodResolver(SignInWithEmailAndPasswordSchema),
   });
-  const { handleSubmit, setError } = methos;
+  const { handleSubmit, setError } = methods;
 
   const onSubmit = handleSubmit((data) => {
     const { email, password } = data;
@@ -55,10 +56,10 @@ const Login: FC = () => {
     <Container>
       <Seo noindex />
       <h2 className="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-8 lg:text-3xl">Login</h2>
-      <FormProvider {...methos}>
+      <FormProvider {...methods}>
         <form onSubmit={onSubmit} className="mx-auto max-w-lg rounded-lg border">
           <div className="flex flex-col gap-4 p-4 md:p-8">
-            <Input id="email" label="Eメール" placeholder="example@example.com" validation={{ required: "required" }} />
+            <Input id="email" label="Eメール" placeholder="example@example.com" helperText="hoge" validation={{ required: "required" }} />
             <PasswordInput id="password" label="パスワード" validation={{ required: "required" }} />
             <Button type="submit">ログイン</Button>
           </div>

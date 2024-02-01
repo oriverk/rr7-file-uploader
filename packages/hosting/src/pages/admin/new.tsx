@@ -1,12 +1,12 @@
 import { FC, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FormProvider, useForm } from "react-hook-form";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ref, uploadBytesResumable } from "firebase/storage";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 
-import { FormData } from "@/types/firestore";
 import { CreateFormSchema } from "@/lib/zod";
 import { storage, db } from "@/lib/firebase";
 import { Container } from "@/components/ui/Container";
@@ -18,7 +18,7 @@ import Description from "@/docs/description.md?raw";
 const NewFile: FC = () => {
   const navigate = useNavigate();
   // const [progress, setProgress] = useState(0);
-  const methods = useForm<Pick<FormData, "name" | "description" | "file" | "deleted">>({
+  const methods = useForm<z.infer<typeof CreateFormSchema>>({
     resolver: zodResolver(CreateFormSchema),
     defaultValues: {
       name: "",

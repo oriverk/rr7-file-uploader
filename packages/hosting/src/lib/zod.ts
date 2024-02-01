@@ -13,12 +13,26 @@ import * as z from "zod";
 //     })
 // })
 
+const emailSchema = z
+  .string()
+  .email({ message: 'メールアドレスの形式が正しくありません' });
+
+const passwordSchema = z.string()
+
+export const SignUpWithEmailAndPasswordSchema = z.object({
+  // name: z.string().max(15),
+  // displayName: z.string().max(50),
+  email: emailSchema,
+  password: passwordSchema
+})
+
 export const SignInWithEmailAndPasswordSchema = z.object({
-  email: z.string().email(),
-  password: z.string(),
+  email: emailSchema,
+  password: passwordSchema
 });
 
 const FileSchema = z.object({
+  name: z.string(),
   path: z.string(),
   preview: z.string(),
   size: z.number(),

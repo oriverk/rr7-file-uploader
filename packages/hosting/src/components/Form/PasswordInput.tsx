@@ -26,6 +26,7 @@ export const PasswordInput: FC<InputProps> = (props) => {
     stateClass = "focus:ring-primary-500 border-gray-300 focus:border-primary-500";
   }
   const className = twMerge("block w-full rounded-md shadow-sm", stateClass);
+  const isError = !!Object.entries(errors).length && !!errors[id]
 
   return (
     <div>
@@ -63,9 +64,7 @@ export const PasswordInput: FC<InputProps> = (props) => {
       </div>
       <div className="mt-1">
         {helperText && <p className="text-xs text-gray-500">{helperText}</p>}
-        {errors.length && errors[id] ? (
-          <span className="text-sm text-red-500">{JSON.stringify(errors[id]?.message, null, 2)}</span>
-        ) : null}
+        {isError && <span className="text-sm text-red-500">{JSON.stringify(errors[id]?.message, null, 2)}</span>}
       </div>
     </div>
   );
