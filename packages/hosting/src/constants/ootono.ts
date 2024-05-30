@@ -43,4 +43,19 @@ export const Ootono: Record<number, string[]> = {
     "nagano",
     "saburou",
   ],
+  27: [
+    '001_hideyoshi',
+    '002_iehisa',
+    '003_katsuyori',
+    '004_motochika',
+    '005_naoie',
+    '006_nobunaga',
+    '007_rokkaku',
+    '008_takeyoshi',
+    '009_terumoto',
+    '010_terumune',
+    '011_uzimasa',
+    '012_yoshiaki',
+    '013_yoshihi',
+  ]
 };

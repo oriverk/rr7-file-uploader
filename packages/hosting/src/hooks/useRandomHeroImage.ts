@@ -11,7 +11,7 @@ type ReturnType = {
  * @param chapter 章
  * @returns "{name, url}"
  */
-export function useRandomHeroImage(chapter: number) {
+export function useRandomHeroImage(chapter: number = 27) {
   const [image, setImage] = useState<ReturnType>({
     name: "",
     url: "",
