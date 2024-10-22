@@ -10,35 +10,34 @@ import { v4 as uuidv4 } from "uuid";
 import { CreateFormSchema } from "@/lib/zod";
 import { storage, db } from "@/lib/firebase";
 import { Container } from "@/components/ui/Container";
-import { TextArea, Button, CheckBox } from "@/components/Form";
+import { TextArea, Button, CheckBox, PasswordInput } from "@/components/Form";
 import { DropzoneInput } from "@/components/Dropzone";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import Description from "@/docs/description.md?raw";
 
 const NewFile: FC = () => {
   const navigate = useNavigate();
-  // const [progress, setProgress] = useState(0);
   const methods = useForm<z.infer<typeof CreateFormSchema>>({
     resolver: zodResolver(CreateFormSchema),
     defaultValues: {
       name: "",
       file: [],
       description: Description,
+      password: "",
       deleted: false,
     },
   });
   const { handleSubmit, getValues, setValue } = methods;
+  const values = getValues();
 
   useEffect(() => {
-    const { name, file } = getValues();
-    if (!name && file.length) {
-      const { name: fileName } = file[0];
-      setValue("name", fileName);
-    }
-  }, [getValues("file")]);
+    const { name, file } = values;
+    if (name || !file.length) return;
+    setValue("name", file[0].name);
+  }, [values]);
 
   const onSubmit = handleSubmit(async (data) => {
-    const { file, description, deleted } = data;
+    const { file, description, deleted, password } = data;
     const { path, preview } = file[0];
     const blob = await fetch(preview).then((r) => r.blob());
     const storageRef = ref(storage, `files/${uuidv4()}-${path}`);
@@ -89,6 +88,7 @@ const NewFile: FC = () => {
                   }}
                 />
                 <TextArea id="description" label="description" />
+                <PasswordInput id="password" label="password (optional)" placeholder="半角英数" />
                 <CheckBox id="deleted" label="delete (論理削除)" />
                 <div className="flex flex-col gap-4">
                   <Button type="submit">submit</Button>

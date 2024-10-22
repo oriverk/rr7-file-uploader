@@ -17,6 +17,8 @@ import { Checkbox } from "@/components/ui/Checkbox";
 
 const FileDownload: FC = () => {
   const adBlockDetected = useDetectAdBlock()
+  const [objectUrl, setObjectUrl] = useState<string>();
+  const [saveName, setSaveName] = useState<string>("");
   const [searchParams] = useSearchParams();
   const { fileId } = useParams() as {
     fileId: string;
@@ -29,40 +31,33 @@ const FileDownload: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const isLoadingCompoliteButFailed = !loading && !dbValue;
 
-  // useEffect(() => {
-  //   console.log("dbValue", dbValue)
-  // }, [dbValue])
+  async function setFileBlob(storageFilePath: string) {
+    const storageRef = ref(storage, storageFilePath);
+    const blob = await getBlob(storageRef);
+    setObjectUrl(URL.createObjectURL(blob));
+  }
+
+  useEffect(() => {
+    if (isOld || loading || !dbValue) return;
+    setSaveName(dbValue.name);
+    setFileBlob(`files/${dbValue.path}`);
+  }, [dbValue]);
 
   const handleConfirm = useCallback(() => {
     setIsConfirmed((prev) => !prev);
   }, []);
 
-  const handlePasswordSubmit = (e: any) => {
-    e.preventDefault()
-    console.log("e", e)
-  }
-
   const handleDownload = useCallback(async () => {
-    if (!dbValue) return;
-    
-    const { name, path } = dbValue;
-    const storageRef = ref(storage, `files/${path}`);
-    const blob = await getBlob(storageRef);
-    const objectUrl = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.setAttribute("href", objectUrl);
-    link.setAttribute("download", name);
-    link.click();
-    
+    if (!dbValue || !objectUrl) return;
     await updateDoc(firestoreRef, {
       downloaded: dbValue!.downloaded + 1,
     }).then(() => {
       URL.revokeObjectURL(objectUrl);
-      link.remove();
       setIsConfirmed(false);
+      setObjectUrl("");
       setIsOpen(true);
     });
-  }, [dbValue]);
+  }, [dbValue, objectUrl]);
 
   const handleCloseModal = useCallback(() => {
     setIsOpen(false);
@@ -73,6 +68,9 @@ const FileDownload: FC = () => {
   } else if (isLoadingCompoliteButFailed) {
     throw new Error(JSON.stringify(error));
   }
+  // else if (!objectUrl) {
+  //   throw new Error("ファイルは削除された可能性があります")
+  // }
 
   if (adBlockDetected) {
     return (
@@ -98,7 +96,7 @@ const FileDownload: FC = () => {
         <h1 className="mb-8 text-center text-xl">ダウンロード</h1>
         <div className="flex flex-col gap-6">
           <div className="mb-4 text-base sm:text-lg">
-            ダウンロードを続けるには、
+            {saveName}&nbsp;のダウンロードを続けるには
             <StyledLink href="/terms" className="mx-2" isExternal>
               利用規約
             </StyledLink>
@@ -106,23 +104,23 @@ const FileDownload: FC = () => {
           </div>
           <div className="mb-4">
             <Checkbox id="confirm" checked={isConfirmed} onChange={handleConfirm} label="利用規約に同意する" />
-            {dbValue?.password && (
-              <form onSubmit={handlePasswordSubmit}>
-                <input type="text" id="password" placeholder="半角英数" />
-                <Button type="submit">認証</Button>
-            </form>
-            )}
           </div>
           <div className="flex flex-col gap-4">
-            <Button type="button" disabled={!isConfirmed} onClick={handleDownload}>
-              {isConfirmed ? 'ダウンロード' : '読み込み中'}
-            </Button>
-            <ButtonLink
-              to="/files"
-              className="bg-teal-600 hover:bg-teal-700 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
-            >
-              ファイル一覧へ戻る
-            </ButtonLink>
+            {isConfirmed && objectUrl ? (
+              <a
+                href={objectUrl}
+                download={saveName}
+                className="block w-full rounded-lg bg-green-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 sm:w-auto"
+                onClick={handleDownload}
+              >
+                ダウンロード
+              </a>
+            ) : (
+              <Button type="button" disabled>
+                読み込み中
+              </Button>
+            )}
+            <ButtonLink to="/files">ファイル一覧へ戻る</ButtonLink>
           </div>
         </div>
       </div>

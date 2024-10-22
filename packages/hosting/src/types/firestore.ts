@@ -22,6 +22,7 @@ export interface FirestoreFileType {
   size: number;
   contentType: string;
   downloaded: number;
+  password: string;
   createdAt: Timestamp;
   updatedAt: Timestamp;
   deletedAt: Timestamp | null;

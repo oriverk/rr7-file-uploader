@@ -10,8 +10,9 @@ import { db } from "@/lib/firebase";
 import { Container } from "@/components/ui/Container";
 import { CreateFormSchema } from "@/lib/zod";
 import type { FirestoreFileType } from "@/types/firestore";
-import { Button, CheckBox, Input, TextArea } from "@/components/Form";
+import { Button, CheckBox, Input, PasswordInput, TextArea } from "@/components/Form";
 import { ButtonLink } from "@/components/ui/ButtonLink";
+import { getHash } from "@/lib/crypto";
 
 const EditFile: FC = () => {
   const { fileId } = useParams() as {
@@ -27,19 +28,21 @@ const EditFile: FC = () => {
 
   useEffect(() => {
     if (!value || error) return;
-    const { name, description, deletedAt } = value as FirestoreFileType;
+    const { name, description, password, deletedAt } = value as FirestoreFileType;
     setValue("name", name);
     setValue("description", description);
+    setValue("password", password)
     setValue("deleted", !!deletedAt);
   }, [value]);
 
   const onSubmit = useCallback(async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { name, description, deleted } = getValues();
-
+    const { name, description, deleted, password } = getValues();
+    const hashedPassword = password === null ? null : await getHash(password);
     await updateDoc(docRef, {
       name: name.trim() ? name : value!.name,
       description,
+      password: hashedPassword,
       deletedAt: deleted ? serverTimestamp() : null,
       updatedAt: serverTimestamp(),
     });
@@ -79,6 +82,7 @@ const EditFile: FC = () => {
                   <Input id="name" label="name" />
                   <CheckBox id="deleted" label="delete (論理削除)" />
                   <TextArea id="description" label="description" />
+                  <PasswordInput id="password" label="password (optional)" placeholder="半角英数" />
                   <Button type="submit">submit</Button>
                 </div>
               </div>

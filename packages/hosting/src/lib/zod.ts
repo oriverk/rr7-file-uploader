@@ -38,10 +38,13 @@ const FileSchema = z.object({
   size: z.number(),
 });
 
+export const filePasswordSchema = z.string().min(3).nullable()
+
 export const CreateFormSchema = z.object({
   name: z.string().min(3),
   description: z.string().max(10000).nullable(),
   file: z.array(FileSchema),
+  password: filePasswordSchema,
   // file: CustomFileListSchema,
   // downloaded: z.number().min(0),
   // createdAt: z.date(),
