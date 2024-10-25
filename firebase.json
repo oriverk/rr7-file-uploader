@@ -1,29 +1,11 @@
 {
   "hosting": {
     "site": "uploader-x193",
-    "public": "./packages/hosting/dist",
+    "public": "./build",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "/health",
-        "function": {
-          "functionId": "healthCheck"
-        }
-      },
-      {
-        "source": "/files/feed",
-        "function": {
-          "functionId": "returnRSS"
-        }
-      },
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
     ]
   },
   "functions": {
