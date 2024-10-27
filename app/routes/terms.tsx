@@ -1,6 +1,8 @@
-import type { MetaFunction } from "@remix-run/react";
-import { Markdown } from "../components/ui/Markdown"
-import markdown from "../docs/term-of-service.md?raw"
+import type { LoaderFunctionArgs } from "@remix-run/node";
+// import type { MetaFunction } from "@remix-run/react";
+import { typedjson, useTypedLoaderData } from "remix-typedjson";
+import markdown from "../docs/term-of-service.md?raw";
+import { parseMarkdown } from "../utils/markdown";
 
 // export const meta: MetaFunction = () => {
 // 	return [
@@ -12,8 +14,19 @@ import markdown from "../docs/term-of-service.md?raw"
 // 	];
 // };
 
+export const loader = ({ params, request }: LoaderFunctionArgs) => {
+	const html = parseMarkdown(markdown);
+	return typedjson({
+		html,
+	});
+};
+
 export default function Index() {
-  return (
-    <Markdown markdown={markdown} />
-  )
+	const { html } = useTypedLoaderData<typeof loader>();
+	return (
+		<article
+			className="prose mx-auto max-w-3xl lg:prose-lg"
+			dangerouslySetInnerHTML={{ __html: html }}
+		/>
+	);
 }
