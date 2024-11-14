@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import type { ReactNode } from "react";
 
 type Props = {
@@ -6,10 +7,11 @@ type Props = {
 	description?: string;
 	children: ReactNode;
 	align?: "left" | "top" | "right";
+	contentClassName?: string;
 };
 
 export function ContentSection(props: Props) {
-	const { id, title, description, children } = props;
+	const { id, title, description, children, contentClassName } = props;
 
 	return (
 		<section
@@ -24,7 +26,7 @@ export function ContentSection(props: Props) {
 					</div>
 				</div>
 			)}
-			<div className="content-area flex-[5] grid place-items-center">
+			<div className={clsx("content-area flex-[5]", contentClassName)}>
 				{children}
 			</div>
 		</section>

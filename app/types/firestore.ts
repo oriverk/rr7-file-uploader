@@ -15,14 +15,14 @@ export interface FileWithPreview extends FileWithPath {
 }
 
 export interface FirestoreFileType {
-	name: string;
-	description: string;
-	path: string;
-	fullPath: string;
+	fileName: string;
+	fileDescription: string;
+	filePath: string;
 	size: number;
 	contentType: string;
-	downloaded: number;
-	password: string;
+	isPublished: boolean;
+	downloadCount: number;
+	// password: string;
 	createdAt: Timestamp;
 	updatedAt: Timestamp;
 	deletedAt: Timestamp | null;
