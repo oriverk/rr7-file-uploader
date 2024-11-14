@@ -1,6 +1,6 @@
 import { Link } from "@remix-run/react";
 import type { FC } from "react";
-import { Facebook, X, YouTube } from "../icons";
+import { FacebookIcon, XIcon, YouTubeIcon } from "../icons";
 
 export const Footer: FC = () => {
 	return (
@@ -22,13 +22,13 @@ export const Footer: FC = () => {
 			<nav>
 				<div className="grid grid-flow-col gap-4">
 					<a href="/">
-						<X />
+						<XIcon />
 					</a>
 					<a href="/">
-						<YouTube />
+						<YouTubeIcon />
 					</a>
 					<a href="/">
-						<Facebook />
+						<FacebookIcon />
 					</a>
 				</div>
 			</nav>

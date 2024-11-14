@@ -2,7 +2,7 @@ type Props = {
 	className?: string;
 };
 
-export function X(props: Props) {
+export function XIcon(props: Props) {
 	const { className = "w-6 h-6" } = props;
 	return (
 		<svg

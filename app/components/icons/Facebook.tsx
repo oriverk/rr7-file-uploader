@@ -4,7 +4,7 @@ type Props = {
 	className?: string;
 };
 
-export function Facebook(props: Props) {
+export function FacebookIcon(props: Props) {
 	const { className = "w-6 h-6" } = props;
 	return (
 		<svg

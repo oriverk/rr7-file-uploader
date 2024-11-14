@@ -4,7 +4,7 @@ type Props = {
 	className?: string;
 };
 
-export function YouTube(props: Props) {
+export function YouTubeIcon(props: Props) {
 	const { className = "w-6 h-6" } = props;
 	return (
 		<svg
