@@ -158,7 +158,10 @@ export default function Index() {
 							<span className="label-text-alt">
 								{ALLOWED_EXTENSIONS.map((extension, index) => (
 									<>
-										<code className="text-sm">{`.${extension}`}</code>
+										<code
+											className="text-sm"
+											key={extension}
+										>{`.${extension}`}</code>
 										{ALLOWED_EXTENSIONS.length - 1 !== index && ", "}
 									</>
 								))}

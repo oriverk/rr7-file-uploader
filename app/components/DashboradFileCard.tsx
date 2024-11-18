@@ -1,35 +1,21 @@
+import type { FirestoreFile } from "@/types/firestore";
 import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
 import { formatDate } from "@/utils/formatDate";
 import { Link } from "@remix-run/react";
-import type { IProps as FileData } from "../server/firestore.server";
-import { DownloadIcon, FileIcon, PencilIcon } from "./icons";
-import { ChevronDownIcon, CloseIcon } from "./icons";
-
-type File = Omit<FileData, "createdAt" | "updatedAt"> & {
-	createdAt: string;
-	updatedAt: string;
-};
+import { DownloadIcon, FileIcon } from "./icons";
 
 type Props = {
 	path: string;
-	file: File;
+	file: FirestoreFile;
 };
 
 export function DashboardFileCard(props: Props) {
 	const { path, file } = props;
-	const {
-		id,
-		fileName,
-		fileDescription,
-		downloadCount,
-		size,
-		createdAt,
-		updatedAt,
-		isPublished,
-	} = file;
+	const { fileName, downloadCount, size, createdAt, updatedAt, isPublished } =
+		file;
 
-	const create = formatDate(new Date(createdAt));
-	const update = formatDate(new Date(updatedAt));
+	const create = formatDate(createdAt);
+	const update = formatDate(updatedAt);
 	const sizeStr = convertByteWithUnit(size);
 	return (
 		<div className="card bg-neutral text-neutral-content shadow-lg">

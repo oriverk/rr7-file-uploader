@@ -5,23 +5,15 @@ import { useState } from "react";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import invariant from "tiny-invariant";
 import { ContentSection } from "../components/ContentSection";
-import { firestore } from "../server/firebase.server";
-import { getUserFiles } from "../server/firestore.server";
+import { getUser, getUserFiles } from "../server/firestore.server";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	invariant(params.uid, "params.uid is required");
-	const userSnapshot = await firestore
-		.collection("users")
-		.where("uid", "==", params.uid)
-		.limit(1)
-		.get();
-	invariant(!userSnapshot.empty, "user not found");
-	const userDoc = userSnapshot.docs[0];
-	const user = userDoc.data();
+	const user = await getUser(params.uid);
+
+	invariant(user.id, "user not found");
 	const { displayName, profile, profileImageUrl } = user;
-	const userId = userDoc.id;
-	const files = await getUserFiles(userId);
-	// invariant(files.length, `Files not found: ${params.uid}`);
+	const files = await getUserFiles(user.id, true);
 	const { uid } = params;
 
 	return typedjson({

@@ -1,16 +1,11 @@
+import type { FirestoreFile } from "@/types/firestore";
 import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
 import { formatDate } from "@/utils/formatDate";
 import { Link } from "@remix-run/react";
-import type { IProps as FileData } from "../server/firestore.server";
 import { DownloadIcon, FileIcon } from "./icons";
 
-type File = Omit<FileData, "createdAt" | "updatedAt"> & {
-	createdAt: string;
-	updatedAt: string;
-};
-
 type Props = {
-	file: File;
+	file: FirestoreFile;
 	path: string;
 	isAuthenticatd?: boolean;
 };
@@ -19,8 +14,8 @@ export function FileCard(props: Props) {
 	const { file, path } = props;
 	const { fileName, downloadCount, size, createdAt, updatedAt } = file;
 
-	const create = formatDate(new Date(createdAt));
-	const update = formatDate(new Date(updatedAt));
+	const create = formatDate(createdAt);
+	const update = formatDate(updatedAt);
 	const sizeStr = convertByteWithUnit(size);
 	return (
 		<div className="card bg-neutral text-neutral-content shadow-lg">

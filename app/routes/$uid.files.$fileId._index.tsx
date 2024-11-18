@@ -1,37 +1,28 @@
 import { formatDate } from "@/utils/formatDate";
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import invariant from "tiny-invariant";
 import { ContentSection } from "../components/ContentSection";
-import { firestore } from "../server/firebase.server";
-import { getUserFile } from "../server/firestore.server";
+import { getUser, getUserFile } from "../server/firestore.server";
 import { convertByteWithUnit } from "../utils/convertByteWithUnit";
 import { parseMarkdown } from "../utils/markdown";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	invariant(params.uid, "params.uid is requied");
 	invariant(params.fileId, "params.fileId is required");
-	const { uid } = params;
-	const userSnapshot = await firestore
-		.collection("users")
-		.where("uid", "==", params.uid)
-		.limit(1)
-		.get();
-	invariant(!userSnapshot.empty, "user not found");
-	const userDoc = userSnapshot.docs[0];
-	const user = userDoc.data();
+	const user = await getUser(params.uid);
+	invariant(user.id, "user not found");
 
 	const { displayName, profile, profileImageUrl } = user;
-	const userId = userDoc.id;
-	const file = await getUserFile(userId, params.fileId);
+	const file = await getUserFile(user.id, params.fileId);
 
 	invariant(file, `File not found: ${params.fileId}`);
 
 	const { fileDescription, size, filePath, deletedAt, ...rest } = file;
 	const html = parseMarkdown(fileDescription ?? "");
 	return typedjson({
-		uid,
+		uid: user.uid,
 		file: {
 			fileDescription: html,
 			size: convertByteWithUnit(size ?? 0),
@@ -51,8 +42,8 @@ export default function UserFile() {
 		downloadCount,
 		fileDescription,
 	} = file;
-	const create = formatDate(new Date(createdAt));
-	const lastUpdate = formatDate(new Date(updatedAt));
+	const create = formatDate(createdAt);
+	const lastUpdate = formatDate(updatedAt);
 
 	return (
 		<div className="text-center">
@@ -79,13 +70,13 @@ export default function UserFile() {
 							<tr>
 								<th>作成日</th>
 								<td>
-									<time dateTime={createdAt}>{create}</time>
+									<time dateTime={create}>{create}</time>
 								</td>
 							</tr>
 							<tr>
 								<th>最終更新日</th>
 								<td>
-									<time dateTime={updatedAt}>{lastUpdate}</time>
+									<time dateTime={lastUpdate}>{lastUpdate}</time>
 								</td>
 							</tr>
 							<tr>

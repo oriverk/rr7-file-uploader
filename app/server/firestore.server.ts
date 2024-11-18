@@ -2,143 +2,24 @@ import type {
 	DocumentData,
 	FirestoreDataConverter,
 	QueryDocumentSnapshot,
-	WithFieldValue,
 } from "firebase-admin/firestore";
 import { Timestamp } from "firebase-admin/firestore";
-import type { FirestoreFileType } from "../types/firestore";
-// import { formatDate } from "../utils/formatDate";
+import type { FirestoreFile, User } from "../types/firestore";
 import { firestore } from "./firebase.server";
-
-type User = {
-	// Firestore ドキュメントのID
-	id?: string;
-	uid: string;
-	displayName: string;
-	email: string;
-	profile: string;
-	profileImageUrl: string;
-	createdAt: Timestamp;
-	updatedAt: Timestamp;
-	deletedAt: Timestamp | null;
-};
-
-export async function getUser(userId: string) {
-	const ref = db.users();
-	const query = ref.where("uid", "==", userId).limit(1);
-	const querySnapshot = await query.get();
-
-	const user = querySnapshot.docs.map((doc) => {
-		const id = doc.id;
-		const user = doc.data();
-		return {
-			id,
-			...user,
-		};
-	})[0];
-	return user;
-}
-
-export async function addUser(userid: string, userData: User) {
-	const userRef = firestore.collection("users").doc(userid);
-	const createdAt = Timestamp.now();
-	const updatedAt = Timestamp.now();
-	await userRef.set({
-		...userData,
-		createdAt,
-		updatedAt,
-		deletedAt: null,
-	});
-
-	return {
-		id: userRef.id,
-		...userData,
-		updatedAt,
-	};
-}
-
-export async function updateUser(userid: string, userData: Partial<User>) {
-	const userRef = firestore.collection("users").doc(userid);
-	const updatedAt = Timestamp.now();
-	await userRef.update({
-		...userData,
-		updatedAt,
-	});
-
-	return {
-		id: userRef.id,
-		...userData,
-		updatedAt,
-	};
-}
-
-export async function deleteUserLogically(userid: string) {
-	const userRef = firestore.collection("users").doc(userid);
-	const deletedAt = Timestamp.now();
-	await userRef.update({
-		deletedAt,
-	});
-
-	return { id: userid, deletedAt };
-}
-
-export interface IProps
-	extends Omit<FirestoreFileType, "createdAt" | "updatedAt" | "deletedAt"> {
-	id?: string;
-	createdAt: Date | Timestamp | string;
-	updatedAt: Date | Timestamp | string;
-	deletedAt: Date | Timestamp | string | null;
-}
-
-export type FirestoreFile = {
-	fileName: string;
-	fileDescription: string;
-	filePath: string;
-	size: number;
-	contentType: string;
-	isPublished: boolean;
-	downloadCount: number;
-	// password: string;
-	createdAt: Timestamp;
-	updatedAt: Timestamp;
-	deletedAt: Timestamp | null;
-};
-
-const getTimeStamp = (date: IProps["createdAt"]) =>
-	date instanceof Date ? Timestamp.fromDate(date) : date;
-const getDate = (date: IProps["createdAt"]) =>
-	date instanceof Timestamp ? date.toDate().toISOString() : date;
-
-// Timestamp型判別用の型ガード
-function isTimestamp(value: any): value is Timestamp {
-	return value instanceof Timestamp;
-}
-
-// Date型判別用の型ガード
-function isDate(value: any): value is Date {
-	return value instanceof Date;
-}
-
-export function formatDateToISOString(
-	value: Date | string | Timestamp,
-): string {
-	if (isTimestamp(value)) {
-		return value.toDate().toISOString();
-	}
-	if (isDate(value)) {
-		return value.toISOString();
-	}
-	return value;
-}
 
 const userConverter: FirestoreDataConverter<User> = {
 	toFirestore(user: User): DocumentData {
-		const { id, ...restProps } = user;
+		const { id, createdAt, updatedAt, deletedAt, ...restProps } = user;
 		return {
 			...restProps,
+			createdAt: Timestamp.fromDate(createdAt),
+			updatedAt: Timestamp.fromDate(updatedAt),
+			deletedAt: deletedAt ? Timestamp.fromDate(deletedAt) : null,
 		};
 	},
 	fromFirestore(snapshot: QueryDocumentSnapshot): User {
 		const data = snapshot.data();
+
 		return {
 			id: snapshot.id,
 			uid: data.uid,
@@ -146,30 +27,39 @@ const userConverter: FirestoreDataConverter<User> = {
 			email: data.email,
 			profile: data.profile,
 			profileImageUrl: data.profileImageUrl,
-			createdAt: data.createdAt,
-			updatedAt: data.updatedAt,
-			deletedAt: data.deletedAt,
+			createdAt: data.createdAt.toDate(),
+			updatedAt: data.updatedAt.toDate(),
+			deletedAt: data.deletedAt ? data.deletedAt.toDate() : null,
 		};
 	},
 };
 
-const fileConverter: FirestoreDataConverter<IProps> = {
-	toFirestore(file: IProps): DocumentData {
+const fileConverter: FirestoreDataConverter<FirestoreFile> = {
+	toFirestore(file: FirestoreFile): DocumentData {
+		const { id, createdAt, updatedAt, deletedAt, ...restProps } = file;
 		return {
-			...file,
-			createdAt: getTimeStamp(file.createdAt),
-			updatedAt: getTimeStamp(file.createdAt),
-			deletedAt: getTimeStamp(file.updatedAt),
+			...restProps,
+			createdAt: Timestamp.fromDate(createdAt),
+			updatedAt: Timestamp.fromDate(updatedAt),
+			deletedAt: deletedAt ? Timestamp.fromDate(deletedAt) : null,
 		};
 	},
-	fromFirestore(snapshot: QueryDocumentSnapshot): IProps {
+	fromFirestore(snapshot: QueryDocumentSnapshot): FirestoreFile {
 		const data = snapshot.data();
+
 		return {
-			...data,
-			createdAt: getDate(data.createdAt),
-			updatedAt: getDate(data.updatedAt),
-			deletedAt: getDate(data.deletedAt),
-		} as IProps;
+			id: snapshot.id,
+			fileName: data.fileName,
+			fileDescription: data.fileDescription,
+			filePath: data.filePath,
+			size: data.size,
+			contentType: data.contentType,
+			isPublished: data.isPublished,
+			downloadCount: data.downloadCount,
+			createdAt: data.createdAt.toDate(),
+			updatedAt: data.updatedAt.toDate(),
+			deletedAt: data.deletedAt ? data.deletedAt.toDate() : null,
+		};
 	},
 };
 
@@ -192,6 +82,65 @@ const db = {
 			.withConverter(fileConverter),
 };
 
+export async function getUser(userId: string) {
+	const collectionRef = db.users();
+	const query = collectionRef.where("uid", "==", userId).limit(1);
+	const querySnapshot = await query.get();
+
+	const user = querySnapshot.docs.map((doc) => {
+		return doc.data();
+	})[0];
+	return user;
+}
+
+export async function addUser(
+	userid: string,
+	data: Omit<User, "createdAt" | "updatedAt" | "deletedAt">,
+) {
+	const { id, ...restProps } = data;
+	const docRef = firestore.collection("users").doc(userid);
+	const createdAt = Timestamp.now();
+	const updatedAt = Timestamp.now();
+	await docRef.set({
+		...restProps,
+		createdAt,
+		updatedAt,
+		deletedAt: null,
+	});
+
+	return {
+		id: docRef.id,
+		...data,
+		updatedAt,
+	};
+}
+
+export async function updateUser(userid: string, data: Partial<User>) {
+	const { id, ...restProps } = data;
+	const docRef = firestore.collection("users").doc(userid);
+	const updatedAt = Timestamp.now();
+	await docRef.update({
+		...restProps,
+		updatedAt,
+	});
+
+	return {
+		id: docRef.id,
+		...data,
+		updatedAt,
+	};
+}
+
+export async function softDeleteUser(userid: string) {
+	const docRef = firestore.collection("users").doc(userid);
+	const deletedAt = Timestamp.now();
+	await docRef.update({
+		deletedAt,
+	});
+
+	return { id: userid, deletedAt };
+}
+
 export async function getUserFiles(uid: string, isPublished: boolean) {
 	const collectionRef = db.userFiles(uid);
 	const commonQuery = collectionRef.where("deletedAt", "==", null);
@@ -200,41 +149,33 @@ export async function getUserFiles(uid: string, isPublished: boolean) {
 		: commonQuery;
 	const querySnapshot = await query.orderBy("createdAt", "desc").get();
 	const files = querySnapshot.docs.map((doc) => {
-		const { createdAt, updatedAt, ...rest } = doc.data();
-		return {
-			id: doc.id,
-			createdAt: formatDateToISOString(createdAt),
-			updatedAt: formatDateToISOString(updatedAt),
-			...rest,
-		};
+		return doc.data();
 	});
 	return files;
 }
 
 export async function getUserFile(uid: string, fileId: string) {
-	const ref = db.userFile(uid, fileId);
-	const snapshot = await ref.get();
+	const docRef = db.userFile(uid, fileId);
+	const snapshot = await docRef.get();
 	const data = snapshot.data();
-	if (!data) {
+	if (!data || data.deletedAt) {
 		throw new Error("file not found");
 	}
-	const { createdAt, updatedAt, ...rest } = data;
-	return {
-		id: snapshot.id,
-		createdAt: formatDateToISOString(createdAt),
-		updatedAt: formatDateToISOString(updatedAt),
-		...rest,
-	};
+
+	return data;
 }
 
 export async function addUserFile(
 	uid: string,
-	data: Omit<IProps, "downloadCount" | "createdAt" | "updatedAt" | "deletedAt">,
+	data: Omit<
+		FirestoreFile,
+		"downloadCount" | "createdAt" | "updatedAt" | "deletedAt"
+	>,
 ) {
-	const filesRef = db.userFiles(uid);
-	const newFileRef = filesRef.doc();
+	const collectionRef = db.userFiles(uid);
+	const newCollectionRef = collectionRef.doc();
 
-	const { writeTime } = await newFileRef.set({
+	const { writeTime } = await newCollectionRef.set({
 		...data,
 		downloadCount: 0,
 		createdAt: Timestamp.now(),
@@ -242,8 +183,8 @@ export async function addUserFile(
 		deletedAt: null,
 	});
 	return {
-		id: newFileRef.id,
-		path: newFileRef.path,
+		id: newCollectionRef.id,
+		path: newCollectionRef.path,
 		writeTime,
 	};
 }
@@ -251,25 +192,25 @@ export async function addUserFile(
 export async function updateUserFile(
 	uid: string,
 	fileId: string,
-	data: Partial<Omit<IProps, "updatedAt">>,
+	data: Partial<Omit<FirestoreFile, "updatedAt">>,
 ) {
-	const ref = db.userFile(uid, fileId);
-	const { id, path } = ref;
-	const { writeTime } = await ref.update({
-		...data,
+	const { id, ...restProps } = data;
+	const docRef = db.userFile(uid, fileId);
+	const { writeTime } = await docRef.update({
+		...restProps,
 		updatedAt: Timestamp.now(),
 	});
 	return {
 		id,
-		path,
+		path: docRef.path,
 		writeTime,
 	};
 }
 
 export async function softDeleteUserFile(uid: string, fileId: string) {
-	const ref = db.userFile(uid, fileId);
-	const { id, path } = ref;
-	const { writeTime } = await ref.update({
+	const docRef = db.userFile(uid, fileId);
+	const { id, path } = docRef;
+	const { writeTime } = await docRef.update({
 		updatedAt: Timestamp.now(),
 		deletedAt: Timestamp.now(),
 	});
@@ -279,7 +220,3 @@ export async function softDeleteUserFile(uid: string, fileId: string) {
 		writeTime,
 	};
 }
-
-// export async function removeUserFile(uid: string, fileId: string) {
-// 	await db.userFiles(uid).doc(fileId).delete();
-// }

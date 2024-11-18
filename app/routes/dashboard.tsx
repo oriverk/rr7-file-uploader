@@ -73,11 +73,11 @@ export default function Dashboard() {
 
 	return (
 		<div>
-			<h1 className="text-center">{user.uid} files</h1>
-			<ContentSection title="files">
+			<h1 className="text-center">ファイルの管理</h1>
+			<ContentSection>
 				<div className="flex flex-col gap-8">
 					{files.map((file) => {
-						const { id: fileId, fileName } = file;
+						const { id: fileId = "", fileName } = file;
 						const path = `/files/${fileId}/edit`;
 						return (
 							<article key={fileId} className="relative">
