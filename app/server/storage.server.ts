@@ -28,7 +28,7 @@ export async function uploadToFirebaseStorage(
 	name: string,
 	expires?: number,
 ) {
-	const blob = storage.file(`images/${name}`);
+	const blob = storage.file(name);
 	const writableStream = blob.createWriteStream();
 	await writeAsyncIterableToWritable(data, writableStream);
 	const [url] = await blob.getSignedUrl({
