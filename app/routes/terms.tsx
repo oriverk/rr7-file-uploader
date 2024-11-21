@@ -1,3 +1,4 @@
+import { Container } from "@/components/Container";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 // import type { MetaFunction } from "@remix-run/react";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
@@ -21,12 +22,16 @@ export const loader = ({ params, request }: LoaderFunctionArgs) => {
 	});
 };
 
-export default function Index() {
+export default function Terms() {
 	const { html } = useTypedLoaderData<typeof loader>();
 	return (
-		<article
-			className="prose mx-auto max-w-3xl lg:prose-lg"
-			dangerouslySetInnerHTML={{ __html: html }}
-		/>
+		<article>
+			<Container>
+				<div
+					className="prose mx-auto py-12 max-w-3xl lg:prose-lg"
+					dangerouslySetInnerHTML={{ __html: html }}
+				/>
+			</Container>
+		</article>
 	);
 }

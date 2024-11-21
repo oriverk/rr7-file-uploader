@@ -1,7 +1,7 @@
 import type { FirestoreFile } from "@/types/firestore";
 import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
-import { formatDate } from "@/utils/formatDate";
 import { Link } from "@remix-run/react";
+import { format } from "date-fns";
 import { DownloadIcon, FileIcon } from "./icons";
 
 type Props = {
@@ -13,10 +13,11 @@ type Props = {
 export function FileCard(props: Props) {
 	const { file, path } = props;
 	const { fileName, downloadCount, size, createdAt, updatedAt } = file;
+	const _size = convertByteWithUnit(size);
+	const _createdAt = format(createdAt, "yyyy年MM月dd日");
+	const _updatedAt =
+		createdAt !== updatedAt ? format(updatedAt, "yyyy年MM月dd日") : undefined;
 
-	const create = formatDate(createdAt);
-	const update = formatDate(updatedAt);
-	const sizeStr = convertByteWithUnit(size);
 	return (
 		<div className="card bg-neutral text-neutral-content shadow-lg">
 			<div className="card-body gap-4">
@@ -26,24 +27,26 @@ export function FileCard(props: Props) {
 					</Link>
 				</h2>
 				<div className="card-actions gap-4">
-					<div className="">
-						<span>作成：</span>
-						{create}
+					<div>
+						<span>公開：</span>
+						<time dateTime={createdAt.toISOString()}>{_createdAt}</time>
 					</div>
-					<div className="">
-						<span>更新：</span>
-						{update}
-					</div>
+					{!!_updatedAt && (
+						<div>
+							<span>更新：</span>
+							<time dateTime={updatedAt.toISOString()}>{_updatedAt}</time>
+						</div>
+					)}
 				</div>
-				<div className="card-actions gap-4">
+				<div className="card-actions items-center gap-4">
 					<div className="flex items-center gap-2 text-sm">
 						<FileIcon className="w-4 h-4 fill-current" />
-						<span>ファイルサイズ</span>
-						<span>{sizeStr}</span>
+						<span className="sr-only">ファイルサイズ</span>
+						<span>{_size}</span>
 					</div>
 					<div className="flex items-center gap-2 text-sm">
 						<DownloadIcon className="w-4 h-4 fill-current" />
-						<span>ダウンロード数</span>
+						<span className="sr-only">ダウンロード数</span>
 						<span>{downloadCount}</span>
 					</div>
 				</div>

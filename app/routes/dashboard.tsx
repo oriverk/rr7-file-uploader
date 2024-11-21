@@ -1,13 +1,16 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 
+import { Container } from "@/components/Container";
 import { DashboardFileCard } from "@/components/DashboradFileCard";
+import { Pagination } from "@/components/Pagination";
 import { CloseIcon } from "@/components/icons";
+import { usePagination } from "@/hooks/usePagination";
 import { requireAuth } from "@/server/auth.server";
 import { getUserFiles, softDeleteUserFile } from "@/server/firestore.server";
+import type { FirestoreFile } from "@/types/firestore";
 import { json, useSubmit } from "@remix-run/react";
 import { useRef, useState } from "react";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
-import { ContentSection } from "../components/ContentSection";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	const user = await requireAuth(request);
@@ -47,6 +50,8 @@ type DeletingFile = Record<"fileId" | "fileName", string>;
 export default function Dashboard() {
 	const { user, files } = useTypedLoaderData<typeof loader>();
 	const [deletingFile, setDeletingFile] = useState<DeletingFile | null>(null);
+	const { currentItems, endIndex, goToPage, nextPage, prevPage } =
+		usePagination<FirestoreFile>(files, 10, 1);
 	const submit = useSubmit();
 	const dialog = useRef<HTMLDialogElement>(null);
 
@@ -72,40 +77,55 @@ export default function Dashboard() {
 	};
 
 	return (
-		<div>
-			<h1 className="text-center">ファイルの管理</h1>
-			<ContentSection>
-				<div className="flex flex-col gap-8">
-					{files.map((file) => {
-						const { id: fileId = "", fileName } = file;
-						const path = `/files/${fileId}/edit`;
-						return (
-							<article key={fileId} className="relative">
-								<div className="absolute top-7 right-8 z-10">
-									<button
-										tabIndex={0}
-										type="button"
-										onClick={() => handleOpenModal({ fileId, fileName })}
-										className="group btn btn-ghost hover:btn-error btn-sm m-1"
-									>
-										<CloseIcon className="h-4 w-4 fill-current group-hover:fill-error" />
-									</button>
-								</div>
-								<DashboardFileCard path={path} file={file} />
-							</article>
-						);
-					})}
-				</div>
-			</ContentSection>
-			<dialog id="my_modal_1" className="modal" ref={dialog}>
+		<>
+			<article className="py-12">
+				<Container>
+					<section>
+						<h1 className="text-center">ファイル管理</h1>
+						<div className="flex flex-col gap-8 items-center">
+							<Pagination
+								handleFirstPage={() => goToPage(1)}
+								handlePreviousPage={prevPage}
+								handleNextPage={nextPage}
+								handleLastPage={() => goToPage(endIndex)}
+							/>
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+								{currentItems.map((file) => {
+									const { id, fileName } = file;
+									const path = `/files/${id}/edit`;
+									return (
+										<div key={id}>
+											<DashboardFileCard
+												path={path}
+												file={file}
+												handleClickDelete={() =>
+													handleOpenModal({ fileId: id ?? "", fileName })
+												}
+											/>
+										</div>
+									);
+								})}
+							</div>
+							<Pagination
+								handleFirstPage={() => goToPage(1)}
+								handlePreviousPage={prevPage}
+								handleNextPage={nextPage}
+								handleLastPage={() => goToPage(endIndex)}
+							/>
+						</div>
+					</section>
+				</Container>
+			</article>
+			{/* dialog */}
+			<dialog className="modal" ref={dialog}>
 				<div className="modal-box">
 					<h3 className="font-bold text-lg text-center">削除しますか？</h3>
 					<p className="py-4">
 						{/* @ts-ignore */}
 						{`ファイル「${deletingFile?.fileName}」を削除しようとしています。この操作は戻すことができません。`}
 					</p>
-					<div className="modal-action">
-						<form method="dialog">
+					<div className="modal-action justify-center">
+						<form method="dialog" className="flex gap-8">
 							<button type="button" onClick={handleCloseModal} className="btn">
 								キャンセル
 							</button>
@@ -120,6 +140,6 @@ export default function Dashboard() {
 					</div>
 				</div>
 			</dialog>
-		</div>
+		</>
 	);
 }

@@ -2,7 +2,7 @@ import type { ActionFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Form } from "@remix-run/react";
 
-import { ContentSection } from "../components/ContentSection";
+import { Container } from "@/components/Container";
 import { destroySession, getSession } from "../sesions";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -14,16 +14,20 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export default function Logout() {
 	return (
-		<div>
-			<h1>Logout</h1>
-			<ContentSection>
-				<p>Press the button below to log out.</p>
-				<Form method="post">
-					<button type="submit" className="not-prose btn btn-primary">
-						Logout
-					</button>
-				</Form>
-			</ContentSection>
-		</div>
+		<article>
+			<Container>
+				<section>
+					<h1 className="text-center">Logout</h1>
+					<div>
+						<p>Press the button below to log out.</p>
+						<Form method="post">
+							<button type="submit" className="not-prose btn btn-primary">
+								Logout
+							</button>
+						</Form>
+					</div>
+				</section>
+			</Container>
+		</article>
 	);
 }

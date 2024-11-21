@@ -8,7 +8,7 @@ import {
 } from "@remix-run/react";
 import { useCallback, useState } from "react";
 
-import { ContentSection } from "../components/ContentSection";
+import { Container } from "@/components/Container";
 import * as firebaseRest from "../firebase-rest";
 import {
 	checkSessionCookie,
@@ -92,56 +92,67 @@ export default function Login() {
 		[submit, restConfig],
 	);
 	return (
-		<div>
-			<h1>Login</h1>
-			{clientAction?.error || actionData?.error ? (
-				<p>{clientAction?.error || actionData?.error}</p>
-			) : null}
-			<ContentSection>
-				<form
-					method="post"
-					onSubmit={handleSubmit}
-					className="not-prose flex flex-col gap-4"
-				>
-					<dl>
-						<dt>
-							<label htmlFor="email">Email</label>
-						</dt>
-						<dd>
-							<input
-								type="email"
-								name="email"
-								autoComplete="email"
-								placeholder="test@example.com"
-								className="input input-bordered w-full"
-							/>
-						</dd>
-						<dt>
-							<label htmlFor="password">Password</label>
-						</dt>
-						<dd>
-							<input
-								type="password"
-								name="password"
-								placeholder="password"
-								autoComplete="current-password"
-								className="input input-bordered w-full"
-							/>
-						</dd>
-					</dl>
-
-					<button type="submit" className="btn btn-secondary">
-						Login
-					</button>
-				</form>
-				<p>
-					Do you want to{" "}
-					<Link to="/join" className="link">
-						join
-					</Link>
-					?
-				</p>
-			</ContentSection>
-		</div>
+		<article>
+			<Container>
+				<section className="py-12">
+					<h1 className="text-center">Login</h1>
+					{clientAction?.error || actionData?.error ? (
+						<p>{clientAction?.error || actionData?.error}</p>
+					) : null}
+					<div className="w-96 mx-auto">
+						<form
+							method="post"
+							onSubmit={handleSubmit}
+							className="flex flex-col gap-4"
+						>
+							<label className="form-control">
+								<div className="label">
+									<span className="label-text">Email</span>
+									<span className="label-text-alt">hoge</span>
+								</div>
+								<input
+									type="email"
+									name="email"
+									autoComplete="email"
+									placeholder="test@example.com"
+									className="input input-bordered"
+								/>
+								<div className="label">
+									<span className="label-text-alt">hoge</span>
+									<span className="label-text-alt">hoge</span>
+								</div>
+							</label>
+							<label className="form-control">
+								<div className="label">
+									<span className="label-text">Password</span>
+									<span className="label-text-alt">hoge</span>
+								</div>
+								<input
+									type="password"
+									name="password"
+									placeholder="password"
+									autoComplete="current-password"
+									className="input input-bordered"
+								/>
+								<div className="label">
+									<span className="label-text-alt">hoge</span>
+									<span className="label-text-alt">hoge</span>
+								</div>
+							</label>
+							<button type="submit" className="btn btn-primary">
+								Login
+							</button>
+						</form>
+						<p className="text-center">
+							Do you want to{" "}
+							<Link to="/join" className="link">
+								join
+							</Link>
+							?
+						</p>
+					</div>
+				</section>
+			</Container>
+		</article>
 	);
 }

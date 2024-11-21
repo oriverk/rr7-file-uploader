@@ -10,17 +10,20 @@ import {
 } from "@remix-run/node";
 import { v4 as uuidv4 } from "uuid";
 
+import { Alert } from "@/components/Alert";
+import { Container } from "@/components/Container";
+import {
+	ALLOWED_FILE_EXTENSIONS,
+	MAX_FILE_DESCRIPTION_LENGTH,
+	MAX_FILE_SIZE,
+} from "@/constant";
+import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
 import { Form, Link } from "@remix-run/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { redirect, typedjson, useTypedActionData } from "remix-typedjson";
-import { ContentSection } from "../components/ContentSection";
 import { requireAuth } from "../server/auth.server";
 import { addUserFile } from "../server/firestore.server";
 import { uploadToFirebaseStorage } from "../server/storage.server";
-
-const MAX_DESCRIPTION_LENGTH = 15000;
-const MAX_SIZE = 1 * 1024 * 1024; // 1MB
-const ALLOWED_EXTENSIONS = ["png", "zip"];
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	await requireAuth(request);
@@ -36,21 +39,24 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	const fileDescription = formData.get("fileDescription");
 	const publish = formData.get("publish");
 	const formError = typedjson(
-		{ error: "Please fill all fields!" },
+		{
+			success: false,
+			message: "Please fill all fields!",
+		},
 		{ status: 400 },
 	);
 
 	try {
 		if (typeof fileDescription !== "string") return formError;
-		if (fileDescription.length > MAX_DESCRIPTION_LENGTH) {
+		if (MAX_FILE_DESCRIPTION_LENGTH < fileDescription.length) {
 			throw new Error(
-				`Description is limited to ${MAX_DESCRIPTION_LENGTH} characters.`,
+				`Description is limited to ${MAX_FILE_DESCRIPTION_LENGTH} characters.`,
 			);
 		}
 		if (typeof publish !== "string" && publish !== null) return formError;
 		if (!(file instanceof File)) return formError;
 		const { name, type: contentType, size } = file;
-		if (size > MAX_SIZE) {
+		if (size > MAX_FILE_SIZE) {
 			throw new Error("File size exceeds the allowed limit");
 		}
 		const isPublished = Boolean(publish);
@@ -64,8 +70,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 				}
 
 				const fileExtension = filename.split(".").pop()?.toLowerCase();
-
-				if (!ALLOWED_EXTENSIONS.includes(fileExtension || "")) {
+				if (!ALLOWED_FILE_EXTENSIONS.includes(fileExtension || "")) {
 					throw new Error("Invalid file extension");
 				}
 
@@ -102,7 +107,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	} catch (error) {
 		console.error("File upload failed:", error);
 		return typedjson(
-			{ url: null, error: "アップロード中にエラーが発生しました" },
+			{ success: false, message: "アップロード中にエラーが発生しました" },
 			{ status: 500 },
 		);
 	}
@@ -110,99 +115,122 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export default function Index() {
 	const actionData = useTypedActionData<typeof action>();
-	const [error, setError] = useState<string | null>(null);
+	const [log, setLog] = useState<{ success: boolean; message: string } | null>(
+		null,
+	);
 
 	const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setError(null);
+		setLog(null);
 		const file = event.target.files?.[0];
 		if (!file) return;
 
-		if (file.size > MAX_SIZE) {
-			setError("The file size must be less than 1MB.");
-			return;
+		if (file.size > MAX_FILE_SIZE) {
+			return setLog({
+				success: false,
+				message: "The file size must be less than 1MB.",
+			});
 		}
 
 		const fileExtension = file.name.split(".").pop()?.toLowerCase();
-		if (!ALLOWED_EXTENSIONS.includes(fileExtension || "")) {
-			setError("Only .zip, and .png files are allowed.");
-			return;
+		if (!ALLOWED_FILE_EXTENSIONS.includes(fileExtension || "")) {
+			return setLog({
+				success: false,
+				message: "Only .zip, and .png files are allowed.",
+			});
 		}
-
-		console.log("File is valid:", file);
 	};
 
+	useEffect(() => {
+		if (!actionData) return;
+		const { message } = actionData as unknown as {
+			message: string;
+		};
+		const log = actionData as unknown as {
+			success: boolean;
+			message: string;
+		};
+		setLog(log);
+	}, [actionData]);
+
 	return (
-		<div>
-			{actionData && <pre>{JSON.stringify(actionData, null, 2)}</pre>}
-			{error && <p style={{ color: "red" }}>{error}</p>}
-			<ContentSection>
-				<Form
-					method="post"
-					encType="multipart/form-data"
-					className="flex flex-col gap-8"
-				>
-					<label className="form-control w-full max-w-xs">
-						<div className="label">
-							<span className="label-text">ファイルを選択</span>
-							<span className="label-text-alt">必須</span>
-						</div>
-						<input
-							type="file"
-							name="file"
-							required
-							accept={ALLOWED_EXTENSIONS.join(",")}
-							onChange={handleFileChange}
-							className="file-input file-input-bordered"
-						/>
-						<div className="label">
-							<span className="label-text-alt">
-								{ALLOWED_EXTENSIONS.map((extension, index) => (
-									<>
-										<code
-											className="text-sm"
-											key={extension}
-										>{`.${extension}`}</code>
-										{ALLOWED_EXTENSIONS.length - 1 !== index && ", "}
-									</>
-								))}
-							</span>
-							<span className="label-text-alt">1MBまで</span>
-						</div>
-					</label>
-					<div className="form-control">
-						<label className="label cursor-pointer">
-							<span className="label-text">公開する</span>
-							<input type="checkbox" name="publish" className="toggle" />
-						</label>
+		<article>
+			<Container>
+				<section className="py-16">
+					<h1 className="text-center">アップロード</h1>
+					<div className="max-w-2xl mx-auto">
+						<Form
+							method="post"
+							encType="multipart/form-data"
+							className="flex flex-col gap-8"
+						>
+							<label className="form-control">
+								<div className="label">
+									<span className="label-text">ファイルを選択</span>
+									<span className="label-text-alt">必須</span>
+								</div>
+								<input
+									type="file"
+									name="file"
+									required
+									accept={ALLOWED_FILE_EXTENSIONS.join(",")}
+									onChange={handleFileChange}
+									className="file-input file-input-bordered"
+								/>
+								<div className="label">
+									<span className="label-text-alt">
+										{ALLOWED_FILE_EXTENSIONS.map((extension, index) => (
+											<>
+												<code
+													className="text-sm"
+													key={extension}
+												>{`.${extension}`}</code>
+												{ALLOWED_FILE_EXTENSIONS.length - 1 !== index && ", "}
+											</>
+										))}
+									</span>
+									<span className="label-text-alt">
+										{convertByteWithUnit(MAX_FILE_SIZE)}まで
+									</span>
+								</div>
+							</label>
+							<div className="form-control">
+								<label className="label cursor-pointer">
+									<span className="label-text">公開する</span>
+									<input type="checkbox" name="publish" className="toggle" />
+								</label>
+							</div>
+							<label className="form-control">
+								<div className="label">
+									<span className="label-text">説明文</span>
+									<span className="label-text-alt">必須</span>
+								</div>
+								<textarea
+									name="fileDescription"
+									placeholder="Bio"
+									required
+									minLength={0}
+									maxLength={MAX_FILE_DESCRIPTION_LENGTH}
+									className="textarea textarea-bordered text-base"
+									// @ts-ignore
+									style={{ fieldSizing: "content" }}
+								/>
+								<div className="label">
+									<span className="label-text-alt" />
+									<span className="label-text-alt">
+										{MAX_FILE_DESCRIPTION_LENGTH}文字まで
+									</span>
+								</div>
+							</label>
+							<button type="submit" className="btn btn-block btn-primary">
+								アップロード
+							</button>
+						</Form>
+						<Link to="/dashboard" className="btn btn-secondary btn-block mt-8">
+							ダッシュボードへ戻る
+						</Link>
 					</div>
-					<label className="form-control">
-						<div className="label">
-							<span className="label-text">説明文</span>
-							<span className="label-text-alt">必須</span>
-						</div>
-						<textarea
-							name="fileDescription"
-							placeholder="Bio"
-							required
-							minLength={0}
-							maxLength={MAX_DESCRIPTION_LENGTH}
-							className="textarea textarea-bordered h-24 w-full"
-						/>
-						<div className="label">
-							<span className="label-text-alt" />
-							<span className="label-text-alt">
-								{MAX_DESCRIPTION_LENGTH}文字まで
-							</span>
-						</div>
-					</label>
-					<button type="submit" className="btn btn-block btn-primary">
-						アップロード
-					</button>
-				</Form>
-				<Link to="/dashboard" className="btn btn-secondary btn-block mt-8">
-					ダッシュボードへ戻る
-				</Link>
-			</ContentSection>
-		</div>
+				</section>
+			</Container>
+		</article>
 	);
 }

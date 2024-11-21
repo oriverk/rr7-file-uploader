@@ -1,4 +1,4 @@
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import {
 	Links,
 	LiveReload,
@@ -14,6 +14,9 @@ import {
 import { Footer, Header } from "./components/layout";
 
 import type { ReactNode } from "react";
+import { typedjson, useTypedLoaderData } from "remix-typedjson";
+import { checkSessionCookie } from "./server/auth.server";
+import { getSession } from "./sesions";
 import tailwind from "./styles/tailwind.css?url";
 
 export const links: LinksFunction = () => [
@@ -39,21 +42,34 @@ export const meta: MetaFunction = () => {
 	];
 };
 
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+	const session = await getSession(request.headers.get("cookie"));
+	const result = await checkSessionCookie(session);
+	const { uid } = result;
+
+	// @ts-ignore
+	const name = result.name;
+	return typedjson({ isAuthenticated: Boolean(uid), uid, name });
+};
+
 type Props = {
 	children: ReactNode;
 };
 
 export function Layout(props: Props) {
+	const { isAuthenticated, name } = useTypedLoaderData<typeof loader>();
+	// const isAuthenticated = true;
+	// const name = "ixanary";
 	const { children } = props;
 	return (
-		<html lang="ja-JP" data-theme="synthwave">
+		<html lang="ja-JP" data-theme="dim">
 			<head>
 				<Meta />
 				<Links />
 			</head>
 			<body>
 				<div className="min-h-screen flex flex-col">
-					<Header />
+					<Header isAuthenticated={isAuthenticated} name={name} />
 					<main className="prose max-w-none">{children}</main>
 					<Footer />
 				</div>
