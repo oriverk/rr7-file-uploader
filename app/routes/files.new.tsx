@@ -1,3 +1,10 @@
+import {
+	getFormProps,
+	getInputProps,
+	getTextareaProps,
+	useForm,
+} from "@conform-to/react";
+import { parseWithZod } from "@conform-to/zod";
 import type {
 	ActionFunctionArgs,
 	LoaderFunctionArgs,
@@ -6,11 +13,14 @@ import type {
 import {
 	unstable_composeUploadHandlers as composeUploadHandlers,
 	unstable_createMemoryUploadHandler as createMemoryUploadHandler,
+	json,
 	unstable_parseMultipartFormData as parseMultipartFormData,
 } from "@remix-run/node";
+import { Form, Link, useActionData } from "@remix-run/react";
+import { redirect, typedjson } from "remix-typedjson";
 import { v4 as uuidv4 } from "uuid";
+import { z } from "zod";
 
-import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
 import {
 	ALLOWED_FILE_EXTENSIONS,
@@ -18,12 +28,35 @@ import {
 	MAX_FILE_SIZE,
 } from "@/constant";
 import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
-import { Form, Link } from "@remix-run/react";
-import { useEffect, useState } from "react";
-import { redirect, typedjson, useTypedActionData } from "remix-typedjson";
+import clsx from "clsx";
 import { requireAuth } from "../server/auth.server";
 import { addUserFile } from "../server/firestore.server";
 import { uploadToFirebaseStorage } from "../server/storage.server";
+
+const schema = z
+	.object({
+		fileDescription: z
+			.string()
+			.max(
+				MAX_FILE_DESCRIPTION_LENGTH,
+				`ファイル説明文は${MAX_FILE_DESCRIPTION_LENGTH}文字まで`,
+			),
+		file: z
+			.instanceof(File)
+			.refine(
+				(file) => file.size < MAX_FILE_SIZE,
+				`1ファイル${convertByteWithUnit(MAX_FILE_SIZE)}まで`,
+			)
+			.refine(
+				(file) => {
+					const fileExtension = file.name.split(".").pop()?.toLowerCase() ?? "";
+					return ALLOWED_FILE_EXTENSIONS.includes(fileExtension);
+				},
+				`ファイル拡張子は ${ALLOWED_FILE_EXTENSIONS.join(" か ")} のみ`,
+			),
+		isPublished: z.boolean().default(false),
+	})
+	.required();
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	await requireAuth(request);
@@ -35,31 +68,15 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 export const action = async ({ request }: ActionFunctionArgs) => {
 	const user = await requireAuth(request);
 	const formData = await request.clone().formData();
-	const file = formData.get("file");
-	const fileDescription = formData.get("fileDescription");
-	const publish = formData.get("publish");
-	const formError = typedjson(
-		{
-			success: false,
-			message: "Please fill all fields!",
-		},
-		{ status: 400 },
-	);
 
 	try {
-		if (typeof fileDescription !== "string") return formError;
-		if (MAX_FILE_DESCRIPTION_LENGTH < fileDescription.length) {
-			throw new Error(
-				`Description is limited to ${MAX_FILE_DESCRIPTION_LENGTH} characters.`,
-			);
+		const submission = parseWithZod(formData, { schema });
+		if (submission.status !== "success") {
+			return json(submission.reply());
 		}
-		if (typeof publish !== "string" && publish !== null) return formError;
-		if (!(file instanceof File)) return formError;
+
+		const { fileDescription, file, isPublished } = submission.value;
 		const { name, type: contentType, size } = file;
-		if (size > MAX_FILE_SIZE) {
-			throw new Error("File size exceeds the allowed limit");
-		}
-		const isPublished = Boolean(publish);
 		const uuid = uuidv4();
 		const fileName = `${uuid}-${name}`;
 
@@ -69,10 +86,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 					return null;
 				}
 
-				const fileExtension = filename.split(".").pop()?.toLowerCase();
-				if (!ALLOWED_FILE_EXTENSIONS.includes(fileExtension || "")) {
-					throw new Error("Invalid file extension");
-				}
+				// const fileExtension = filename.split(".").pop()?.toLowerCase();
+				// if (!ALLOWED_FILE_EXTENSIONS.includes(fileExtension || "")) {
+				// 	throw new Error("Invalid file extension");
+				// }
 
 				const signedUrl = await uploadToFirebaseStorage(
 					data,
@@ -114,43 +131,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export default function Index() {
-	const actionData = useTypedActionData<typeof action>();
-	const [log, setLog] = useState<{ success: boolean; message: string } | null>(
-		null,
-	);
-
-	const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setLog(null);
-		const file = event.target.files?.[0];
-		if (!file) return;
-
-		if (file.size > MAX_FILE_SIZE) {
-			return setLog({
-				success: false,
-				message: "The file size must be less than 1MB.",
-			});
-		}
-
-		const fileExtension = file.name.split(".").pop()?.toLowerCase();
-		if (!ALLOWED_FILE_EXTENSIONS.includes(fileExtension || "")) {
-			return setLog({
-				success: false,
-				message: "Only .zip, and .png files are allowed.",
-			});
-		}
-	};
-
-	useEffect(() => {
-		if (!actionData) return;
-		const { message } = actionData as unknown as {
-			message: string;
-		};
-		const log = actionData as unknown as {
-			success: boolean;
-			message: string;
-		};
-		setLog(log);
-	}, [actionData]);
+	const actionData = useActionData<typeof action>();
+	const [form, fields] = useForm({
+		lastResult: actionData,
+		onValidate({ formData }) {
+			return parseWithZod(formData, { schema });
+		},
+		shouldValidate: "onBlur",
+		shouldRevalidate: "onInput",
+	});
 
 	return (
 		<article>
@@ -162,62 +151,68 @@ export default function Index() {
 							method="post"
 							encType="multipart/form-data"
 							className="flex flex-col gap-8"
+							{...getFormProps(form)}
+							noValidate
 						>
 							<label className="form-control">
 								<div className="label">
 									<span className="label-text">ファイルを選択</span>
-									<span className="label-text-alt">必須</span>
+									<span className="label-text-alt">
+										{convertByteWithUnit(MAX_FILE_SIZE)}まで
+									</span>
 								</div>
 								<input
-									type="file"
-									name="file"
-									required
-									accept={ALLOWED_FILE_EXTENSIONS.join(",")}
-									onChange={handleFileChange}
-									className="file-input file-input-bordered"
+									{...getInputProps(fields.file, { type: "file" })}
+									className={clsx(
+										"file-input file-input-bordered",
+										!fields.file.valid && "file-input-error",
+									)}
 								/>
 								<div className="label">
 									<span className="label-text-alt">
 										{ALLOWED_FILE_EXTENSIONS.map((extension, index) => (
-											<>
-												<code
-													className="text-sm"
-													key={extension}
-												>{`.${extension}`}</code>
-												{ALLOWED_FILE_EXTENSIONS.length - 1 !== index && ", "}
-											</>
+											<code
+												className="text-sm"
+												key={extension}
+											>{`.${extension}${ALLOWED_FILE_EXTENSIONS.length - 1 !== index ? ", " : ""}`}</code>
 										))}
 									</span>
-									<span className="label-text-alt">
-										{convertByteWithUnit(MAX_FILE_SIZE)}まで
+									<span className="label-text-alt text-error">
+										{fields.file.errors}
 									</span>
 								</div>
 							</label>
 							<div className="form-control">
 								<label className="label cursor-pointer">
 									<span className="label-text">公開する</span>
-									<input type="checkbox" name="publish" className="toggle" />
+									<input
+										className="toggle toggle-primary"
+										{...getInputProps(fields.isPublished, { type: "checkbox" })}
+									/>
 								</label>
+								<div>{fields.isPublished.errors}</div>
 							</div>
 							<label className="form-control">
 								<div className="label">
 									<span className="label-text">説明文</span>
-									<span className="label-text-alt">必須</span>
+									<span className="label-text-alt">
+										{MAX_FILE_DESCRIPTION_LENGTH}文字まで
+									</span>
 								</div>
 								<textarea
-									name="fileDescription"
-									placeholder="Bio"
-									required
-									minLength={0}
-									maxLength={MAX_FILE_DESCRIPTION_LENGTH}
-									className="textarea textarea-bordered text-base"
+									placeholder="ファイル説明文（markdown記法使用可能）"
+									className={clsx(
+										"textarea textarea-bordered text-base",
+										!fields.fileDescription.valid && "textarea-error",
+									)}
 									// @ts-ignore
 									style={{ fieldSizing: "content" }}
+									{...getTextareaProps(fields.fileDescription)}
 								/>
 								<div className="label">
 									<span className="label-text-alt" />
-									<span className="label-text-alt">
-										{MAX_FILE_DESCRIPTION_LENGTH}文字まで
+									<span className="label-text-alt text-error">
+										{fields.fileDescription.errors}
 									</span>
 								</div>
 							</label>

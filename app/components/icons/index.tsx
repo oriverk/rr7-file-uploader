@@ -7,3 +7,5 @@ export * from "./Download";
 export * from "./Pencil";
 export * from "./ChevronDown";
 export * from "./Close";
+export * from "./Eye";
+export * from "./EyeClosed";
