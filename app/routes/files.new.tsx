@@ -93,7 +93,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 				const signedUrl = await uploadToFirebaseStorage(
 					data,
-					`images/${uuid}-${filename}`,
+					`files/${uuid}-${filename}`,
 					Date.now() + 60 * 60 * 1000,
 				);
 				return signedUrl;

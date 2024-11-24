@@ -2,10 +2,10 @@ import type { Session } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import type { UserRecord } from "firebase-admin/auth";
 
+import type { User } from "@/types";
 import { destroySession, getSession } from "../sesions";
 import { auth } from "./firebase.server";
 import { addUser } from "./firestore.server";
-import type { User } from "@/types";
 
 export const checkSessionCookie = async (session: Session) => {
 	try {
@@ -44,7 +44,12 @@ export const signInWithToken = async (idToken: string) => {
 	return sessionCookie;
 };
 
-export const signUp = async (username: User["username"], displayName: User["displayName"], email: string, password: string) => {
+export const signUp = async (
+	username: User["username"],
+	displayName: User["displayName"],
+	email: string,
+	password: string,
+) => {
 	const user = await auth.server.createUser({
 		email,
 		password,

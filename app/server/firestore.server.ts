@@ -4,8 +4,9 @@ import type {
 	QueryDocumentSnapshot,
 } from "firebase-admin/firestore";
 import { Timestamp } from "firebase-admin/firestore";
-import type { FirestoreFile, User } from "../types/firestore";
+import type { FirestoreFile, User } from "../types";
 import { firestore } from "./firebase.server";
+import { RESERVED_WORDS } from "@/constant";
 
 const userConverter: FirestoreDataConverter<User> = {
 	toFirestore(user: User): DocumentData {
@@ -22,7 +23,7 @@ const userConverter: FirestoreDataConverter<User> = {
 
 		return {
 			id: snapshot.id,
-			uid: data.uid,
+			username: data.username,
 			displayName: data.displayName,
 			email: data.email,
 			profile: data.profile,
@@ -65,7 +66,7 @@ const fileConverter: FirestoreDataConverter<FirestoreFile> = {
 
 const db = {
 	user: (uid: string) =>
-		firestore.collection("users").where("uid", "==", uid).limit(1),
+		firestore.collection("users").doc(uid).withConverter(userConverter),
 	users: () => firestore.collection("users").withConverter(userConverter),
 	userFiles: (uid: string) =>
 		firestore
@@ -82,63 +83,124 @@ const db = {
 			.withConverter(fileConverter),
 };
 
-export async function getUser(userId: string) {
+export async function getUserWithId(id: string) {
+	const docRef = db.user(id);
+	const docSnapshot = await docRef.get();
+	const user = docSnapshot.data();
+
+	if (!user || user.deletedAt !== null) {
+		throw new Error("User not found.");
+	}
+	return user;
+}
+
+export async function checkExistingUser(username: User["username"]) {
+	if(RESERVED_WORDS.includes(username)) return true;
+
 	const collectionRef = db.users();
-	const query = collectionRef.where("uid", "==", userId).limit(1);
+	const query = collectionRef
+		.where("username", "==", username)
+		.limit(1);
 	const querySnapshot = await query.get();
+	if(querySnapshot.empty){
+		console.log("No users found in the collection.")
+		return false;
+	}
+	const user = querySnapshot.docs.map((doc) => {
+		return doc.data();
+	})[0];
+	if (!user || user.deletedAt) {
+		console.log("No users found in the collection.")
+		return false;
+	}
+	return true;
+}
+
+export async function getUser(username: User["username"]) {
+	const collectionRef = db.users();
+	const query = collectionRef
+		.where("username", "==", username)
+		.limit(1);
+	const querySnapshot = await query.get();
+	if(querySnapshot.empty){
+		throw new Error("No users found in the collection.")
+	}
 
 	const user = querySnapshot.docs.map((doc) => {
 		return doc.data();
 	})[0];
+	if (!user || user.deletedAt) {
+		throw new Error("User not found.hhh");
+	}
 	return user;
 }
 
 export async function addUser(
-	userid: string,
-	data: Omit<User, "createdAt" | "updatedAt" | "deletedAt">,
+	uid: string,
+	data: Omit<User, "id" | "createdAt" | "updatedAt" | "deletedAt">,
 ) {
-	const { id, ...restProps } = data;
-	const docRef = firestore.collection("users").doc(userid);
+	const docRef = firestore.collection("users").doc(uid);
 	const createdAt = Timestamp.now();
 	const updatedAt = Timestamp.now();
-	await docRef.set({
-		...restProps,
+	const { writeTime } = await docRef.set({
+		...data,
 		createdAt,
 		updatedAt,
 		deletedAt: null,
 	});
 
+	if (!writeTime) {
+		throw new Error("Failed to create user.");
+	}
+	const { id, path } = docRef;
+
 	return {
-		id: docRef.id,
-		...data,
-		updatedAt,
+		id,
+		path,
+		writeTime: writeTime.toDate(),
 	};
 }
 
-export async function updateUser(userid: string, data: Partial<User>) {
-	const { id, ...restProps } = data;
-	const docRef = firestore.collection("users").doc(userid);
+export async function updateUser(
+	uid: string,
+	data: Partial<Omit<User, "createdAt" | "updatedAt" | "deletedAt">>,
+) {
+	const { id: _id, ...restProps } = data;
+	const docRef = firestore.collection("users").doc(uid);
 	const updatedAt = Timestamp.now();
-	await docRef.update({
+	const { writeTime } = await docRef.update({
 		...restProps,
 		updatedAt,
 	});
+	if (!writeTime) {
+		throw new Error("Failed to update user.");
+	}
+	const { id, path } = docRef;
 
 	return {
-		id: docRef.id,
-		...data,
-		updatedAt,
+		id,
+		path,
+		writeTime: writeTime.toDate(),
 	};
 }
 
-export async function softDeleteUser(userid: string) {
-	const docRef = firestore.collection("users").doc(userid);
+export async function softDeleteUser(uid: string) {
+	const docRef = firestore.collection("users").doc(uid);
 	const deletedAt = Timestamp.now();
-	await docRef.update({
+	const { writeTime } = await docRef.update({
 		deletedAt,
 	});
+	if (!writeTime) {
+		throw new Error("Failed to delete user.");
+	}
 
-	return { id: userid, deletedAt };
+	const { id, path } = docRef;
+
+	return {
+		id,
+		path,
+		writeTime: writeTime.toDate(),
+	};
 }
 
 export async function getUserFiles(uid: string, isPublished: boolean) {
@@ -148,6 +210,9 @@ export async function getUserFiles(uid: string, isPublished: boolean) {
 		? commonQuery.where("isPublished", "==", true)
 		: commonQuery;
 	const querySnapshot = await query.orderBy("createdAt", "desc").get();
+	if(querySnapshot.empty) {
+		return []
+	}
 	const files = querySnapshot.docs.map((doc) => {
 		return doc.data();
 	});
@@ -157,12 +222,12 @@ export async function getUserFiles(uid: string, isPublished: boolean) {
 export async function getUserFile(uid: string, fileId: string) {
 	const docRef = db.userFile(uid, fileId);
 	const snapshot = await docRef.get();
-	const data = snapshot.data();
-	if (!data || data.deletedAt) {
-		throw new Error("file not found");
+	const file = snapshot.data();
+	if (!file || file.deletedAt) {
+		throw new Error("file not found.");
 	}
 
-	return data;
+	return file;
 }
 
 export async function addUserFile(
@@ -182,10 +247,14 @@ export async function addUserFile(
 		updatedAt: Timestamp.now(),
 		deletedAt: null,
 	});
+	if (!writeTime) {
+		throw new Error("Failed to create file.");
+	}
+	const { id, path } = newCollectionRef;
 	return {
-		id: newCollectionRef.id,
-		path: newCollectionRef.path,
-		writeTime,
+		id,
+		path,
+		writeTime: writeTime.toDate(),
 	};
 }
 
@@ -193,30 +262,42 @@ export async function updateUserFile(
 	uid: string,
 	fileId: string,
 	data: Partial<Omit<FirestoreFile, "updatedAt">>,
+	isDownload?: boolean,
 ) {
-	const { id, ...restProps } = data;
+	const { id: _id, ...restProps } = data;
 	const docRef = db.userFile(uid, fileId);
-	const { writeTime } = await docRef.update({
+	const newData = {
 		...restProps,
-		updatedAt: Timestamp.now(),
-	});
+	};
+	if (!isDownload) {
+		// @ts-ignore
+		newData.updatedAt = Timestamp.now();
+	}
+	const { writeTime } = await docRef.update(newData);
+	if (!writeTime) {
+		throw new Error("Failed to update file.");
+	}
+	const { id, path } = docRef;
 	return {
 		id,
-		path: docRef.path,
-		writeTime,
+		path,
+		writeTime: writeTime.toDate(),
 	};
 }
 
 export async function softDeleteUserFile(uid: string, fileId: string) {
 	const docRef = db.userFile(uid, fileId);
-	const { id, path } = docRef;
 	const { writeTime } = await docRef.update({
 		updatedAt: Timestamp.now(),
 		deletedAt: Timestamp.now(),
 	});
+	if (!writeTime) {
+		throw new Error("Failed to delete file.");
+	}
+	const { id, path } = docRef;
 	return {
 		id,
 		path,
-		writeTime,
+		writeTime: writeTime.toDate(),
 	};
 }

@@ -35,9 +35,10 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	const user = await requireAuth(request);
 	const file = await getUserFile(user.uid, params.fileId);
 	invariant(file, "file not found");
+	const { fileName, fileDescription, isPublished } = file;
 
 	return typedjson({
-		file,
+		file: { fileName, fileDescription, isPublished },
 	});
 };
 

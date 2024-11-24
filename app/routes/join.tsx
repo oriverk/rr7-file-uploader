@@ -4,7 +4,7 @@ import { Form, Link, useActionData } from "@remix-run/react";
 
 import { Container } from "@/components/Container";
 import { EyeClosedIcon, EyeIcon } from "@/components/icons";
-import { getUser } from "@/server/firestore.server";
+import { checkExistingUser } from "@/server/firestore.server";
 import type { Intent } from "@conform-to/react";
 import { getFormProps, getInputProps, useForm } from "@conform-to/react";
 import { conformZodMessage, parseWithZod } from "@conform-to/zod";
@@ -25,12 +25,13 @@ function createSchema(
 			username: z
 				.string({ required_error: "名前は必須です" })
 				.min(3, "少なくとも３文字")
-				.regex(/^[a-zA-Z0-9]+$/, "不正な名前: 英数字とハイフンのみ")
+				.regex(/^[a-z\d-]+$/, "不正な名前: 英数字とハイフンのみ")
 				.pipe(
 					z.string().superRefine((username, ctx) => {
 						const isValidatingUsername =
 							intent === null ||
-							(intent.type === "validate" && intent.payload.name === "username");
+							(intent.type === "validate" &&
+								intent.payload.name === "username");
 
 						if (!isValidatingUsername) {
 							ctx.addIssue({
@@ -89,8 +90,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		schema: (intent) =>
 			createSchema(intent, {
 				isUsernameUnique: async (username) => {
-					const user = await getUser(username);
-					return !user;
+					const isExisting = await checkExistingUser(username)
+					return !isExisting;
 				},
 			}),
 		async: true,
@@ -177,7 +178,9 @@ export default function Login() {
 										placeholder="password"
 										autoComplete="new-password"
 										className="grow"
-										{...getInputProps(fields.password, { type: showPassword ? "text" : "password" })}
+										{...getInputProps(fields.password, {
+											type: showPassword ? "text" : "password",
+										})}
 									/>
 									<button
 										type="button"
@@ -215,7 +218,7 @@ export default function Login() {
 								/>
 								<div className="label">
 									<span className="label-text-alt text-sm">
-										<code>{"/^[a-zA-Z0-9]{3,}$/"}</code>
+										<code>{"/^[a-z\d-]{3,}$/"}</code>
 									</span>
 									<span className="label-text-alt text-error">
 										{fields.username.errors}

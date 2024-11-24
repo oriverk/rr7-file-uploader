@@ -3,12 +3,11 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { Container } from "@/components/Container";
 import { DashboardFileCard } from "@/components/DashboradFileCard";
 import { Pagination } from "@/components/Pagination";
-import { CloseIcon } from "@/components/icons";
 import { usePagination } from "@/hooks/usePagination";
 import { requireAuth } from "@/server/auth.server";
 import { getUserFiles, softDeleteUserFile } from "@/server/firestore.server";
-import type { FirestoreFile } from "@/types/firestore";
-import { json, useSubmit } from "@remix-run/react";
+import type { FirestoreFile } from "@/types";
+import { Link, json, useSubmit } from "@remix-run/react";
 import { useRef, useState } from "react";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 
@@ -17,7 +16,6 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	const files = await getUserFiles(user.uid, false);
 
 	return typedjson({
-		user,
 		files,
 	});
 };
@@ -48,7 +46,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 type DeletingFile = Record<"fileId" | "fileName", string>;
 
 export default function Dashboard() {
-	const { user, files } = useTypedLoaderData<typeof loader>();
+	const { files } = useTypedLoaderData<typeof loader>();
 	const [deletingFile, setDeletingFile] = useState<DeletingFile | null>(null);
 	const { currentItems, endIndex, goToPage, nextPage, prevPage } =
 		usePagination<FirestoreFile>(files, 10, 1);
@@ -82,41 +80,48 @@ export default function Dashboard() {
 				<Container>
 					<section>
 						<h1 className="text-center">ファイル管理</h1>
-						<div className="flex flex-col gap-8 items-center">
-							<Pagination
-								handleFirstPage={() => goToPage(1)}
-								handlePreviousPage={prevPage}
-								handleNextPage={nextPage}
-								handleLastPage={() => goToPage(endIndex)}
-							/>
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
-								{currentItems.map((file) => {
-									const { id, fileName } = file;
-									const path = `/files/${id}/edit`;
-									return (
-										<div key={id}>
-											<DashboardFileCard
-												path={path}
-												file={file}
-												handleClickDelete={() =>
-													handleOpenModal({ fileId: id ?? "", fileName })
-												}
-											/>
-										</div>
-									);
-								})}
+						{!files.length ? (
+							<div className="">
+								<Link to="/flies/new" className="btn btn-primary">
+									アップロード
+								</Link>
 							</div>
-							<Pagination
-								handleFirstPage={() => goToPage(1)}
-								handlePreviousPage={prevPage}
-								handleNextPage={nextPage}
-								handleLastPage={() => goToPage(endIndex)}
-							/>
-						</div>
+						) : (
+							<div className="flex flex-col gap-8 items-center">
+								<Pagination
+									handleFirstPage={() => goToPage(1)}
+									handlePreviousPage={prevPage}
+									handleNextPage={nextPage}
+									handleLastPage={() => goToPage(endIndex)}
+								/>
+								<div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+									{currentItems.map((file) => {
+										const { id, fileName } = file;
+										const path = `/files/${id}/edit`;
+										return (
+											<div key={id}>
+												<DashboardFileCard
+													path={path}
+													file={file}
+													handleClickDelete={() =>
+														handleOpenModal({ fileId: id ?? "", fileName })
+													}
+												/>
+											</div>
+										);
+									})}
+								</div>
+								<Pagination
+									handleFirstPage={() => goToPage(1)}
+									handlePreviousPage={prevPage}
+									handleNextPage={nextPage}
+									handleLastPage={() => goToPage(endIndex)}
+								/>
+							</div>
+						)}
 					</section>
 				</Container>
 			</article>
-			{/* dialog */}
 			<dialog className="modal" ref={dialog}>
 				<div className="modal-box">
 					<h3 className="font-bold text-lg text-center">削除しますか？</h3>

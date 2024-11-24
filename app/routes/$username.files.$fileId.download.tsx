@@ -7,7 +7,6 @@ import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import invariant from "tiny-invariant";
 import { getUser, getUserFile } from "../server/firestore.server";
 import { convertByteWithUnit } from "../utils/convertByteWithUnit";
-import { parseMarkdown } from "../utils/markdown";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	invariant(params.username, "params.username is requied");
@@ -15,18 +14,16 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	const user = await getUser(params.username);
 	invariant(user.id, "user not found");
 
-	const { displayName, profile, profileImageUrl } = user;
+	const { username, displayName } = user;
 	const file = await getUserFile(user.id ?? "", params.fileId);
 
 	invariant(file, `File not found: ${params.fileId}`);
 
-	const { fileDescription, size, filePath, deletedAt, ...rest } = file;
-	const html = parseMarkdown(fileDescription ?? "");
+	const { id, fileDescription, filePath, deletedAt, isPublished, ...rest } =
+		file;
 	return typedjson({
-		user,
+		user: { username, displayName },
 		file: {
-			fileDescription: html,
-			size: convertByteWithUnit(size ?? 0),
 			...rest,
 		},
 	});
@@ -36,15 +33,8 @@ export default function UserFile() {
 	const { user, file } = useTypedLoaderData<typeof loader>();
 	const [isConfirmed, setIsConfirmed] = useState(false);
 	const { username, displayName } = user;
-	const {
-		fileName,
-		contentType,
-		size,
-		createdAt,
-		updatedAt,
-		downloadCount,
-		fileDescription,
-	} = file;
+	const { fileName, contentType, size, createdAt, updatedAt, downloadCount } =
+		file;
 
 	const handleConfirm = () => {
 		setIsConfirmed(!isConfirmed);
@@ -107,7 +97,7 @@ export default function UserFile() {
 											</tr>
 											<tr>
 												<th>サイズ</th>
-												<td>{size}</td>
+												<td>{convertByteWithUnit(size)}</td>
 											</tr>
 											<tr>
 												<th>ダウンロード数</th>

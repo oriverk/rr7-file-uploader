@@ -1,7 +1,6 @@
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import {
 	Links,
-	LiveReload,
 	Meta,
 	type MetaFunction,
 	Outlet,
@@ -45,11 +44,13 @@ export const meta: MetaFunction = () => {
 export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const session = await getSession(request.headers.get("cookie"));
 	const result = await checkSessionCookie(session);
-	const { uid } = result;
+	const isAuthenticated = Boolean(result.uid);
 
-	// @ts-ignore
-	const name = result.name;
-	return typedjson({ isAuthenticated: Boolean(uid), uid, name });
+	let name = "";
+	if ("name" in result) {
+		name = result.name;
+	}
+	return typedjson({ isAuthenticated, name });
 };
 
 type Props = {
@@ -57,10 +58,9 @@ type Props = {
 };
 
 export function Layout(props: Props) {
-	const { isAuthenticated, name } = useTypedLoaderData<typeof loader>();
-	// const isAuthenticated = true;
-	// const name = "ixanary";
 	const { children } = props;
+	const { isAuthenticated, name } = useTypedLoaderData<typeof loader>();
+
 	return (
 		<html lang="ja-JP" data-theme="dim">
 			<head>

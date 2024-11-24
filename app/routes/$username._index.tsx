@@ -13,14 +13,12 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	const user = await getUser(params.username);
 
 	invariant(user.id, "user not found");
-	const { displayName, profile, profileImageUrl } = user;
+	const { username, displayName, profile, profileImageUrl } = user;
 	const files = await getUserFiles(user.id, true);
-	const { uid } = params;
 
 	return typedjson({
-		uid,
 		user: {
-			uid,
+			username,
 			displayName,
 			profile,
 			profileImageUrl,
@@ -31,7 +29,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
 export default function UserFiles() {
 	const { user, files } = useTypedLoaderData<typeof loader>();
-	const { uid, profile } = user;
+	const { username, displayName, profile, profileImageUrl } = user;
 	const { currentItems, endIndex, goToPage, nextPage, prevPage } =
 		usePagination<FirestoreFile>(files, 6, 1);
 
@@ -41,16 +39,20 @@ export default function UserFiles() {
 				<div>
 					<div className="py-12 flex flex-col items-center gap-8 md:flex-row">
 						<div className="avatar">
-							<div className="w-32 rounded-full">
-								<img
-									alt="avator"
-									src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-									className="not-prose"
-								/>
+							<div className="w-32 rounded-full ring-info ring-offset-base-100 ring ring-offset-2">
+								{!profileImageUrl ? (
+									<div>&nbsp;</div>
+								) : (
+									<img
+										alt="avator"
+										src={profileImageUrl}
+										className="not-prose"
+									/>
+								)}
 							</div>
 						</div>
 						<div className="info">
-							<h1 className="m-0">{uid}</h1>
+							<h1 className="m-0">{displayName}</h1>
 							<p className="p-0">{profile}</p>
 							<div>
 								<span className="font-bold">{files.length}</span> files
@@ -76,7 +78,7 @@ export default function UserFiles() {
 							/>
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
 								{currentItems.map((file) => {
-									const path = `/${uid}/files/${file.id}`;
+									const path = `/${username}/files/${file.id}`;
 									return (
 										<article key={file.id}>
 											<FileCard file={file} path={path} />

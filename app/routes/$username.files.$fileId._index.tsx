@@ -13,27 +13,24 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	invariant(params.fileId, "params.fileId is required");
 	const user = await getUser(params.username);
 	invariant(user.id, "user not found");
-
-	const { displayName, profile, profileImageUrl } = user;
 	const file = await getUserFile(user.id, params.fileId);
-
 	invariant(file, `File not found: ${params.fileId}`);
 
-	const { fileDescription, size, filePath, deletedAt, ...rest } = file;
+	const { username, displayName } = user;
+	const { id, fileDescription, filePath, deletedAt, ...rest } = file;
 	const html = parseMarkdown(fileDescription ?? "");
 	return typedjson({
-		user,
+		user: { username, displayName },
 		file: {
-			fileDescription: html,
-			size: convertByteWithUnit(size ?? 0),
 			...rest,
+			fileDescription: html,
 		},
 	});
 };
 
 export default function UserFile() {
 	const { user, file } = useTypedLoaderData<typeof loader>();
-	const { username, displayName} = user;
+	const { username, displayName } = user;
 	const {
 		fileName,
 		contentType,
@@ -97,7 +94,7 @@ export default function UserFile() {
 											</tr>
 											<tr>
 												<th>サイズ</th>
-												<td>{size}</td>
+												<td>{convertByteWithUnit(size)}</td>
 											</tr>
 											<tr>
 												<th>ダウンロード数</th>

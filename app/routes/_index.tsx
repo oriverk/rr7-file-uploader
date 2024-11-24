@@ -1,16 +1,4 @@
-// import type { MetaFunction } from "@remix-run/react";
-
 import { Container } from "@/components/Container";
-
-// export const meta: MetaFunction = () => {
-// 	return [
-// 		{ title: "New Remix App" },
-// 		{
-// 			name: "description",
-// 			content: "Welcome to Remix! Using Vite and Cloudflare!",
-// 		},
-// 	];
-// };
 
 export default function Index() {
 	return (
@@ -31,9 +19,6 @@ export default function Index() {
 							nulla pariatur. Excepteur sint occaecat cupidatat non proident,
 							sunt in culpa qui officia deserunt mollit anim id est laborum.
 						</p>
-						<button type="button" className="btn btn-primary">
-							Get Started
-						</button>
 					</div>
 				</div>
 			</Container>

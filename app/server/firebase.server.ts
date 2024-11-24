@@ -4,7 +4,7 @@ import {
 	initializeApp as initializeServerApp,
 	cert as serverCert,
 } from "firebase-admin/app";
-import { getAuth as getServerAuth } from "firebase-admin/auth";
+import { getAuth, getAuth as getServerAuth } from "firebase-admin/auth";
 import { getStorage } from "firebase-admin/storage";
 
 import { getFirestore } from "firebase-admin/firestore";
@@ -20,14 +20,14 @@ export const getRestConfig = (): {
 			apiKey: "fake-api-key",
 			domain: "http://localhost:9099/identitytoolkit.googleapis.com",
 		};
-	} else if (!process.env.API_KEY) {
-		throw new Error("Missing API_KEY environment variable");
-	} else {
-		return {
-			apiKey: process.env.API_KEY,
-			domain: "https://identitytoolkit.googleapis.com",
-		};
 	}
+	if (!process.env.API_KEY) {
+		throw new Error("Missing API_KEY environment variable");
+	}
+	return {
+		apiKey: process.env.API_KEY,
+		domain: "https://identitytoolkit.googleapis.com",
+	};
 };
 const restConfig = getRestConfig();
 
