@@ -6,11 +6,11 @@ import { getUserFile, updateUserFile } from "../server/firestore.server";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	try {
-		invariant(params.uid, "params.uid is requied");
+		invariant(params.username, "params.username is requied");
 		invariant(params.fileId, "params.fileId is required");
 		const userSnapshot = await firestore
 			.collection("users")
-			.where("uid", "==", params.uid)
+			.where("uid", "==", params.username)
 			.limit(1)
 			.get();
 		invariant(!userSnapshot.empty, "user not found");

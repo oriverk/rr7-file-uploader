@@ -17,20 +17,20 @@ import { commitSession, getSession } from "../sesions";
 function createSchema(
 	intent: Intent | null,
 	options?: {
-		isUsernameUnique: (name: string) => Promise<boolean>;
+		isUsernameUnique: (username: string) => Promise<boolean>;
 	},
 ) {
 	return z
 		.object({
-			name: z
+			username: z
 				.string({ required_error: "名前は必須です" })
 				.min(3, "少なくとも３文字")
 				.regex(/^[a-zA-Z0-9]+$/, "不正な名前: 英数字とハイフンのみ")
 				.pipe(
-					z.string().superRefine((name, ctx) => {
+					z.string().superRefine((username, ctx) => {
 						const isValidatingUsername =
 							intent === null ||
-							(intent.type === "validate" && intent.payload.name === "name");
+							(intent.type === "validate" && intent.payload.name === "username");
 
 						if (!isValidatingUsername) {
 							ctx.addIssue({
@@ -49,7 +49,7 @@ function createSchema(
 							return;
 						}
 
-						return options.isUsernameUnique(name).then((isUnique) => {
+						return options.isUsernameUnique(username).then((isUnique) => {
 							if (!isUnique) {
 								ctx.addIssue({
 									code: "custom",
@@ -88,8 +88,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	const submission = await parseWithZod(formData, {
 		schema: (intent) =>
 			createSchema(intent, {
-				isUsernameUnique: async (name) => {
-					const user = await getUser(name);
+				isUsernameUnique: async (username) => {
+					const user = await getUser(username);
 					return !user;
 				},
 			}),
@@ -100,11 +100,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		if (submission.status !== "success") {
 			return json(submission.reply());
 		}
-		const { name, email, password } = submission.value;
-		const sessionCookie = await signUp(name, email, password);
+		const { username, email, password } = submission.value;
+		const sessionCookie = await signUp(username, username, email, password);
 		const session = await getSession(request.headers.get("cookie"));
 		session.set("session", sessionCookie);
-		return redirect("/", {
+		return redirect(`/${username}`, {
 			headers: {
 				"Set-Cookie": await commitSession(session),
 			},
@@ -117,7 +117,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export default function Login() {
 	const [showPassword, setShowPassword] = useState(false);
-	const [name, setName] = useState("");
+	const [username, setUsername] = useState("");
 	const actionData = useActionData<typeof action>();
 	const [form, fields] = useForm({
 		// @ts-ignore
@@ -132,13 +132,13 @@ export default function Login() {
 	});
 
 	const handleInputName = (e: any) => {
-		setName(e.target.value);
+		setUsername(e.target.value);
 	};
 
 	return (
 		<article>
 			<Container>
-				<section>
+				<section className="py-12">
 					<h1 className="text-center">アカウントを作成</h1>
 					<div className="mx-auto w-96">
 						<Form
@@ -177,7 +177,7 @@ export default function Login() {
 										placeholder="password"
 										autoComplete="new-password"
 										className="grow"
-										{...getInputProps(fields.password, { type: "password" })}
+										{...getInputProps(fields.password, { type: showPassword ? "text" : "password" })}
 									/>
 									<button
 										type="button"
@@ -208,23 +208,23 @@ export default function Login() {
 									autoCapitalize="none"
 									className={clsx(
 										"input input-bordered",
-										!fields.name.valid && "input-error",
+										!fields.username.valid && "input-error",
 									)}
 									onInput={handleInputName}
-									{...getInputProps(fields.name, { type: "text" })}
+									{...getInputProps(fields.username, { type: "text" })}
 								/>
 								<div className="label">
 									<span className="label-text-alt text-sm">
 										<code>{"/^[a-zA-Z0-9]{3,}$/"}</code>
 									</span>
 									<span className="label-text-alt text-error">
-										{fields.name.errors}
+										{fields.username.errors}
 									</span>
 								</div>
 								<div className="label">
-									{name ? (
+									{username ? (
 										<span className="label-text-alt">
-											ファイルURLは `{`/${name}/files/{fileId}`}`
+											ファイルURLは `{`/${username}/files/{fileId}`}`
 										</span>
 									) : (
 										<span className="label-text-alt">&nbsp;</span>

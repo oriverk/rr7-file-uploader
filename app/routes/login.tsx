@@ -157,7 +157,9 @@ export default function Login() {
 										placeholder="password"
 										autoComplete="current-password"
 										className="grow"
-										{...getInputProps(fields.password, { type: "password" })}
+										{...getInputProps(fields.password, {
+											type: showPassword ? "text" : "password",
+										})}
 									/>
 									<button
 										type="button"

@@ -2,15 +2,15 @@ import { Container } from "@/components/Container";
 import { FileCard } from "@/components/FileCard";
 import { Pagination } from "@/components/Pagination";
 import { usePagination } from "@/hooks/usePagination";
-import type { FirestoreFile } from "@/types/firestore";
+import type { FirestoreFile } from "@/types";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import invariant from "tiny-invariant";
 import { getUser, getUserFiles } from "../server/firestore.server";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-	invariant(params.uid, "params.uid is required");
-	const user = await getUser(params.uid);
+	invariant(params.username, "params.usename is required");
+	const user = await getUser(params.username);
 
 	invariant(user.id, "user not found");
 	const { displayName, profile, profileImageUrl } = user;
@@ -62,30 +62,36 @@ export default function UserFiles() {
 			<Container>
 				<section className="py-8">
 					<h2 className="text-center">ファイル一覧</h2>
-					<div className="flex flex-col gap-8 items-center">
-						<Pagination
-							handleFirstPage={() => goToPage(1)}
-							handlePreviousPage={prevPage}
-							handleNextPage={nextPage}
-							handleLastPage={() => goToPage(endIndex)}
-						/>
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
-							{currentItems.map((file) => {
-								const path = `/${uid}/files/${file.id}`;
-								return (
-									<article key={file.id}>
-										<FileCard file={file} path={path} />
-									</article>
-								);
-							})}
+					{!files.length ? (
+						<p className="text-center">
+							アップロードされたファイルはありません
+						</p>
+					) : (
+						<div className="flex flex-col gap-8 items-center">
+							<Pagination
+								handleFirstPage={() => goToPage(1)}
+								handlePreviousPage={prevPage}
+								handleNextPage={nextPage}
+								handleLastPage={() => goToPage(endIndex)}
+							/>
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+								{currentItems.map((file) => {
+									const path = `/${uid}/files/${file.id}`;
+									return (
+										<article key={file.id}>
+											<FileCard file={file} path={path} />
+										</article>
+									);
+								})}
+							</div>
+							<Pagination
+								handleFirstPage={() => goToPage(1)}
+								handlePreviousPage={prevPage}
+								handleNextPage={nextPage}
+								handleLastPage={() => goToPage(endIndex)}
+							/>
 						</div>
-						<Pagination
-							handleFirstPage={() => goToPage(1)}
-							handlePreviousPage={prevPage}
-							handleNextPage={nextPage}
-							handleLastPage={() => goToPage(endIndex)}
-						/>
-					</div>
+					)}
 				</section>
 			</Container>
 		</article>

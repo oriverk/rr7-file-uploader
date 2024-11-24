@@ -3,8 +3,9 @@ import { redirect } from "@remix-run/node";
 import type { UserRecord } from "firebase-admin/auth";
 
 import { destroySession, getSession } from "../sesions";
-
 import { auth } from "./firebase.server";
+import { addUser } from "./firestore.server";
+import type { User } from "@/types";
 
 export const checkSessionCookie = async (session: Session) => {
 	try {
@@ -25,12 +26,14 @@ export const requireAuth = async (request: Request): Promise<UserRecord> => {
 			headers: { "Set-Cookie": await destroySession(session) },
 		});
 	}
-	return auth.server.getUser(uid);
+	const user = auth.server.getUser(uid);
+	return user;
 };
 
 export const signIn = async (email: string, password: string) => {
 	const { idToken } = await auth.signInWithPassword(email, password);
-	return signInWithToken(idToken);
+	const sessionCookie = signInWithToken(idToken);
+	return sessionCookie;
 };
 
 export const signInWithToken = async (idToken: string) => {
@@ -41,11 +44,19 @@ export const signInWithToken = async (idToken: string) => {
 	return sessionCookie;
 };
 
-export const signUp = async (name: string, email: string, password: string) => {
-	await auth.server.createUser({
+export const signUp = async (username: User["username"], displayName: User["displayName"], email: string, password: string) => {
+	const user = await auth.server.createUser({
 		email,
 		password,
-		displayName: name,
+		displayName,
+	});
+	const { uid, photoURL } = user;
+	await addUser(uid, {
+		username,
+		displayName,
+		email,
+		profile: "",
+		profileImageUrl: photoURL ?? "",
 	});
 	return await signIn(email, password);
 };

@@ -10,10 +10,10 @@ import { convertByteWithUnit } from "../utils/convertByteWithUnit";
 import { parseMarkdown } from "../utils/markdown";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-	invariant(params.uid, "params.uid is requied");
+	invariant(params.username, "params.username is requied");
 	invariant(params.fileId, "params.fileId is required");
-	const user = await getUser(params.uid);
-	invariant(user.uid, "user not found");
+	const user = await getUser(params.username);
+	invariant(user.id, "user not found");
 
 	const { displayName, profile, profileImageUrl } = user;
 	const file = await getUserFile(user.id ?? "", params.fileId);
@@ -23,8 +23,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	const { fileDescription, size, filePath, deletedAt, ...rest } = file;
 	const html = parseMarkdown(fileDescription ?? "");
 	return typedjson({
-		uid: user.uid,
-		user: user,
+		user,
 		file: {
 			fileDescription: html,
 			size: convertByteWithUnit(size ?? 0),
@@ -34,8 +33,9 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 };
 
 export default function UserFile() {
-	const { uid, user, file } = useTypedLoaderData<typeof loader>();
+	const { user, file } = useTypedLoaderData<typeof loader>();
 	const [isConfirmed, setIsConfirmed] = useState(false);
+	const { username, displayName } = user;
 	const {
 		fileName,
 		contentType,
@@ -60,7 +60,7 @@ export default function UserFile() {
 				<div className="">
 					<div className="py-4 flex flex-col gap-4 items-center justify-evenly">
 						<h1 className="mb-0 break-words">{fileName}</h1>
-						<Link to={`/${user.uid}`} className="no-underline">
+						<Link to={`/${username}`} className="no-underline">
 							<div className="flex items-center gap-4">
 								<div className="avatar">
 									<div className="w-12 rounded-full">
@@ -71,7 +71,7 @@ export default function UserFile() {
 										/>
 									</div>
 								</div>
-								<div className="text-lg">{user.displayName}</div>
+								<div className="text-lg">{displayName}</div>
 							</div>
 						</Link>
 						<div className="flex flex-wrap gap-4">

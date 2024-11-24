@@ -1,7 +1,9 @@
 export type User = {
 	// Firestore ドキュメントのID
 	id?: string;
-	uid: string;
+	// root/{username}/files/{fileId}
+	username: string;
+	// just name to display
 	displayName: string;
 	email: string;
 	profile: string;
