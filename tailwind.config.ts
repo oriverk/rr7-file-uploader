@@ -14,6 +14,6 @@ export default {
     require("daisyui")
   ],
   daisyui: {
-    themes: ["dark", "light", "synthwave"],
+    themes: ["dark", "light", "synthwave", "business", "dim"],
   },
 } satisfies Config;

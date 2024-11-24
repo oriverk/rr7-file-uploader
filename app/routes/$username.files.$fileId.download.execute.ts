@@ -13,8 +13,8 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 		invariant(params.username, "params.username is requied");
 		invariant(params.fileId, "params.fileId is required");
 		const user = await getUser(params.username);
-		console.log('user:', user);
-		
+		console.log("user:", user);
+
 		invariant(user.id, "User not found.");
 		const file = await getUserFile(user.id, params.fileId);
 		invariant(file, `File not found: ${params.fileId}`);

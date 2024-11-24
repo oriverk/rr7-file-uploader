@@ -1,3 +1,4 @@
+import { RESERVED_WORDS } from "@/constant";
 import type {
 	DocumentData,
 	FirestoreDataConverter,
@@ -6,7 +7,6 @@ import type {
 import { Timestamp } from "firebase-admin/firestore";
 import type { FirestoreFile, User } from "../types";
 import { firestore } from "./firebase.server";
-import { RESERVED_WORDS } from "@/constant";
 
 const userConverter: FirestoreDataConverter<User> = {
 	toFirestore(user: User): DocumentData {
@@ -95,22 +95,20 @@ export async function getUserWithId(id: string) {
 }
 
 export async function checkExistingUser(username: User["username"]) {
-	if(RESERVED_WORDS.includes(username)) return true;
+	if (RESERVED_WORDS.includes(username)) return true;
 
 	const collectionRef = db.users();
-	const query = collectionRef
-		.where("username", "==", username)
-		.limit(1);
+	const query = collectionRef.where("username", "==", username).limit(1);
 	const querySnapshot = await query.get();
-	if(querySnapshot.empty){
-		console.log("No users found in the collection.")
+	if (querySnapshot.empty) {
+		console.log("No users found in the collection.");
 		return false;
 	}
 	const user = querySnapshot.docs.map((doc) => {
 		return doc.data();
 	})[0];
 	if (!user || user.deletedAt) {
-		console.log("No users found in the collection.")
+		console.log("No users found in the collection.");
 		return false;
 	}
 	return true;
@@ -118,12 +116,10 @@ export async function checkExistingUser(username: User["username"]) {
 
 export async function getUser(username: User["username"]) {
 	const collectionRef = db.users();
-	const query = collectionRef
-		.where("username", "==", username)
-		.limit(1);
+	const query = collectionRef.where("username", "==", username).limit(1);
 	const querySnapshot = await query.get();
-	if(querySnapshot.empty){
-		throw new Error("No users found in the collection.")
+	if (querySnapshot.empty) {
+		throw new Error("No users found in the collection.");
 	}
 
 	const user = querySnapshot.docs.map((doc) => {
@@ -210,8 +206,8 @@ export async function getUserFiles(uid: string, isPublished: boolean) {
 		? commonQuery.where("isPublished", "==", true)
 		: commonQuery;
 	const querySnapshot = await query.orderBy("createdAt", "desc").get();
-	if(querySnapshot.empty) {
-		return []
+	if (querySnapshot.empty) {
+		return [];
 	}
 	const files = querySnapshot.docs.map((doc) => {
 		return doc.data();

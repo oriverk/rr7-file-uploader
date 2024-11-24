@@ -90,7 +90,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		schema: (intent) =>
 			createSchema(intent, {
 				isUsernameUnique: async (username) => {
-					const isExisting = await checkExistingUser(username)
+					const isExisting = await checkExistingUser(username);
 					return !isExisting;
 				},
 			}),
@@ -218,7 +218,7 @@ export default function Login() {
 								/>
 								<div className="label">
 									<span className="label-text-alt text-sm">
-										<code>{"/^[a-z\d-]{3,}$/"}</code>
+										<code>{"/^[a-zd-]{3,}$/"}</code>
 									</span>
 									<span className="label-text-alt text-error">
 										{fields.username.errors}

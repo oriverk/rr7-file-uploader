@@ -30,7 +30,9 @@
 				"noDangerouslySetInnerHtml": "off"
 			},
 			"a11y": {
-				"useSemanticElements": "info"
+				"useSemanticElements": "info",
+				"noNoninteractiveTabindex": "off",
+				"noSvgWithoutTitle": "off"
 			}
 		}
 	},

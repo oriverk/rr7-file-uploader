@@ -4,7 +4,7 @@ import {
 	initializeApp as initializeServerApp,
 	cert as serverCert,
 } from "firebase-admin/app";
-import { getAuth, getAuth as getServerAuth } from "firebase-admin/auth";
+import { getAuth as getServerAuth } from "firebase-admin/auth";
 import { getStorage } from "firebase-admin/storage";
 
 import { getFirestore } from "firebase-admin/firestore";
@@ -15,17 +15,17 @@ export const getRestConfig = (): {
 	apiKey: string;
 	domain: string;
 } => {
-	if (process.env.NODE_ENV === "development" && !process.env.API_KEY) {
+	if (process.env.NODE_ENV === "development" && !process.env.FIREBASE_API_KEY) {
 		return {
 			apiKey: "fake-api-key",
 			domain: "http://localhost:9099/identitytoolkit.googleapis.com",
 		};
 	}
-	if (!process.env.API_KEY) {
-		throw new Error("Missing API_KEY environment variable");
+	if (!process.env.FIREBASE_API_KEY) {
+		throw new Error("Missing FIREBASE API_KEY environment variable");
 	}
 	return {
-		apiKey: process.env.API_KEY,
+		apiKey: process.env.FIREBASE_API_KEY,
 		domain: "https://identitytoolkit.googleapis.com",
 	};
 };
@@ -42,7 +42,7 @@ if (getServerApps().length === 0) {
 
 		config = {
 			credential: serverCert(serviceAccount),
-			storageBucket: process.env.VITE_FIREBASE_STORAGEBUCKET,
+			storageBucket: process.env.FIREBASE_STORAGEBUCKET,
 		};
 	} catch {
 		throw Error("Invalid SERVICE_ACCOUNT environment variable");
