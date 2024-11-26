@@ -1,21 +1,36 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 
+import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
 import { DashboardFileCard } from "@/components/DashboradFileCard";
 import { Pagination } from "@/components/Pagination";
 import { usePagination } from "@/hooks/usePagination";
-import { requireAuth } from "@/server/auth.server";
+import { requireAdmin, requireAuth } from "@/server/auth.server";
 import { getUserFiles, softDeleteUserFile } from "@/server/firestore.server";
 import type { FirestoreFile } from "@/types";
-import { Link, json, useSubmit } from "@remix-run/react";
+import { Link, json, useActionData, useSubmit } from "@remix-run/react";
 import { useRef, useState } from "react";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	const user = await requireAuth(request);
-	const files = await getUserFiles(user.uid, false);
+	// for demo;
+	const admin = requireAdmin(user.email ?? "");
+	const userid = !admin.isAdmin ? admin.adminId : user.uid;
+	let files = await getUserFiles(userid, false);
+	if (!admin.isAdmin) {
+		files = files.map((file, index) => {
+			const { fileName, fileDescription, ...rest } = file;
+			return {
+				...rest,
+				fileName: `demo-${index}.zip`,
+				fileDescription: "file description for demo",
+			};
+		});
+	}
 
 	return typedjson({
+		isAdmin: admin.isAdmin,
 		files,
 	});
 };
@@ -27,26 +42,39 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 
 	try {
 		if (typeof fileId !== "string") {
-			throw new Error("");
-		}
-		const result = await softDeleteUserFile(user.uid, fileId);
-		if (!result.writeTime) {
-			throw new Error("");
+			throw new Error("file id does not exist.");
 		}
 
+		// for demo
+		const admin = requireAdmin(user.email ?? "");
+		if (!admin.isAdmin) {
+			return json({
+				success: false,
+				message: "This is demo app. You can't delete a file.",
+			});
+		}
+		await softDeleteUserFile(user.uid, fileId);
 		return json({
 			success: true,
+			message: "file was deleted successfully",
 		});
 	} catch (error) {
-		console.error("File delete failed:", error);
-		return json({ error: String(error) }, { status: 401 });
+		console.error("failed to delete file", error);
+		return json(
+			{
+				success: false,
+				message: String(error),
+			},
+			{ status: 401 },
+		);
 	}
 };
 
 type DeletingFile = Record<"fileId" | "fileName", string>;
 
 export default function Dashboard() {
-	const { files } = useTypedLoaderData<typeof loader>();
+	const { isAdmin, files } = useTypedLoaderData<typeof loader>();
+	const actionData = useActionData<typeof action>();
 	const [deletingFile, setDeletingFile] = useState<DeletingFile | null>(null);
 	const { currentItems, endIndex, goToPage, nextPage, prevPage } =
 		usePagination<FirestoreFile>(files, 10, 1);
@@ -78,11 +106,23 @@ export default function Dashboard() {
 		<>
 			<article className="py-12">
 				<Container>
-					<section>
+					<section className="flex flex-col gap-8">
+						{/* for demo */}
+						{!isAdmin && (
+							<Alert state="info">
+								This is a demo account, but it displays files from other
+								accounts under different names.
+							</Alert>
+						)}
+						{actionData?.message && (
+							<Alert state={actionData.success ? "info" : "error"}>
+								{actionData.message}
+							</Alert>
+						)}
 						<h1 className="text-center">ファイル管理</h1>
 						{!files.length ? (
 							<div className="">
-								<Link to="/flies/new" className="btn btn-primary">
+								<Link to="/files/new" className="btn btn-primary">
 									アップロード
 								</Link>
 							</div>

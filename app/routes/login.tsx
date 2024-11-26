@@ -6,8 +6,9 @@ import {
 	useLoaderData,
 	useSubmit,
 } from "@remix-run/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
+import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
 import { EyeClosedIcon, EyeIcon } from "@/components/icons";
 import { getFormProps, getInputProps, useForm } from "@conform-to/react";
@@ -17,6 +18,7 @@ import { z } from "zod";
 import * as firebaseRest from "../firebase-rest";
 import {
 	checkSessionCookie,
+	requireAdmin,
 	signIn,
 	signInWithToken,
 } from "../server/auth.server";
@@ -54,10 +56,26 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	let sessionCookie: string;
 	try {
 		if (submission.status !== "success") {
-			return json(submission.reply());
+			return json({
+				success: false,
+				message: null,
+				submission: submission.reply(),
+			});
 		}
 
 		const { idToken, email, password } = submission.value;
+
+		// for demo
+		const admin = requireAdmin(email);
+		if (email !== "test@example.com" && !admin.isAdmin) {
+			return json({
+				success: false,
+				message:
+					"This is demo app. You can login only with test@example.com and password",
+				submission: submission.reply(),
+			});
+		}
+
 		if (typeof idToken === "string") {
 			sessionCookie = await signInWithToken(idToken);
 		} else {
@@ -72,19 +90,24 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		});
 	} catch (error) {
 		console.error(error);
-		return json({ error: String(error) }, { status: 401 });
+		return json(
+			{
+				success: false,
+				message: String(error),
+				submission: null,
+			},
+			{ status: 401 },
+		);
 	}
 };
 
 export default function Login() {
-	// const [clientAction, setClientAction] = useState<ActionData>();
 	const restConfig = useLoaderData<typeof loader>();
 	const actionData = useActionData<typeof action>();
-	const submit = useSubmit();
 	const [showPassword, setShowPassword] = useState(false);
+	const submit = useSubmit();
 	const [form, fields] = useForm({
-		// @ts-ignore
-		lastResult: actionData,
+		lastResult: actionData?.submission,
 		onValidate({ formData }) {
 			return parseWithZod(formData, { schema });
 		},
@@ -113,13 +136,25 @@ export default function Login() {
 		shouldRevalidate: "onInput",
 	});
 
+	// useEffect(() => {
+	// 	if(!actionData || actionData.success) return;
+	// 	const {success, message} = actionData
+	// 	setNotification(prev => {success, message})
+
+	// }, [actionData])
+
 	const { onSubmit, ...restFormSubmit } = getFormProps(form);
 	return (
 		<article className="py-12">
 			<Container>
 				<section>
 					<h1>ログイン</h1>
-					<div className="w-96 mx-auto">
+					<div className="w-96 mx-auto flex flex-col gap-8">
+						{actionData?.message && (
+							<Alert state={actionData.success ? "info" : "error"}>
+								{actionData.message}
+							</Alert>
+						)}
 						<form
 							method="post"
 							{...getFormProps(form)}

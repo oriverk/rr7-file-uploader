@@ -1,4 +1,6 @@
+import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
+import { requireAdmin } from "@/server/auth.server";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import { format } from "date-fns";
@@ -13,23 +15,34 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	invariant(params.fileId, "params.fileId is required");
 	const user = await getUser(params.username);
 	invariant(user.id, "user not found");
-	const file = await getUserFile(user.id, params.fileId);
+
+	// for demo
+	const admin = requireAdmin(user.email);
+	const userId = !admin.isAdmin ? admin.adminId : user.id;
+	const file = await getUserFile(userId, params.fileId);
 	invariant(file, `File not found: ${params.fileId}`);
 
 	const { username, displayName, profileImageUrl } = user;
-	const { id, fileDescription, filePath, deletedAt, ...rest } = file;
-	const html = parseMarkdown(fileDescription ?? "");
+	const { id, fileName, fileDescription, filePath, deletedAt, ...rest } = file;
+	// for demo
+	const filename = !admin.isAdmin ? "demo.zip" : fileName;
+	const desc = !admin.isAdmin ? "file description for demo" : fileDescription;
+
+	const html = parseMarkdown(desc ?? "");
 	return typedjson({
+		// for demo
+		isAdmin: admin.isAdmin,
 		user: { username, displayName, profileImageUrl },
 		file: {
 			...rest,
+			fileName: filename,
 			fileDescription: html,
 		},
 	});
 };
 
 export default function UserFile() {
-	const { user, file } = useTypedLoaderData<typeof loader>();
+	const { isAdmin, user, file } = useTypedLoaderData<typeof loader>();
 	const { username, displayName, profileImageUrl } = user;
 	const {
 		fileName,
@@ -42,10 +55,16 @@ export default function UserFile() {
 	} = file;
 
 	return (
-		<article>
+		<article className="py-12">
 			<Container maxWidth="wide">
 				<div className="">
 					<div className="py-4 flex flex-col gap-4 items-center justify-evenly">
+						{!isAdmin && (
+							<Alert state="info">
+								This is a demo account, but it displays files from other
+								accounts under different names.
+							</Alert>
+						)}
 						<h1 className="mb-0 break-words">{fileName}</h1>
 						<Link to={`/${username}`} className="no-underline">
 							<div className="flex items-center gap-4">
@@ -87,7 +106,7 @@ export default function UserFile() {
 			<Container maxWidth="wide">
 				<section>
 					<div className="">
-						<Container className="py-8 bg-neutral text-neutral-content rounded-sm">
+						<Container className="py-8">
 							<div className="flex flex-col justify-around gap-8">
 								<div className="overflow-x-auto">
 									<table className="table">

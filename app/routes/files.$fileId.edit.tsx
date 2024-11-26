@@ -7,6 +7,7 @@ import { redirect, typedjson, useTypedLoaderData } from "remix-typedjson";
 import invariant from "tiny-invariant";
 import { z } from "zod";
 
+import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
 import { MAX_FILE_DESCRIPTION_LENGTH } from "@/constant";
 import {
@@ -15,7 +16,7 @@ import {
 	getTextareaProps,
 	useForm,
 } from "@conform-to/react";
-import { requireAuth } from "../server/auth.server";
+import { requireAdmin, requireAuth } from "../server/auth.server";
 import { getUserFile, updateUserFile } from "../server/firestore.server";
 
 const schema = z
@@ -33,12 +34,25 @@ const schema = z
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	invariant(params.fileId, "params.fileId is required");
 	const user = await requireAuth(request);
-	const file = await getUserFile(user.uid, params.fileId);
+
+	// for demo
+	const admin = requireAdmin(user.email ?? "");
+	const userid = !admin.isAdmin ? admin.adminId : user.uid;
+
+	const file = await getUserFile(userid, params.fileId);
 	invariant(file, "file not found");
 	const { fileName, fileDescription, isPublished } = file;
 
+	// for demo
+	const filename = !admin.isAdmin ? "demo.zip" : fileName;
+	const desc = !admin.isAdmin ? "file description for demo" : fileDescription;
+
 	return typedjson({
-		file: { fileName, fileDescription, isPublished },
+		file: {
+			fileName: filename,
+			fileDescription: desc,
+			isPublished,
+		},
 	});
 };
 
@@ -50,7 +64,19 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 
 	try {
 		if (submission.status !== "success") {
-			return json(submission.reply());
+			return json({
+				success: false,
+				message: null,
+				submission: submission.reply(),
+			});
+		}
+		const admin = requireAdmin(user.email ?? "");
+		if (!admin.isAdmin) {
+			return json({
+				success: false,
+				message: "This is demo app. You can't edit file.",
+				submission: null,
+			});
 		}
 
 		const { fileDescription, isPublished } = submission.value;
@@ -67,7 +93,14 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 		}
 	} catch (error) {
 		console.error(error);
-		return json({ error: String(error) }, { status: 401 });
+		return json(
+			{
+				success: false,
+				message: String(error),
+				submission: null,
+			},
+			{ status: 401 },
+		);
 	}
 };
 
@@ -75,7 +108,7 @@ export default function Index() {
 	const { file } = useTypedLoaderData<typeof loader>();
 	const actionData = useActionData<typeof action>();
 	const [form, fields] = useForm({
-		lastResult: actionData,
+		lastResult: actionData?.submission,
 		onValidate({ formData }) {
 			return parseWithZod(formData, { schema });
 		},
@@ -90,7 +123,12 @@ export default function Index() {
 				<section>
 					<h1>{fileName}</h1>
 					<h2 className="text-center">ファイル編集</h2>
-					<div className="max-w-2xl mx-auto">
+					<div className="max-w-2xl mx-auto flex flex-col gap-8">
+						{actionData?.message && (
+							<Alert state={actionData.success ? "info" : "error"}>
+								{actionData.message}
+							</Alert>
+						)}
 						<Form
 							method="post"
 							className="flex flex-col gap-8"

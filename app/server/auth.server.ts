@@ -6,6 +6,20 @@ import type { User } from "@/types";
 import { destroySession, getSession } from "../sesions";
 import { auth } from "./firebase.server";
 import { addUser } from "./firestore.server";
+import "dotenv/config";
+
+export function requireAdmin(email: string) {
+	if (!process.env.ADMIN_ID || !process.env.ADMIN_EMAIL) {
+		throw new Error("admin env secrets are required for demo app");
+	}
+
+	const { ADMIN_ID, ADMIN_EMAIL } = process.env;
+	const isAdmin = ADMIN_EMAIL === email;
+	return {
+		isAdmin,
+		adminId: ADMIN_ID,
+	};
+}
 
 export const checkSessionCookie = async (session: Session) => {
 	try {

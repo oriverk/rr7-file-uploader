@@ -1,7 +1,9 @@
+import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
 import { FileCard } from "@/components/FileCard";
 import { Pagination } from "@/components/Pagination";
 import { usePagination } from "@/hooks/usePagination";
+import { requireAdmin } from "@/server/auth.server";
 import type { FirestoreFile } from "@/types";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
@@ -11,12 +13,27 @@ import { getUser, getUserFiles } from "../server/firestore.server";
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	invariant(params.username, "params.usename is required");
 	const user = await getUser(params.username);
-
 	invariant(user.id, "user not found");
 	const { username, displayName, profile, profileImageUrl } = user;
-	const files = await getUserFiles(user.id, true);
+
+	// for demo;
+	const admin = requireAdmin(user.email ?? "");
+	const userid = !admin.isAdmin ? admin.adminId : user.id;
+	let files = await getUserFiles(userid, true);
+	if (!admin.isAdmin) {
+		files = files.map((file, index) => {
+			const { fileName, fileDescription, ...rest } = file;
+			return {
+				...rest,
+				fileName: `demo-${index}.zip`,
+				fileDescription: "file description for demo",
+			};
+		});
+	}
 
 	return typedjson({
+		// for demo
+		isAdmin: admin.isAdmin,
 		user: {
 			username,
 			displayName,
@@ -28,15 +45,21 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 };
 
 export default function UserFiles() {
-	const { user, files } = useTypedLoaderData<typeof loader>();
+	const { isAdmin, user, files } = useTypedLoaderData<typeof loader>();
 	const { username, displayName, profile, profileImageUrl } = user;
 	const { currentItems, endIndex, goToPage, nextPage, prevPage } =
 		usePagination<FirestoreFile>(files, 6, 1);
 
 	return (
-		<article>
+		<article className="py-12">
 			<Container>
-				<div>
+				<div className="flex flex-col gap-8">
+					{!isAdmin && (
+						<Alert state="info">
+							This is a demo account, but it displays files from other accounts
+							under different names.
+						</Alert>
+					)}
 					<div className="py-8 flex flex-col items-center gap-8 md:flex-row">
 						<div className="avatar">
 							<div className="w-32 rounded-full ring-info ring-offset-base-100 ring ring-offset-2">

@@ -2,6 +2,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData } from "@remix-run/react";
 
+import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
 import { EyeClosedIcon, EyeIcon } from "@/components/icons";
 import { checkExistingUser } from "@/server/firestore.server";
@@ -11,7 +12,11 @@ import { conformZodMessage, parseWithZod } from "@conform-to/zod";
 import clsx from "clsx";
 import { useState } from "react";
 import { z } from "zod";
-import { checkSessionCookie, signUp } from "../server/auth.server";
+import {
+	checkSessionCookie,
+	requireAdmin,
+	signUp,
+} from "../server/auth.server";
 import { commitSession, getSession } from "../sesions";
 
 function createSchema(
@@ -99,9 +104,24 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 	try {
 		if (submission.status !== "success") {
-			return json(submission.reply());
+			return json({
+				success: false,
+				message: null,
+				submission: submission.reply(),
+			});
 		}
 		const { username, email, password } = submission.value;
+		// for demo
+		const admin = requireAdmin(email);
+		if (!admin.isAdmin) {
+			return json({
+				success: false,
+				message:
+					"This is demo app. You can't register, but you can log in with a demo account.",
+				submission: submission.reply(),
+			});
+		}
+
 		const sessionCookie = await signUp(username, username, email, password);
 		const session = await getSession(request.headers.get("cookie"));
 		session.set("session", sessionCookie);
@@ -112,7 +132,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		});
 	} catch (error) {
 		console.error(error);
-		return json({ error: String(error) }, { status: 401 });
+		return json(
+			{
+				success: false,
+				message: String(error),
+				submission: null,
+			},
+			{ status: 401 },
+		);
 	}
 };
 
@@ -121,8 +148,7 @@ export default function Login() {
 	const [username, setUsername] = useState("");
 	const actionData = useActionData<typeof action>();
 	const [form, fields] = useForm({
-		// @ts-ignore
-		lastResult: actionData,
+		lastResult: actionData?.submission,
 		onValidate({ formData }) {
 			return parseWithZod(formData, {
 				schema: (intent) => createSchema(intent),
@@ -141,7 +167,12 @@ export default function Login() {
 			<Container>
 				<section>
 					<h1>アカウントを作成</h1>
-					<div className="mx-auto w-96">
+					<div className="mx-auto w-96 flex flex-col gap-8">
+						{actionData?.message && (
+							<Alert state={actionData.success ? "info" : "error"}>
+								{actionData.message}
+							</Alert>
+						)}
 						<Form
 							method="post"
 							className="flex flex-col gap-8"

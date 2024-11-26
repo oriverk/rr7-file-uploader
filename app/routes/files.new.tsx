@@ -21,6 +21,7 @@ import { redirect, typedjson } from "remix-typedjson";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
+import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
 import {
 	ALLOWED_FILE_EXTENSIONS,
@@ -29,7 +30,7 @@ import {
 } from "@/constant";
 import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
 import clsx from "clsx";
-import { requireAuth } from "../server/auth.server";
+import { requireAdmin, requireAuth } from "../server/auth.server";
 import { addUserFile } from "../server/firestore.server";
 import { uploadToFirebaseStorage } from "../server/storage.server";
 
@@ -60,6 +61,7 @@ const schema = z
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	await requireAuth(request);
+
 	return typedjson({
 		success: true,
 	});
@@ -72,7 +74,21 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	try {
 		const submission = parseWithZod(formData, { schema });
 		if (submission.status !== "success") {
-			return json(submission.reply());
+			return json({
+				success: false,
+				message: null,
+				submission: submission.reply(),
+			});
+		}
+
+		// for demo
+		const admin = requireAdmin(user.email ?? "");
+		if (!admin.isAdmin) {
+			return json({
+				success: false,
+				message: "This is demo app. You can't upload file.",
+				submission: null,
+			});
 		}
 
 		const { fileDescription, file, isPublished } = submission.value;
@@ -123,8 +139,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		}
 	} catch (error) {
 		console.error("File upload failed:", error);
-		return typedjson(
-			{ success: false, message: "アップロード中にエラーが発生しました" },
+		return json(
+			{ success: false, message: String(error), submission: null },
 			{ status: 500 },
 		);
 	}
@@ -133,7 +149,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 export default function Index() {
 	const actionData = useActionData<typeof action>();
 	const [form, fields] = useForm({
-		lastResult: actionData,
+		lastResult: actionData?.submission,
 		onValidate({ formData }) {
 			return parseWithZod(formData, { schema });
 		},
@@ -146,7 +162,12 @@ export default function Index() {
 			<Container>
 				<section>
 					<h1>アップロード</h1>
-					<div className="max-w-2xl mx-auto">
+					<div className="max-w-2xl mx-auto flex flex-col gap-8">
+						{actionData?.message && (
+							<Alert state={actionData.success ? "info" : "error"}>
+								{actionData.message}
+							</Alert>
+						)}
 						<Form
 							method="post"
 							encType="multipart/form-data"
