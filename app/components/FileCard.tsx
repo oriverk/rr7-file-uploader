@@ -21,11 +21,14 @@ export function FileCard(props: Props) {
 	return (
 		<div className="card bg-neutral text-neutral-content shadow-lg">
 			<div className="card-body gap-4">
-				<h2 className="card-title m-0">
-					<Link to={path} className="link link-hover">
+				<div className="card-title">
+					<Link
+						to={path}
+						className="link link-hover break-all overflow-hidden line-clamp-2 text-ellipsis"
+					>
 						{fileName}
 					</Link>
-				</h2>
+				</div>
 				<div className="card-actions gap-4">
 					<div>
 						<span>公開：</span>

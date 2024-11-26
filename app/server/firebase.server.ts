@@ -9,7 +9,7 @@ import { getStorage } from "firebase-admin/storage";
 
 import { getFirestore } from "firebase-admin/firestore";
 import * as firebaseRest from "../firebase-rest";
-import 'dotenv/config'
+import "dotenv/config";
 
 // Warning: though getRestConfig is only run server side, its return value may be sent to the client
 export const getRestConfig = (): {

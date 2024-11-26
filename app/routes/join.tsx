@@ -137,10 +137,10 @@ export default function Login() {
 	};
 
 	return (
-		<article>
+		<article className="py-12">
 			<Container>
-				<section className="py-12">
-					<h1 className="text-center">アカウントを作成</h1>
+				<section>
+					<h1>アカウントを作成</h1>
 					<div className="mx-auto w-96">
 						<Form
 							method="post"

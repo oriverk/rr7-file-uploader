@@ -76,10 +76,10 @@ export default function Profile() {
 	}, [actionData]);
 
 	return (
-		<article>
+		<article className="py-12">
 			<Container>
-				<section className="py-12">
-					<h1 className="text-center">プロフィール編集</h1>
+				<section>
+					<h1>プロフィール編集</h1>
 					<div className="max-w-2xl mx-auto">
 						<Form
 							method="post"

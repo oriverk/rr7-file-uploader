@@ -77,7 +77,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export default function Login() {
-	const [clientAction, setClientAction] = useState<ActionData>();
+	// const [clientAction, setClientAction] = useState<ActionData>();
 	const restConfig = useLoaderData<typeof loader>();
 	const actionData = useActionData<typeof action>();
 	const submit = useSubmit();
@@ -104,7 +104,7 @@ export default function Login() {
 				restConfig,
 			);
 			if (firebaseRest.isError(login)) {
-				setClientAction({ error: login.error.message });
+				// setClientAction({ error: login.error.message });
 				return;
 			}
 			submit({ idToken: login.idToken, email, password }, { method: "post" });
@@ -115,10 +115,10 @@ export default function Login() {
 
 	const { onSubmit, ...restFormSubmit } = getFormProps(form);
 	return (
-		<article>
+		<article className="py-12">
 			<Container>
-				<section className="py-12">
-					<h1 className="text-center">ログイン</h1>
+				<section>
+					<h1>ログイン</h1>
 					<div className="w-96 mx-auto">
 						<form
 							method="post"

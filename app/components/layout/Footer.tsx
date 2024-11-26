@@ -1,7 +1,6 @@
 import { Link } from "@remix-run/react";
 import type { FC } from "react";
 import { Container } from "../Container";
-import { FacebookIcon, XIcon, YouTubeIcon } from "../icons";
 
 export const Footer: FC = () => {
 	return (
@@ -24,19 +23,6 @@ export const Footer: FC = () => {
 						Privacy Policy
 					</Link>
 				</nav>
-				{/* <nav>
-					<div className="grid grid-flow-col gap-4">
-						<a href="/">
-							<XIcon />
-						</a>
-						<a href="/">
-							<YouTubeIcon />
-						</a>
-						<a href="/">
-							<FacebookIcon />
-						</a>
-					</div>
-				</nav> */}
 				<aside>
 					<p>
 						Copyright &#xA9; {new Date().getFullYear()} - All right reserved by

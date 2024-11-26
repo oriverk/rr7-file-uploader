@@ -5,7 +5,7 @@ export default function Index() {
 		<article>
 			<Container
 				maxWidth="wide"
-				className="not-prose hero bg-base-200 max-w-none min-h-screen"
+				className="not-prose hero max-w-none min-h-screen"
 			>
 				<div className="hero-content text-center">
 					<div className="max-w-md">

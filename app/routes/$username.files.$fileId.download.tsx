@@ -14,7 +14,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	const user = await getUser(params.username);
 	invariant(user.id, "user not found");
 
-	const { username, displayName } = user;
+	const { username, displayName, profileImageUrl } = user;
 	const file = await getUserFile(user.id ?? "", params.fileId);
 
 	invariant(file, `File not found: ${params.fileId}`);
@@ -22,7 +22,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	const { id, fileDescription, filePath, deletedAt, isPublished, ...rest } =
 		file;
 	return typedjson({
-		user: { username, displayName },
+		user: { username, displayName, profileImageUrl },
 		file: {
 			...rest,
 		},
@@ -32,7 +32,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 export default function UserFile() {
 	const { user, file } = useTypedLoaderData<typeof loader>();
 	const [isConfirmed, setIsConfirmed] = useState(false);
-	const { username, displayName } = user;
+	const { username, displayName, profileImageUrl } = user;
 	const { fileName, contentType, size, createdAt, updatedAt, downloadCount } =
 		file;
 
@@ -53,12 +53,16 @@ export default function UserFile() {
 						<Link to={`/${username}`} className="no-underline">
 							<div className="flex items-center gap-4">
 								<div className="avatar">
-									<div className="w-12 rounded-full">
-										<img
-											alt="avator"
-											src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-											className="not-prose"
-										/>
+									<div className="w-12 rounded-full ring-info ring-offset-base-100 ring ring-offset-2">
+										{!profileImageUrl ? (
+											<div>&nbsp;</div>
+										) : (
+											<img
+												alt="avator"
+												src={profileImageUrl}
+												className="not-prose"
+											/>
+										)}
 									</div>
 								</div>
 								<div className="text-lg">{displayName}</div>

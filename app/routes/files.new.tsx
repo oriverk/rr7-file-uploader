@@ -142,10 +142,10 @@ export default function Index() {
 	});
 
 	return (
-		<article>
+		<article className="py-12">
 			<Container>
-				<section className="py-16">
-					<h1 className="text-center">アップロード</h1>
+				<section>
+					<h1>アップロード</h1>
 					<div className="max-w-2xl mx-auto">
 						<Form
 							method="post"

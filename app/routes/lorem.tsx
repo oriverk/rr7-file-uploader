@@ -1,29 +1,18 @@
 import { Container } from "@/components/Container";
-import type { LoaderFunctionArgs } from "@remix-run/node";
-// import type { MetaFunction } from "@remix-run/react";
-import { typedjson, useTypedLoaderData } from "remix-typedjson";
+import { type LoaderFunctionArgs, json } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 import markdown from "../docs/lorem.md?raw";
 import { parseMarkdown } from "../utils/markdown";
 
-// export const meta: MetaFunction = () => {
-// 	return [
-// 		{ title: "Terms of Use" },
-// 		{
-// 			name: "description",
-// 			content: "Welcome to Remix! Using Vite and Cloudflare!",
-// 		},
-// 	];
-// };
-
 export const loader = ({ params, request }: LoaderFunctionArgs) => {
 	const html = parseMarkdown(markdown);
-	return typedjson({
+	return json({
 		html,
 	});
 };
 
 export default function Lorem() {
-	const { html } = useTypedLoaderData<typeof loader>();
+	const { html } = useLoaderData<typeof loader>();
 	return (
 		<article>
 			<Container>

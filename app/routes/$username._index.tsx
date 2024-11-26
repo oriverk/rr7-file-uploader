@@ -37,7 +37,7 @@ export default function UserFiles() {
 		<article>
 			<Container>
 				<div>
-					<div className="py-12 flex flex-col items-center gap-8 md:flex-row">
+					<div className="py-8 flex flex-col items-center gap-8 md:flex-row">
 						<div className="avatar">
 							<div className="w-32 rounded-full ring-info ring-offset-base-100 ring ring-offset-2">
 								{!profileImageUrl ? (
@@ -52,8 +52,8 @@ export default function UserFiles() {
 							</div>
 						</div>
 						<div className="info">
-							<h1 className="m-0">{displayName}</h1>
-							<p className="p-0">{profile}</p>
+							<h1>{displayName}</h1>
+							<p>{profile}</p>
 							<div>
 								<span className="font-bold">{files.length}</span> files
 							</div>

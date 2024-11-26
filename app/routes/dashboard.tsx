@@ -96,7 +96,7 @@ export default function Dashboard() {
 								/>
 								<div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
 									{currentItems.map((file) => {
-										const { id, fileName } = file;
+										const { id = "", fileName } = file;
 										const path = `/files/${id}/edit`;
 										return (
 											<div key={id}>
@@ -104,7 +104,7 @@ export default function Dashboard() {
 													path={path}
 													file={file}
 													handleClickDelete={() =>
-														handleOpenModal({ fileId: id ?? "", fileName })
+														handleOpenModal({ fileId: id, fileName })
 													}
 												/>
 											</div>
@@ -126,7 +126,6 @@ export default function Dashboard() {
 				<div className="modal-box">
 					<h3 className="font-bold text-lg text-center">削除しますか？</h3>
 					<p className="py-4">
-						{/* @ts-ignore */}
 						{`ファイル「${deletingFile?.fileName}」を削除しようとしています。この操作は戻すことができません。`}
 					</p>
 					<div className="modal-action justify-center">

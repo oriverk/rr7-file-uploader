@@ -22,20 +22,25 @@ export function DashboardFileCard(props: Props) {
 	return (
 		<div className="card bg-neutral text-neutral-content shadow-lg">
 			<div className="card-body gap-4">
-				<div className="flex">
-					<h2 className="card-title m-0 break-words">
-						<Link to={path} className="link link-hover">
+				<div className="flex justify-center">
+					<div className="flex-1 card-title">
+						<Link
+							to={path}
+							className="link link-hover break-all overflow-hidden line-clamp-2 text-ellipsis"
+						>
 							{fileName}
 						</Link>
-					</h2>
-					<button
-						tabIndex={0}
-						type="button"
-						onClick={handleClickDelete}
-						className="group btn btn-ghost hover:btn-error btn-sm"
-					>
-						<CloseIcon className="h-4 w-4 fill-current group-hover:fill-error" />
-					</button>
+					</div>
+					<div>
+						<button
+							tabIndex={0}
+							type="button"
+							onClick={handleClickDelete}
+							className="group btn btn-ghost hover:btn-error btn-sm"
+						>
+							<CloseIcon className="h-4 w-4 fill-current group-hover:fill-error" />
+						</button>
+					</div>
 				</div>
 				<div className="card-actions gap-4">
 					<div>

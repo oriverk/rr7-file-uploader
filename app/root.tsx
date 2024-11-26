@@ -7,13 +7,14 @@ import {
 	Scripts,
 	ScrollRestoration,
 	isRouteErrorResponse,
+	json,
+	useLoaderData,
 	useRouteError,
 } from "@remix-run/react";
 
 import { Footer, Header } from "./components/layout";
 
 import type { ReactNode } from "react";
-import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { checkSessionCookie } from "./server/auth.server";
 import { getSession } from "./sesions";
 import tailwind from "./styles/tailwind.css?url";
@@ -26,7 +27,7 @@ export const links: LinksFunction = () => [
 
 export const meta: MetaFunction = () => {
 	return [
-		{ title: "Very cool app | Remix" },
+		{ title: "Uploader" },
 		{ charSet: "utf-8" },
 		{ name: "viewport", content: "width=device-width, initial-scale=1.0" },
 		{ name: "format-detection", content: "email=no,telephone=no,address=no" },
@@ -37,7 +38,7 @@ export const meta: MetaFunction = () => {
 		{ name: "og:site_name", content: "👆 Uploader" },
 		{ name: "twitter:card", content: "summary_large_image" },
 		{ property: "og:title", content: "Very cool app" },
-		{ name: "description", content: "This app is the best" },
+		{ name: "description", content: "Web app to upload / download file" },
 	];
 };
 
@@ -45,12 +46,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const session = await getSession(request.headers.get("cookie"));
 	const result = await checkSessionCookie(session);
 	const isAuthenticated = Boolean(result.uid);
-
-	let name = "";
-	if ("name" in result) {
-		name = result.name;
-	}
-	return typedjson({ isAuthenticated, name });
+	const name: string = "name" in result ? result.name : "";
+	return json({ isAuthenticated, name });
 };
 
 type Props = {
@@ -59,7 +56,7 @@ type Props = {
 
 export function Layout(props: Props) {
 	const { children } = props;
-	const { isAuthenticated, name } = useTypedLoaderData<typeof loader>();
+	const { isAuthenticated, name } = useLoaderData<typeof loader>();
 
 	return (
 		<html lang="ja-JP" data-theme="dim">
@@ -70,7 +67,9 @@ export function Layout(props: Props) {
 			<body>
 				<div className="min-h-screen flex flex-col">
 					<Header isAuthenticated={isAuthenticated} name={name} />
-					<main className="prose max-w-none">{children}</main>
+					<main className="prose prose-h1:text-center max-w-none">
+						{children}
+					</main>
 					<Footer />
 				</div>
 				<ScrollRestoration />
@@ -90,20 +89,25 @@ export function ErrorBoundary() {
 
 	if (isRouteErrorResponse(error)) {
 		return (
-			<>
+			<div>
 				<h1>
 					{error.status} {error.statusText}
 				</h1>
 				<p>{error.data}</p>
-			</>
+			</div>
 		);
 	}
 
-	return (
-		<>
-			<h1>Error!</h1>
-			{/* @ts-ignore */}
-			<p>{error?.message ?? "Unknown error"}</p>
-		</>
-	);
+	if (error instanceof Error) {
+		return (
+			<div>
+				<h1>Error</h1>
+				<p>{error.message}</p>
+				<p>The stack trace is:</p>
+				<pre>{error.stack}</pre>
+			</div>
+		);
+	}
+
+	return <h1>Unknown Error</h1>;
 }

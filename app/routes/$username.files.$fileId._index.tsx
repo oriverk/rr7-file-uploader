@@ -16,11 +16,11 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	const file = await getUserFile(user.id, params.fileId);
 	invariant(file, `File not found: ${params.fileId}`);
 
-	const { username, displayName } = user;
+	const { username, displayName, profileImageUrl } = user;
 	const { id, fileDescription, filePath, deletedAt, ...rest } = file;
 	const html = parseMarkdown(fileDescription ?? "");
 	return typedjson({
-		user: { username, displayName },
+		user: { username, displayName, profileImageUrl },
 		file: {
 			...rest,
 			fileDescription: html,
@@ -30,7 +30,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
 export default function UserFile() {
 	const { user, file } = useTypedLoaderData<typeof loader>();
-	const { username, displayName } = user;
+	const { username, displayName, profileImageUrl } = user;
 	const {
 		fileName,
 		contentType,
@@ -50,12 +50,16 @@ export default function UserFile() {
 						<Link to={`/${username}`} className="no-underline">
 							<div className="flex items-center gap-4">
 								<div className="avatar">
-									<div className="w-12 rounded-full">
-										<img
-											alt="avator"
-											src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-											className="not-prose"
-										/>
+									<div className="w-12 rounded-full ring-info ring-offset-base-100 ring ring-offset-2">
+										{!profileImageUrl ? (
+											<div>&nbsp;</div>
+										) : (
+											<img
+												alt="avator"
+												src={profileImageUrl}
+												className="not-prose"
+											/>
+										)}
 									</div>
 								</div>
 								<div className="text-lg">{displayName}</div>

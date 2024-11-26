@@ -85,10 +85,10 @@ export default function Index() {
 	const { fileName, fileDescription, isPublished } = file;
 
 	return (
-		<article>
+		<article className="py-12">
 			<Container>
-				<section className="py-16">
-					<h1 className="text-center">{fileName}</h1>
+				<section>
+					<h1>{fileName}</h1>
 					<h2 className="text-center">ファイル編集</h2>
 					<div className="max-w-2xl mx-auto">
 						<Form
