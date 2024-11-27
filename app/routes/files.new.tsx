@@ -23,13 +23,14 @@ import { z } from "zod";
 
 import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
+import { FileInput } from "@/components/form/FileInput";
+import { Textarea } from "@/components/form/Textarea";
 import {
 	ALLOWED_FILE_EXTENSIONS,
 	MAX_FILE_DESCRIPTION_LENGTH,
 	MAX_FILE_SIZE,
 } from "@/constant";
 import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
-import clsx from "clsx";
 import { requireAdmin, requireAuth } from "../server/auth.server";
 import { addUserFile } from "../server/firestore.server";
 import { uploadToFirebaseStorage } from "../server/storage.server";
@@ -104,7 +105,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 				// const fileExtension = filename.split(".").pop()?.toLowerCase();
 				// if (!ALLOWED_FILE_EXTENSIONS.includes(fileExtension || "")) {
-				// 	throw new Error("Invalid file extension");
+				// throw new Error("Invalid file extension");
 				// }
 
 				const signedUrl = await uploadToFirebaseStorage(
@@ -182,12 +183,9 @@ export default function Index() {
 										{convertByteWithUnit(MAX_FILE_SIZE)}まで
 									</span>
 								</div>
-								<input
+								<FileInput
 									{...getInputProps(fields.file, { type: "file" })}
-									className={clsx(
-										"file-input file-input-bordered",
-										!fields.file.valid && "file-input-error",
-									)}
+									isError={!fields.file.valid}
 								/>
 								<div className="label">
 									<span className="label-text-alt">
@@ -220,14 +218,9 @@ export default function Index() {
 										{MAX_FILE_DESCRIPTION_LENGTH}文字まで
 									</span>
 								</div>
-								<textarea
+								<Textarea
 									placeholder="ファイル説明文（markdown記法使用可能）"
-									className={clsx(
-										"textarea textarea-bordered text-base",
-										!fields.fileDescription.valid && "textarea-error",
-									)}
-									// @ts-ignore
-									style={{ fieldSizing: "content" }}
+									isError={!fields.fileDescription.valid}
 									{...getTextareaProps(fields.fileDescription)}
 								/>
 								<div className="label">
@@ -242,7 +235,7 @@ export default function Index() {
 							</button>
 						</Form>
 						<Link to="/dashboard" className="btn btn-secondary btn-block mt-8">
-							ダッシュボードへ戻る
+							ファイルの管理へ戻る
 						</Link>
 					</div>
 				</section>

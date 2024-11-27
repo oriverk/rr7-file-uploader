@@ -23,7 +23,7 @@ export function DashboardFileCard(props: Props) {
 		<div className="card bg-neutral text-neutral-content shadow-lg">
 			<div className="card-body gap-4">
 				<div className="flex justify-center">
-					<div className="flex-1 card-title">
+					<div className="flex-1 card-title items-start">
 						<Link
 							to={path}
 							className="link link-hover break-all overflow-hidden line-clamp-2 text-ellipsis"

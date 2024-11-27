@@ -1,4 +1,6 @@
 import { Container } from "@/components/Container";
+import { TextInput } from "@/components/form/TextInput";
+import { Textarea } from "@/components/form/Textarea";
 import { MAX_PROFILE_LENGTH } from "@/constant";
 import { requireAuth } from "@/server/auth.server";
 import { getUserWithId, updateUser } from "@/server/firestore.server";
@@ -12,7 +14,6 @@ import { parseWithZod } from "@conform-to/zod";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
-import clsx from "clsx";
 import { useEffect } from "react";
 import { z } from "zod";
 
@@ -93,14 +94,11 @@ export default function Profile() {
 									<span className="label-text">表示名</span>
 									<span className="label-text-alt">hoge</span>
 								</div>
-								<input
+								<TextInput
 									autoComplete="off"
 									autoCorrect="off"
 									autoCapitalize="none"
-									className={clsx(
-										"input input-bordered",
-										!fields.displayName.valid && "input-error",
-									)}
+									isError={!fields.displayName.valid}
 									defaultValue={displayName}
 									{...getInputProps(fields.displayName, { type: "text" })}
 								/>
@@ -118,14 +116,9 @@ export default function Profile() {
 										{MAX_PROFILE_LENGTH}文字まで
 									</span>
 								</div>
-								<textarea
-									className={clsx(
-										"textarea textarea-bordered text-base",
-										!fields.profile.valid && "textarea-error",
-									)}
-									// @ts-ignore
-									style={{ fieldSizing: "content" }}
+								<Textarea
 									defaultValue={profile ?? ""}
+									isError={!fields.profile.valid}
 									{...getTextareaProps(fields.profile)}
 								/>
 								<div className="label">

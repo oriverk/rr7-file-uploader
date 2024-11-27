@@ -119,7 +119,7 @@ export default function Dashboard() {
 								{actionData.message}
 							</Alert>
 						)}
-						<h1 className="text-center">ファイル管理</h1>
+						<h1 className="text-center">ファイルの管理</h1>
 						{!files.length ? (
 							<div className="">
 								<Link to="/files/new" className="btn btn-primary">

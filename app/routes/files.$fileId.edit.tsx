@@ -9,6 +9,7 @@ import { z } from "zod";
 
 import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
+import { Textarea } from "@/components/form/Textarea";
 import { MAX_FILE_DESCRIPTION_LENGTH } from "@/constant";
 import {
 	getFormProps,
@@ -153,16 +154,11 @@ export default function Index() {
 										{MAX_FILE_DESCRIPTION_LENGTH}文字まで
 									</span>
 								</div>
-								<textarea
+								<Textarea
 									placeholder="ファイル説明文（markdown記法使用可能）"
-									className={clsx(
-										"textarea textarea-bordered text-base",
-										!fields.fileDescription.valid && "textarea-error",
-									)}
-									// @ts-ignore
-									style={{ fieldSizing: "content" }}
-									defaultValue={fileDescription ?? ""}
+									isError={!fields.fileDescription.valid}
 									{...getTextareaProps(fields.fileDescription)}
+									defaultValue={fileDescription ?? ""}
 								/>
 								<div className="label">
 									<span className="label-text-alt" />
@@ -172,11 +168,11 @@ export default function Index() {
 								</div>
 							</label>
 							<button type="submit" className="btn btn-block btn-primary">
-								保存する
+								更新する
 							</button>
 						</Form>
 						<Link to="/dashboard" className="btn btn-secondary btn-block mt-8">
-							ダッシュボードへ戻る
+							ファイルの管理へ戻る
 						</Link>
 					</div>
 				</section>

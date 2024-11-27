@@ -59,9 +59,10 @@ export function Header(props: Props) {
 											<Link to="/settings/profile">アカウント設定</Link>
 										</li>
 										<li>
-											<Form method="post" action="/logout">
+											<Link to="/logout">ログアウト</Link>
+											{/* <Form method="post" action="/logout">
 												<button type="submit">ログアウト</button>
-											</Form>
+											</Form> */}
 										</li>
 									</ul>
 								</div>

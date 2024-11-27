@@ -4,12 +4,13 @@ import { Form, Link, useActionData } from "@remix-run/react";
 
 import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
-import { EyeClosedIcon, EyeIcon } from "@/components/icons";
+import { EmailInput } from "@/components/form/EmailInput";
+import { PasswordInput } from "@/components/form/PasswordInput";
+import { TextInput } from "@/components/form/TextInput";
 import { checkExistingUser } from "@/server/firestore.server";
 import type { Intent } from "@conform-to/react";
 import { getFormProps, getInputProps, useForm } from "@conform-to/react";
 import { conformZodMessage, parseWithZod } from "@conform-to/zod";
-import clsx from "clsx";
 import { useState } from "react";
 import { z } from "zod";
 import {
@@ -144,7 +145,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export default function Login() {
-	const [showPassword, setShowPassword] = useState(false);
 	const [username, setUsername] = useState("");
 	const actionData = useActionData<typeof action>();
 	const [form, fields] = useForm({
@@ -183,13 +183,10 @@ export default function Login() {
 									<span className="label-text">Eメール</span>
 									<span className="label-text-alt">hoge</span>
 								</div>
-								<input
+								<EmailInput
 									autoComplete="email"
 									placeholder="test@example.com"
-									className={clsx(
-										"input input-bordered",
-										!fields.email.valid && "input-error",
-									)}
+									isError={!fields.email.valid}
 									{...getInputProps(fields.email, { type: "email" })}
 								/>
 								<div className="label">
@@ -204,26 +201,12 @@ export default function Login() {
 									<span className="label-text">パスワード</span>
 									<span className="label-text-alt" />
 								</div>
-								<div className="input input-bordered flex items-center gap-2">
-									<input
-										placeholder="password"
-										autoComplete="new-password"
-										className="grow"
-										{...getInputProps(fields.password, {
-											type: showPassword ? "text" : "password",
-										})}
-									/>
-									<button
-										type="button"
-										onClick={() => setShowPassword((prev) => !prev)}
-									>
-										{showPassword ? (
-											<EyeIcon className="h-5 w-5 fill-current" />
-										) : (
-											<EyeClosedIcon className="h-5 w-5 fill-current" />
-										)}
-									</button>
-								</div>
+								<PasswordInput
+									placeholder="password"
+									autoComplete="new-password"
+									isError={!fields.password.valid}
+									{...getInputProps(fields.password, { type: "password" })}
+								/>
 								<div className="label">
 									<span className="label-text-alt text-sm" />
 									<span className="label-text-alt text-error">
@@ -236,14 +219,11 @@ export default function Login() {
 									<span className="label-text">ハンドルネーム</span>
 									<span className="label-text-alt">hoge</span>
 								</div>
-								<input
+								<TextInput
 									autoComplete="off"
 									autoCorrect="off"
 									autoCapitalize="none"
-									className={clsx(
-										"input input-bordered",
-										!fields.username.valid && "input-error",
-									)}
+									isError={!fields.username.valid}
 									onInput={handleInputName}
 									{...getInputProps(fields.username, { type: "text" })}
 								/>
