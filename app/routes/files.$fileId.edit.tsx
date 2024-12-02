@@ -122,7 +122,7 @@ export default function Index() {
 		<article className="py-12">
 			<Container>
 				<section>
-					<h1>{fileName}</h1>
+					<h1 className="break-all">{fileName}</h1>
 					<h2 className="text-center">ファイル編集</h2>
 					<div className="max-w-2xl mx-auto flex flex-col gap-8">
 						{actionData?.message && (
@@ -171,7 +171,7 @@ export default function Index() {
 								更新する
 							</button>
 						</Form>
-						<Link to="/dashboard" className="btn btn-secondary btn-block mt-8">
+						<Link to="/dashboard" className="btn btn-secondary btn-block">
 							ファイルの管理へ戻る
 						</Link>
 					</div>

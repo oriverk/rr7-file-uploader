@@ -57,7 +57,7 @@ export default function UserFile() {
 	return (
 		<article className="py-12">
 			<Container maxWidth="wide">
-				<div className="">
+				<div>
 					<div className="py-4 flex flex-col gap-4 items-center justify-evenly">
 						{!isAdmin && (
 							<Alert state="info">
@@ -65,7 +65,7 @@ export default function UserFile() {
 								accounts under different names.
 							</Alert>
 						)}
-						<h1 className="mb-0 break-words">{fileName}</h1>
+						<h1 className="mb-0 break-all">{fileName}</h1>
 						<Link to={`/${username}`} className="no-underline">
 							<div className="flex items-center gap-4">
 								<div className="avatar">
@@ -105,36 +105,37 @@ export default function UserFile() {
 			</Container>
 			<Container maxWidth="wide">
 				<section>
-					<div className="">
-						<Container className="py-8">
-							<div className="flex flex-col justify-around gap-8">
-								<div className="overflow-x-auto">
-									<table className="table">
-										<tbody>
-											<tr>
-												<th>タイプ</th>
-												<td>{contentType}</td>
-											</tr>
-											<tr>
-												<th>サイズ</th>
-												<td>{convertByteWithUnit(size)}</td>
-											</tr>
-											<tr>
-												<th>ダウンロード数</th>
-												<td>{downloadCount}</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-								<div
-									dangerouslySetInnerHTML={{ __html: fileDescription }}
-									className="break-words prose-img:rounded-xl"
-								/>
-								<Link to="download" className="btn btn-primary">
-									ダウロードページへ
-								</Link>
+					<div className="py-8">
+						<div className="flex flex-col justify-around gap-8">
+							<div className="overflow-x-auto">
+								<table className="table">
+									<tbody>
+										<tr>
+											<th>タイプ</th>
+											<td>{contentType}</td>
+										</tr>
+										<tr>
+											<th>サイズ</th>
+											<td>{convertByteWithUnit(size)}</td>
+										</tr>
+										<tr>
+											<th>ダウンロード数</th>
+											<td>{downloadCount}</td>
+										</tr>
+									</tbody>
+								</table>
 							</div>
-						</Container>
+							<div
+								dangerouslySetInnerHTML={{ __html: fileDescription }}
+								className="break-words prose-img:rounded-xl"
+							/>
+							<Link to="download" className="btn btn-primary">
+								ダウロードページへ
+							</Link>
+							<Link to={`/${username}`} className="btn btn-secondary btn-block">
+								ファイル一覧へ戻る
+							</Link>
+						</div>
 					</div>
 				</section>
 			</Container>
