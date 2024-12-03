@@ -136,8 +136,8 @@ export async function addUser(
 	data: Omit<User, "id" | "createdAt" | "updatedAt" | "deletedAt">,
 ) {
 	const docRef = firestore.collection("users").doc(uid);
-	const createdAt = Timestamp.now();
-	const updatedAt = Timestamp.now();
+	const createdAt = Timestamp.now().toDate();
+	const updatedAt = Timestamp.now().toDate();
 	const { writeTime } = await docRef.set({
 		...data,
 		createdAt,
@@ -163,7 +163,7 @@ export async function updateUser(
 ) {
 	const { id: _id, ...restProps } = data;
 	const docRef = firestore.collection("users").doc(uid);
-	const updatedAt = Timestamp.now();
+	const updatedAt = Timestamp.now().toDate();
 	const { writeTime } = await docRef.update({
 		...restProps,
 		updatedAt,
@@ -182,7 +182,7 @@ export async function updateUser(
 
 export async function softDeleteUser(uid: string) {
 	const docRef = firestore.collection("users").doc(uid);
-	const deletedAt = Timestamp.now();
+	const deletedAt = Timestamp.now().toDate();
 	const { writeTime } = await docRef.update({
 		deletedAt,
 	});
@@ -239,8 +239,8 @@ export async function addUserFile(
 	const { writeTime } = await newCollectionRef.set({
 		...data,
 		downloadCount: 0,
-		createdAt: Timestamp.now(),
-		updatedAt: Timestamp.now(),
+		createdAt: Timestamp.now().toDate(),
+		updatedAt: Timestamp.now().toDate(),
 		deletedAt: null,
 	});
 	if (!writeTime) {
@@ -267,7 +267,7 @@ export async function updateUserFile(
 	};
 	if (!isDownload) {
 		// @ts-ignore
-		newData.updatedAt = Timestamp.now();
+		newData.updatedAt = Timestamp.now().toDate();
 	}
 	const { writeTime } = await docRef.update(newData);
 	if (!writeTime) {
@@ -284,8 +284,8 @@ export async function updateUserFile(
 export async function softDeleteUserFile(uid: string, fileId: string) {
 	const docRef = db.userFile(uid, fileId);
 	const { writeTime } = await docRef.update({
-		updatedAt: Timestamp.now(),
-		deletedAt: Timestamp.now(),
+		updatedAt: Timestamp.now().toDate(),
+		deletedAt: Timestamp.now().toDate(),
 	});
 	if (!writeTime) {
 		throw new Error("Failed to delete file.");

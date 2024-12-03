@@ -22,7 +22,6 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 			params.fileId,
 			{
 				downloadCount: FieldValue.increment(1) as unknown as number,
-				...rest,
 			},
 			true,
 		);

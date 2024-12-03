@@ -56,7 +56,7 @@ type Props = {
 
 export function Layout(props: Props) {
 	const { children } = props;
-	const { isAuthenticated, name } = useLoaderData<typeof loader>();
+	const loaderData = useLoaderData<typeof loader>();
 
 	return (
 		<html lang="ja-JP" data-theme="dim">
@@ -66,7 +66,7 @@ export function Layout(props: Props) {
 			</head>
 			<body>
 				<div className="min-h-screen flex flex-col">
-					<Header isAuthenticated={isAuthenticated} name={name} />
+					<Header isAuthenticated={loaderData?.isAuthenticated ?? false} name={loaderData?.name ?? ""} />
 					<main className="prose prose-h1:text-center max-w-none">
 						{children}
 					</main>
