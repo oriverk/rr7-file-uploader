@@ -2,7 +2,6 @@ import { parseWithZod } from "@conform-to/zod";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, Link, useActionData } from "@remix-run/react";
-import clsx from "clsx";
 import { redirect, typedjson, useTypedLoaderData } from "remix-typedjson";
 import invariant from "tiny-invariant";
 import { z } from "zod";
@@ -140,9 +139,11 @@ export default function Index() {
 								<label className="label cursor-pointer">
 									<span className="label-text">公開する</span>
 									<input
-										defaultChecked={isPublished}
 										className="toggle toggle-primary"
-										{...getInputProps(fields.isPublished, { type: "checkbox" })}
+										{...getInputProps(fields.isPublished, {
+											type: "checkbox",
+										})}
+										defaultChecked={isPublished}
 									/>
 								</label>
 								<div>{fields.isPublished.errors}</div>

@@ -9,8 +9,11 @@ import {
 	isRouteErrorResponse,
 	json,
 	useLoaderData,
+	useLocation,
 	useRouteError,
 } from "@remix-run/react";
+import { useEffect } from "react";
+import * as gtag from "./utils/gtags.client";
 
 import { Footer, Header } from "./components/layout";
 
@@ -37,7 +40,7 @@ export const meta: MetaFunction = () => {
 		{ property: "og:type", content: "article" },
 		{ name: "og:site_name", content: "👆 Uploader" },
 		{ name: "twitter:card", content: "summary_large_image" },
-		{ property: "og:title", content: "Very cool app" },
+		{ property: "og:title", content: "upload and download files" },
 		{ name: "description", content: "Web app to upload / download file" },
 	];
 };
@@ -47,7 +50,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const result = await checkSessionCookie(session);
 	const isAuthenticated = Boolean(result.uid);
 	const name: string = "name" in result ? result.name : "";
-	return json({ isAuthenticated, name });
+	const gaTrackingId = process.env.GA_TRACKING_ID
+	return json({ isAuthenticated, name, gaTrackingId });
 };
 
 type Props = {
@@ -56,7 +60,15 @@ type Props = {
 
 export function Layout(props: Props) {
 	const { children } = props;
+	const location = useLocation();
 	const loaderData = useLoaderData<typeof loader>();
+	const { gaTrackingId } = loaderData
+	
+	useEffect(() => {
+		if (gaTrackingId?.length) {
+			gtag.pageview(location.pathname, gaTrackingId);
+		}
+	}, [location, gaTrackingId])
 
 	return (
 		<html lang="ja-JP" data-theme="dim">
@@ -66,7 +78,10 @@ export function Layout(props: Props) {
 			</head>
 			<body>
 				<div className="min-h-screen flex flex-col">
-					<Header isAuthenticated={loaderData?.isAuthenticated ?? false} name={loaderData?.name ?? ""} />
+					<Header
+						isAuthenticated={loaderData?.isAuthenticated ?? false}
+						name={loaderData?.name ?? ""}
+					/>
 					<main className="prose prose-h1:text-center max-w-none">
 						{children}
 					</main>
@@ -75,6 +90,39 @@ export function Layout(props: Props) {
 				<ScrollRestoration />
 				<Scripts />
 				{/* <LiveReload /> */}
+				{process.env.NODE_ENV === "development" || !gaTrackingId ? null : (
+					<>
+						<script
+							async
+							src={`https://www.googletagmanager.com/gtag/js?id=${gaTrackingId}`}
+						/>
+						<script
+							async
+							id="gtag-init"
+							dangerouslySetInnerHTML={{
+								__html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+
+                gtag('config', '${gaTrackingId}', {
+                  page_path: window.location.pathname,
+                });
+              `,
+							}}
+						/>
+					</>
+				)}
+				{process.env.NODE_ENV === "development" ? null : (
+					<>
+						<script
+							async
+							src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3305972869013074"
+							crossOrigin="anonymous"
+						/>
+						<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+					</>
+				)}
 			</body>
 		</html>
 	);

@@ -1,0 +1,14 @@
+User-agent: Twitterbot
+Allow: *
+
+User-agent: *
+Allow: *
+Disallow: /login
+Disallow: /join
+Disallow: /logout
+Disallow: /dashboard
+Disallow: /settings/profile
+Disallow: /files
+
+# Host
+Host: https://uploader.ixanary.com
