@@ -1,5 +1,6 @@
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import {
+	Link,
 	Links,
 	Meta,
 	type MetaFunction,
@@ -21,6 +22,7 @@ import type { ReactNode } from "react";
 import { checkSessionCookie } from "./server/auth.server";
 import { getSession } from "./sesions";
 import tailwind from "./styles/tailwind.css?url";
+import { Container } from "./components/Container";
 
 export const links: LinksFunction = () => [
 	{ rel: "stylesheet", href: tailwind },
@@ -62,8 +64,10 @@ export function Layout(props: Props) {
 	const { children } = props;
 	const location = useLocation();
 	const loaderData = useLoaderData<typeof loader>();
-	const { gaTrackingId } = loaderData
-	
+	const isAuthenticated = loaderData?.isAuthenticated ?? false;
+	const name = loaderData?.name ?? "";
+	const gaTrackingId = loaderData?.gaTrackingId ?? "";
+
 	useEffect(() => {
 		if (gaTrackingId?.length) {
 			gtag.pageview(location.pathname, gaTrackingId);
@@ -79,8 +83,8 @@ export function Layout(props: Props) {
 			<body>
 				<div className="min-h-screen flex flex-col">
 					<Header
-						isAuthenticated={loaderData?.isAuthenticated ?? false}
-						name={loaderData?.name ?? ""}
+						isAuthenticated={isAuthenticated}
+						name={name}
 					/>
 					<main className="prose prose-h1:text-center max-w-none">
 						{children}
@@ -137,23 +141,45 @@ export function ErrorBoundary() {
 
 	if (isRouteErrorResponse(error)) {
 		return (
-			<div>
-				<h1>
-					{error.status} {error.statusText}
-				</h1>
-				<p>{error.data}</p>
-			</div>
+			<article>
+				<Container
+					maxWidth="wide"
+					className="not-prose hero max-w-none min-h-screen"
+				>
+					<div className="hero-content text-center">
+						<div className="max-w-md">
+							<h1 className="text-5xl font-bold">
+								{error.status} {error.statusText}
+							</h1>
+							<p className="py-6">{error.data}</p>
+							<Link to="/" className="link link-primary">Back to home</Link>
+						</div>
+					</div>
+				</Container>
+			</article>
 		);
 	}
 
 	if (error instanceof Error) {
 		return (
-			<div>
-				<h1>Error</h1>
-				<p>{error.message}</p>
-				<p>The stack trace is:</p>
-				<pre>{error.stack}</pre>
-			</div>
+			<article>
+				<Container
+					maxWidth="wide"
+					className="not-prose hero max-w-none min-h-screen"
+				>
+					<div className="hero-content text-center">
+						<div className="max-w-md">
+							<h1>Error</h1>
+							<p>{error.message}</p>
+							<p>The stack trace is:</p>
+							<pre>{error.stack}</pre>
+							<Link to="/" className="link link-primary">
+								Back to home
+							</Link>
+						</div>
+					</div>
+				</Container>
+			</article>
 		);
 	}
 
