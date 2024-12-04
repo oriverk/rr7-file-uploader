@@ -10,7 +10,8 @@
     "start": "remix-serve ./build/server/index.js",
     "typecheck": "tsc",
     "lint": "npx @biomejs/biome check ./app",
-    "fix": "npx @biomejs/biome check --write ./app"
+    "fix": "npx @biomejs/biome check --write ./app",
+    "deploy": "firebase deploy --only hosting:uploader-7f826"
   },
   "dependencies": {
     "@conform-to/react": "^1.2.2",

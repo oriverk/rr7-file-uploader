@@ -1,0 +1,14 @@
+{
+  "hosting": {
+    "site": "uploader-7f826",
+    "rewrites": [
+      {
+        "source": "**",
+        "run": {
+          "serviceId": "uploader",
+          "region": "us-central1"
+        }
+      }
+    ]
+  }
+}
