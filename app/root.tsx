@@ -79,13 +79,19 @@ export function Layout(props: Props) {
 			<head>
 				<Meta />
 				<Links />
+				{process.env.NODE_ENV === "development" ? null : (
+					<>
+						<script
+							async
+							src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3305972869013074"
+							crossOrigin="anonymous"
+						/>
+					</>
+				)}
 			</head>
 			<body>
 				<div className="min-h-screen flex flex-col">
-					<Header
-						isAuthenticated={isAuthenticated}
-						name={name}
-					/>
+					<Header isAuthenticated={isAuthenticated} name={name} />
 					<main className="prose prose-h1:text-center max-w-none">
 						{children}
 					</main>
@@ -115,16 +121,6 @@ export function Layout(props: Props) {
               `,
 							}}
 						/>
-					</>
-				)}
-				{process.env.NODE_ENV === "development" ? null : (
-					<>
-						<script
-							async
-							src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3305972869013074"
-							crossOrigin="anonymous"
-						/>
-						<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 					</>
 				)}
 			</body>
