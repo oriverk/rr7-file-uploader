@@ -8,9 +8,8 @@ import { usePagination } from "@/hooks/usePagination";
 import { requireAdmin, requireAuth } from "@/server/auth.server";
 import { getUserFiles, softDeleteUserFile } from "@/server/firestore.server";
 import type { FirestoreFile } from "@/types";
-import { Link, json, useActionData, useSubmit } from "@remix-run/react";
+import { Link, data, useActionData, useLoaderData, useSubmit } from "@remix-run/react";
 import { useRef, useState } from "react";
-import { typedjson, useTypedLoaderData } from "remix-typedjson";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	const user = await requireAuth(request);
@@ -29,10 +28,10 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 		});
 	}
 
-	return typedjson({
+	return {
 		isAdmin: admin.isAdmin,
 		files,
-	});
+	};
 };
 
 export const action = async ({ params, request }: ActionFunctionArgs) => {
@@ -48,19 +47,19 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 		// for demo
 		const admin = requireAdmin(user.email ?? "");
 		if (!admin.isAdmin) {
-			return json({
+			return {
 				success: false,
 				message: "This is demo app. You can't delete a file.",
-			});
+			};
 		}
 		await softDeleteUserFile(user.uid, fileId);
-		return json({
+		return {
 			success: true,
 			message: "file was deleted successfully",
-		});
+		};
 	} catch (error) {
 		console.error("failed to delete file", error);
-		return json(
+		return data(
 			{
 				success: false,
 				message: String(error),
@@ -73,7 +72,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 type DeletingFile = Record<"fileId" | "fileName", string>;
 
 export default function Dashboard() {
-	const { isAdmin, files } = useTypedLoaderData<typeof loader>();
+	const { isAdmin, files } = useLoaderData<typeof loader>();
 	const actionData = useActionData<typeof action>();
 	const [deletingFile, setDeletingFile] = useState<DeletingFile | null>(null);
 	const { currentItems, endIndex, goToPage, nextPage, prevPage } =

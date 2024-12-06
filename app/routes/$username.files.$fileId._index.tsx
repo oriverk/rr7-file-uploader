@@ -2,9 +2,8 @@ import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
 import { requireAdmin } from "@/server/auth.server";
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { Link } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
-import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import invariant from "tiny-invariant";
 import { getUser, getUserFile } from "../server/firestore.server";
 import { convertByteWithUnit } from "../utils/convertByteWithUnit";
@@ -29,7 +28,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	const desc = !admin.isAdmin ? "file description for demo" : fileDescription;
 
 	const html = parseMarkdown(desc ?? "");
-	return typedjson({
+	return {
 		// for demo
 		isAdmin: admin.isAdmin,
 		user: { username, displayName, profileImageUrl },
@@ -38,11 +37,11 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 			fileName: filename,
 			fileDescription: html,
 		},
-	});
+	};
 };
 
 export default function UserFile() {
-	const { isAdmin, user, file } = useTypedLoaderData<typeof loader>();
+	const { isAdmin, user, file } = useLoaderData<typeof loader>();
 	const { username, displayName, profileImageUrl } = user;
 	const {
 		fileName,

@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { data, redirect } from "@remix-run/node";
 import { Form, Link, useActionData } from "@remix-run/react";
 
 import { Alert } from "@/components/Alert";
@@ -87,7 +87,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 	if (uid) {
 		return redirect("/", { headers });
 	}
-	return json(null, { headers });
+	return data(null, { headers });
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -105,22 +105,22 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 	try {
 		if (submission.status !== "success") {
-			return json({
+			return {
 				success: false,
 				message: null,
 				submission: submission.reply(),
-			});
+			};
 		}
 		const { username, email, password } = submission.value;
 		// for demo
 		const admin = requireAdmin(email);
 		if (!admin.isAdmin) {
-			return json({
+			return {
 				success: false,
 				message:
 					"This is demo app. You can't register, but you can log in with a demo account.",
 				submission: submission.reply(),
-			});
+			};
 		}
 
 		const sessionCookie = await signUp(username, username, email, password);
@@ -133,7 +133,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		});
 	} catch (error) {
 		console.error(error);
-		return json(
+		return data(
 			{
 				success: false,
 				message: String(error),

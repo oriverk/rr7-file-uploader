@@ -6,9 +6,9 @@ import { usePagination } from "@/hooks/usePagination";
 import { requireAdmin } from "@/server/auth.server";
 import type { FirestoreFile } from "@/types";
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import invariant from "tiny-invariant";
 import { getUser, getUserFiles } from "../server/firestore.server";
+import { useLoaderData } from "@remix-run/react";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	invariant(params.username, "params.usename is required");
@@ -31,7 +31,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 		});
 	}
 
-	return typedjson({
+	return {
 		// for demo
 		isAdmin: admin.isAdmin,
 		user: {
@@ -41,11 +41,11 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 			profileImageUrl,
 		},
 		files,
-	});
+	};
 };
 
 export default function UserFiles() {
-	const { isAdmin, user, files } = useTypedLoaderData<typeof loader>();
+	const { isAdmin, user, files } = useLoaderData<typeof loader>();
 	const { username, displayName, profile, profileImageUrl } = user;
 	const { currentItems, endIndex, goToPage, nextPage, prevPage } =
 		usePagination<FirestoreFile>(files, 6, 1);

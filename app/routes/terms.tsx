@@ -1,14 +1,14 @@
 import { Container } from "@/components/Container";
-import { type LoaderFunctionArgs, json } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import markdown from "../docs/term-of-service.md?raw";
 import { parseMarkdown } from "../utils/markdown";
 
 export const loader = ({ params, request }: LoaderFunctionArgs) => {
 	const html = parseMarkdown(markdown);
-	return json({
+	return {
 		html,
-	});
+	};
 };
 
 export default function Lorem() {

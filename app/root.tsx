@@ -8,7 +8,6 @@ import {
 	Scripts,
 	ScrollRestoration,
 	isRouteErrorResponse,
-	json,
 	useLoaderData,
 	useLocation,
 	useRouteError,
@@ -53,7 +52,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const isAuthenticated = Boolean(result.uid);
 	const name: string = "name" in result ? result.name : "";
 	const gaTrackingId = process.env.GA_TRACKING_ID
-	return json({ isAuthenticated, name, gaTrackingId });
+	return { isAuthenticated, name, gaTrackingId };
 };
 
 type Props = {

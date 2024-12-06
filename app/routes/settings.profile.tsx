@@ -12,7 +12,7 @@ import {
 } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { data } from "@remix-run/node";
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { useEffect } from "react";
 import { z } from "zod";
@@ -27,9 +27,9 @@ const schema = z.object({
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	const auth = await requireAuth(request);
 	const { displayName, profile } = await getUserWithId(auth.uid);
-	return json({
+	return {
 		user: { displayName, profile },
-	});
+	};
 };
 
 export const action = async ({ params, request }: ActionFunctionArgs) => {
@@ -38,7 +38,9 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 	const submission = parseWithZod(formData, { schema });
 	try {
 		if (submission.status !== "success") {
-			return json(submission.reply());
+			return {
+				submission: submission.reply(),
+			};
 		}
 
 		const { displayName, profile } = submission.value;
@@ -46,12 +48,12 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 			displayName,
 			profile,
 		});
-		return json({
+		return {
 			success: !!result.writeTime,
-		});
+		};
 	} catch (error) {
 		console.error(error);
-		return json({ error: String(error) }, { status: 401 });
+		return data({ error: String(error) }, { status: 401 });
 	}
 };
 

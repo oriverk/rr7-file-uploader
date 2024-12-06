@@ -1,8 +1,7 @@
 import { parseWithZod } from "@conform-to/zod";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { Form, Link, useActionData } from "@remix-run/react";
-import { redirect, typedjson, useTypedLoaderData } from "remix-typedjson";
+import { data, redirect } from "@remix-run/node";
+import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import { z } from "zod";
 
@@ -47,13 +46,13 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	const filename = !admin.isAdmin ? "demo.zip" : fileName;
 	const desc = !admin.isAdmin ? "file description for demo" : fileDescription;
 
-	return typedjson({
+	return {
 		file: {
 			fileName: filename,
 			fileDescription: desc,
 			isPublished,
 		},
-	});
+	};
 };
 
 export const action = async ({ params, request }: ActionFunctionArgs) => {
@@ -64,19 +63,19 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 
 	try {
 		if (submission.status !== "success") {
-			return json({
+			return {
 				success: false,
 				message: null,
 				submission: submission.reply(),
-			});
+			};
 		}
 		const admin = requireAdmin(user.email ?? "");
 		if (!admin.isAdmin) {
-			return json({
+			return {
 				success: false,
 				message: "This is demo app. You can't edit file.",
 				submission: null,
-			});
+			};
 		}
 
 		const { fileDescription, isPublished } = submission.value;
@@ -93,7 +92,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 		}
 	} catch (error) {
 		console.error(error);
-		return json(
+		return data(
 			{
 				success: false,
 				message: String(error),
@@ -105,7 +104,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 };
 
 export default function Index() {
-	const { file } = useTypedLoaderData<typeof loader>();
+	const { file } = useLoaderData<typeof loader>();
 	const actionData = useActionData<typeof action>();
 	const [form, fields] = useForm({
 		lastResult: actionData?.submission,

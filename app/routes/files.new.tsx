@@ -13,11 +13,11 @@ import type {
 import {
 	unstable_composeUploadHandlers as composeUploadHandlers,
 	unstable_createMemoryUploadHandler as createMemoryUploadHandler,
-	json,
+	data,
 	unstable_parseMultipartFormData as parseMultipartFormData,
+	redirect,
 } from "@remix-run/node";
 import { Form, Link, useActionData } from "@remix-run/react";
-import { redirect, typedjson } from "remix-typedjson";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
@@ -63,9 +63,9 @@ const schema = z
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	await requireAuth(request);
 
-	return typedjson({
+	return {
 		success: true,
-	});
+	};
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -75,21 +75,21 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	try {
 		const submission = parseWithZod(formData, { schema });
 		if (submission.status !== "success") {
-			return json({
+			return {
 				success: false,
 				message: null,
 				submission: submission.reply(),
-			});
+			};
 		}
 
 		// for demo
 		const admin = requireAdmin(user.email ?? "");
 		if (!admin.isAdmin) {
-			return json({
+			return {
 				success: false,
 				message: "This is demo app. You can't upload file.",
 				submission: null,
-			});
+			};
 		}
 
 		const { fileDescription, file, isPublished } = submission.value;
@@ -140,7 +140,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		}
 	} catch (error) {
 		console.error("File upload failed:", error);
-		return json(
+		return data(
 			{ success: false, message: String(error), submission: null },
 			{ status: 500 },
 		);

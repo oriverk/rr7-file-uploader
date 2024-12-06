@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { data, redirect } from "@remix-run/node";
 import {
 	Link,
 	useActionData,
@@ -42,7 +42,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 		return redirect("/", { headers });
 	}
 	const { apiKey, domain } = getRestConfig();
-	return json({ apiKey, domain }, { headers });
+	return data({ apiKey, domain }, { headers });
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -51,11 +51,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	let sessionCookie: string;
 	try {
 		if (submission.status !== "success") {
-			return json({
+			return {
 				success: false,
 				message: null,
 				submission: submission.reply(),
-			});
+			};
 		}
 
 		const { idToken, email, password } = submission.value;
@@ -63,12 +63,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		// for demo
 		const admin = requireAdmin(email);
 		if (email !== "test@example.com" && !admin.isAdmin) {
-			return json({
+			return {
 				success: false,
 				message:
 					"This is demo app. You can login only with test@example.com and password",
 				submission: submission.reply(),
-			});
+			};
 		}
 
 		if (typeof idToken === "string") {
@@ -85,7 +85,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		});
 	} catch (error) {
 		console.error(error);
-		return json(
+		return data(
 			{
 				success: false,
 				message: String(error),
