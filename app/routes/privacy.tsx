@@ -1,18 +1,18 @@
 import { Container } from "@/components/Container";
-import type { LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
 import markdown from "../docs/privacy-policy.md?raw";
 import { parseMarkdown } from "../utils/markdown";
 
-export const loader = ({ params, request }: LoaderFunctionArgs) => {
+import type { Route } from "./+types/privacy";
+
+export const loader = ({ params, request }: Route.LoaderArgs) => {
 	const html = parseMarkdown(markdown);
 	return {
 		html,
 	};
 };
 
-export default function Lorem() {
-	const { html } = useLoaderData<typeof loader>();
+export default function Page({ loaderData }: Route.ComponentProps) {
+	const { html } = loaderData;
 	return (
 		<article>
 			<Container>

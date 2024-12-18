@@ -1,24 +1,22 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { data, redirect } from "@remix-run/node";
-import { Form, Link, useActionData } from "@remix-run/react";
+import { data, redirect } from "react-router";
+import { Form, Link } from "react-router";
 
 import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
-import { EmailInput } from "@/components/form/EmailInput";
-import { PasswordInput } from "@/components/form/PasswordInput";
-import { TextInput } from "@/components/form/TextInput";
+import { EmailInput, PasswordInput, TextInput } from "@/components/form";
+import { checkSessionCookie, requireAdmin, signUp } from "@/server/auth.server";
 import { checkExistingUser } from "@/server/firestore.server";
 import type { Intent } from "@conform-to/react";
 import { getFormProps, getInputProps, useForm } from "@conform-to/react";
 import { conformZodMessage, parseWithZod } from "@conform-to/zod";
 import { useState } from "react";
 import { z } from "zod";
-import {
-	checkSessionCookie,
-	requireAdmin,
-	signUp,
-} from "../server/auth.server";
-import { commitSession, getSession } from "../sesions";
+
+import { commitSession, getSession } from "@/sesions";
+
+import type { Route } from "./+types/join";
+
+import type { ActionData } from "@/types";
 
 function createSchema(
 	intent: Intent | null,
@@ -77,7 +75,7 @@ function createSchema(
 		);
 }
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ request }: Route.LoaderArgs) => {
 	const session = await getSession(request.headers.get("cookie"));
 	const { uid } = await checkSessionCookie(session);
 
@@ -90,7 +88,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 	return data(null, { headers });
 };
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+export const action = async ({ request }: Route.ActionArgs) => {
 	const formData = await request.formData();
 	const submission = await parseWithZod(formData, {
 		schema: (intent) =>
@@ -144,9 +142,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	}
 };
 
-export default function Login() {
+type Props = {
+	actionData?: ActionData;
+};
+
+export default function Login({ actionData }: Props) {
 	const [username, setUsername] = useState("");
-	const actionData = useActionData<typeof action>();
 	const [form, fields] = useForm({
 		lastResult: actionData?.submission,
 		onValidate({ formData }) {

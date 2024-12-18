@@ -4,13 +4,13 @@ import { FileCard } from "@/components/FileCard";
 import { Pagination } from "@/components/Pagination";
 import { usePagination } from "@/hooks/usePagination";
 import { requireAdmin } from "@/server/auth.server";
+import { getUser, getUserFiles } from "@/server/firestore.server";
 import type { FirestoreFile } from "@/types";
-import type { LoaderFunctionArgs } from "@remix-run/node";
 import invariant from "tiny-invariant";
-import { getUser, getUserFiles } from "../server/firestore.server";
-import { useLoaderData } from "@remix-run/react";
 
-export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+import type { Route } from "./+types/userFiles";
+
+export const loader = async ({ params, request }: Route.LoaderArgs) => {
 	invariant(params.username, "params.usename is required");
 	const user = await getUser(params.username);
 	invariant(user.id, "user not found");
@@ -44,8 +44,8 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	};
 };
 
-export default function UserFiles() {
-	const { isAdmin, user, files } = useLoaderData<typeof loader>();
+export default function UserFiles({ loaderData }: Route.ComponentProps) {
+	const { isAdmin, user, files } = loaderData;
 	const { username, displayName, profile, profileImageUrl } = user;
 	const { currentItems, endIndex, goToPage, nextPage, prevPage } =
 		usePagination<FirestoreFile>(files, 6, 1);

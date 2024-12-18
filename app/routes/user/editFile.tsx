@@ -1,7 +1,5 @@
 import { parseWithZod } from "@conform-to/zod";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { data, redirect } from "@remix-run/node";
-import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
+import { Form, Link, data, redirect } from "react-router";
 import invariant from "tiny-invariant";
 import { z } from "zod";
 
@@ -9,14 +7,16 @@ import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
 import { Textarea } from "@/components/form/Textarea";
 import { MAX_FILE_DESCRIPTION_LENGTH } from "@/constant";
+import { requireAdmin, requireAuth } from "@/server/auth.server";
+import { getUserFile, updateUserFile } from "@/server/firestore.server";
+import type { ActionData } from "@/types";
 import {
 	getFormProps,
 	getInputProps,
 	getTextareaProps,
 	useForm,
 } from "@conform-to/react";
-import { requireAdmin, requireAuth } from "../server/auth.server";
-import { getUserFile, updateUserFile } from "../server/firestore.server";
+import type { Route } from "./+types/editFile";
 
 const schema = z
 	.object({
@@ -30,7 +30,7 @@ const schema = z
 	})
 	.required();
 
-export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+export const loader = async ({ params, request }: Route.LoaderArgs) => {
 	invariant(params.fileId, "params.fileId is required");
 	const user = await requireAuth(request);
 
@@ -55,7 +55,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	};
 };
 
-export const action = async ({ params, request }: ActionFunctionArgs) => {
+export const action = async ({ params, request }: Route.ActionArgs) => {
 	invariant(params.fileId, "params.fileId is required");
 	const user = await requireAuth(request);
 	const formData = await request.formData();
@@ -103,9 +103,13 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 	}
 };
 
-export default function Index() {
-	const { file } = useLoaderData<typeof loader>();
-	const actionData = useActionData<typeof action>();
+type Props = {
+	loaderData: Route.ComponentProps["loaderData"];
+	actionData?: ActionData;
+};
+
+export default function Index({ loaderData, actionData }: Props) {
+	const { file } = loaderData;
 	const [form, fields] = useForm({
 		lastResult: actionData?.submission,
 		onValidate({ formData }) {
@@ -123,9 +127,9 @@ export default function Index() {
 					<h1 className="break-all">{fileName}</h1>
 					<h2 className="text-center">ファイル編集</h2>
 					<div className="max-w-2xl mx-auto flex flex-col gap-8">
-						{actionData?.message && (
+						{actionData && (
 							<Alert state={actionData.success ? "info" : "error"}>
-								{actionData.message}
+								{actionData.message ?? ""}
 							</Alert>
 						)}
 						<Form

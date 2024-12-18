@@ -1,57 +1,66 @@
 import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
 import { requireAdmin } from "@/server/auth.server";
-import type { LoaderFunctionArgs } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+
 import { format } from "date-fns";
+import { useState } from "react";
 import invariant from "tiny-invariant";
 import { getUser, getUserFile } from "../server/firestore.server";
 import { convertByteWithUnit } from "../utils/convertByteWithUnit";
-import { parseMarkdown } from "../utils/markdown";
 
-export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+import { Link } from "react-router";
+import type { Route } from "./+types/fileConfirm";
+
+export const loader = async ({ params, request }: Route.LoaderArgs) => {
 	invariant(params.username, "params.username is requied");
 	invariant(params.fileId, "params.fileId is required");
 	const user = await getUser(params.username);
 	invariant(user.id, "user not found");
 
+	const { username, displayName, profileImageUrl, email } = user;
+
 	// for demo
-	const admin = requireAdmin(user.email);
+	const admin = requireAdmin(email);
 	const userId = !admin.isAdmin ? admin.adminId : user.id;
 	const file = await getUserFile(userId, params.fileId);
 	invariant(file, `File not found: ${params.fileId}`);
 
-	const { username, displayName, profileImageUrl } = user;
-	const { id, fileName, fileDescription, filePath, deletedAt, ...rest } = file;
+	const {
+		id,
+		fileName,
+		fileDescription,
+		filePath,
+		deletedAt,
+		isPublished,
+		...rest
+	} = file;
+
 	// for demo
 	const filename = !admin.isAdmin ? "demo.zip" : fileName;
-	const desc = !admin.isAdmin ? "file description for demo" : fileDescription;
-
-	const html = parseMarkdown(desc ?? "");
 	return {
-		// for demo
 		isAdmin: admin.isAdmin,
 		user: { username, displayName, profileImageUrl },
 		file: {
 			...rest,
 			fileName: filename,
-			fileDescription: html,
 		},
 	};
 };
 
-export default function UserFile() {
-	const { isAdmin, user, file } = useLoaderData<typeof loader>();
+export default function UserFile({ loaderData }: Route.ComponentProps) {
+	const { isAdmin, user, file } = loaderData;
+	const [isConfirmed, setIsConfirmed] = useState(false);
 	const { username, displayName, profileImageUrl } = user;
-	const {
-		fileName,
-		contentType,
-		size,
-		createdAt,
-		updatedAt,
-		downloadCount,
-		fileDescription,
-	} = file;
+	const { fileName, contentType, size, createdAt, updatedAt, downloadCount } =
+		file;
+
+	const handleConfirm = () => {
+		setIsConfirmed(!isConfirmed);
+	};
+
+	const handleDownload = () => {
+		setIsConfirmed(false);
+	};
 
 	return (
 		<article className="py-12">
@@ -124,13 +133,42 @@ export default function UserFile() {
 									</tbody>
 								</table>
 							</div>
-							<div
-								dangerouslySetInnerHTML={{ __html: fileDescription }}
-								className="break-words prose-img:rounded-xl"
-							/>
-							<Link to="download" className="btn btn-primary">
-								ダウロードページへ
-							</Link>
+							<p>
+								ダウンロードを続けるには、
+								<Link to="/terms" className="link">
+									利用規約
+								</Link>
+								に同意した上で「ダウンロード」ボタンを押下してください。ダウンロードが開始されます。
+							</p>
+
+							<div className="form-control mb-4">
+								<label className="label cursor-pointer justify-center">
+									<input
+										type="checkbox"
+										name="confirm"
+										checked={isConfirmed}
+										onChange={handleConfirm}
+										className="checkbox checkbox-primary"
+									/>
+									<span className="label-text ml-4">同意する</span>
+								</label>
+							</div>
+							{isConfirmed && isAdmin ? (
+								<Link
+									to="execute"
+									download
+									reloadDocument
+									onClick={handleDownload}
+									className="btn btn-block btn-primary"
+								>
+									ダウンロードする
+								</Link>
+							) : (
+								<button type="button" disabled={true} className="btn btn-block">
+									ダウンロード不可
+									{!isAdmin && <span>（デモアカウントのため）</span>}
+								</button>
+							)}
 							<Link to={`/${username}`} className="btn btn-secondary btn-block">
 								ファイル一覧へ戻る
 							</Link>

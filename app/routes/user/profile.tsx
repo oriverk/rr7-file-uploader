@@ -4,6 +4,7 @@ import { Textarea } from "@/components/form/Textarea";
 import { MAX_PROFILE_LENGTH } from "@/constant";
 import { requireAuth } from "@/server/auth.server";
 import { getUserWithId, updateUser } from "@/server/firestore.server";
+import type { ActionData } from "@/types";
 import {
 	getFormProps,
 	getInputProps,
@@ -11,11 +12,11 @@ import {
 	useForm,
 } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { data } from "@remix-run/node";
-import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { useEffect } from "react";
+import { Form, data } from "react-router";
 import { z } from "zod";
+
+import type { Route } from "./+types/profile";
 
 const schema = z.object({
 	displayName: z
@@ -24,7 +25,7 @@ const schema = z.object({
 	profile: z.string().max(140, "自己紹介文は140文字まで").optional(),
 });
 
-export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+export const loader = async ({ params, request }: Route.LoaderArgs) => {
 	const auth = await requireAuth(request);
 	const { displayName, profile } = await getUserWithId(auth.uid);
 	return {
@@ -32,13 +33,14 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	};
 };
 
-export const action = async ({ params, request }: ActionFunctionArgs) => {
+export const action = async ({ params, request }: Route.ActionArgs) => {
 	const user = await requireAuth(request);
 	const formData = await request.formData();
 	const submission = parseWithZod(formData, { schema });
 	try {
 		if (submission.status !== "success") {
 			return {
+				success: false,
 				submission: submission.reply(),
 			};
 		}
@@ -50,6 +52,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 		});
 		return {
 			success: !!result.writeTime,
+			submission: [],
 		};
 	} catch (error) {
 		console.error(error);
@@ -57,12 +60,15 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 	}
 };
 
-export default function Profile() {
-	const { user } = useLoaderData<typeof loader>();
-	const actionData = useActionData<typeof action>();
+type Props = {
+	loaderData: Route.ComponentProps["loaderData"];
+	actionData?: ActionData;
+};
+
+export default function Profile({ loaderData, actionData }: Props) {
+	const { user } = loaderData;
 	const [form, fields] = useForm({
-		// @ts-ignore
-		lastResult: actionData,
+		lastResult: actionData?.submission,
 		onValidate({ formData }) {
 			return parseWithZod(formData, { schema });
 		},
@@ -107,7 +113,7 @@ export default function Profile() {
 								<div className="label">
 									<span className="label-text-alt text-sm" />
 									<span className="label-text-alt text-error">
-										{fields.username.errors}
+										{fields.displayName.errors}
 									</span>
 								</div>
 							</label>

@@ -1,7 +1,7 @@
 import type { FirestoreFile } from "@/types";
 import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
-import { Link } from "@remix-run/react";
 import { format } from "date-fns";
+import { Link } from "react-router";
 import { CloseIcon, DownloadIcon, FileIcon } from "./icons";
 
 type Props = {

@@ -1,14 +1,15 @@
-import type { LoaderFunctionArgs } from "@remix-run/node";
-import { FieldValue } from "firebase-admin/firestore";
-import invariant from "tiny-invariant";
-import { storage } from "../server/firebase.server";
+import { storage } from "@/server/firebase.server";
 import {
 	getUser,
 	getUserFile,
 	updateUserFile,
-} from "../server/firestore.server";
+} from "@/server/firestore.server";
+import { FieldValue } from "firebase-admin/firestore";
+import invariant from "tiny-invariant";
 
-export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+import type { Route } from "./+types/fileDownload";
+
+export const loader = async ({ params, request }: Route.LoaderArgs) => {
 	try {
 		invariant(params.username, "params.username is requied");
 		invariant(params.fileId, "params.fileId is required");

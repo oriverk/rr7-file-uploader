@@ -1,7 +1,6 @@
-import { Form, Link } from "@remix-run/react";
+import { Link } from "react-router";
 import { Container } from "../Container";
-import { UploadIcon } from "../icons";
-import { HumanIcon } from "../icons/Human";
+import { HumanIcon, UploadIcon } from "../icons";
 
 type Props = {
 	isAuthenticated: boolean;

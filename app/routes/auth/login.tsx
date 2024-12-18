@@ -1,28 +1,25 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { data, redirect } from "@remix-run/node";
-import {
-	Link,
-	useActionData,
-	useLoaderData,
-	useSubmit,
-} from "@remix-run/react";
+import { data, redirect } from "react-router";
+import { Link, useSubmit } from "react-router";
 
 import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
 import { EmailInput } from "@/components/form/EmailInput";
 import { PasswordInput } from "@/components/form/PasswordInput";
-import { getFormProps, getInputProps, useForm } from "@conform-to/react";
-import { parseWithZod } from "@conform-to/zod";
-import { z } from "zod";
-import * as firebaseRest from "../firebase-rest";
+import * as firebaseRest from "@/firebase-rest";
 import {
 	checkSessionCookie,
 	requireAdmin,
 	signIn,
 	signInWithToken,
-} from "../server/auth.server";
-import { getRestConfig } from "../server/firebase.server";
-import { commitSession, getSession } from "../sesions";
+} from "@/server/auth.server";
+import { getRestConfig } from "@/server/firebase.server";
+import { commitSession, getSession } from "@/sesions";
+import { getFormProps, getInputProps, useForm } from "@conform-to/react";
+import { parseWithZod } from "@conform-to/zod";
+import { z } from "zod";
+
+import type { ActionData } from "@/types";
+import type { Route } from "./+types/login";
 
 const schema = z.object({
 	email: z
@@ -32,7 +29,7 @@ const schema = z.object({
 	idToken: z.string().optional(),
 });
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ request }: Route.LoaderArgs) => {
 	const session = await getSession(request.headers.get("cookie"));
 	const { uid } = await checkSessionCookie(session);
 	const headers = {
@@ -45,7 +42,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 	return data({ apiKey, domain }, { headers });
 };
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+export const action = async ({ request }: Route.ActionArgs) => {
 	const formData = await request.formData();
 	const submission = parseWithZod(formData, { schema });
 	let sessionCookie: string;
@@ -96,12 +93,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	}
 };
 
-export default function Login() {
-	const restConfig = useLoaderData<typeof loader>();
-	const actionData = useActionData<typeof action>();
+export default function Login({
+	loaderData,
+	actionData,
+}: Route.ComponentProps) {
+	const typedActionData = actionData as ActionData;
 	const submit = useSubmit();
 	const [form, fields] = useForm({
-		lastResult: actionData?.submission,
+		lastResult: typedActionData?.submission,
 		onValidate({ formData }) {
 			return parseWithZod(formData, { schema });
 		},
@@ -118,7 +117,12 @@ export default function Login() {
 					password,
 					returnSecureToken: true,
 				},
-				restConfig,
+				{
+					// @ts-ignore
+					apiKey: loaderData.apiKey ?? "",
+					// @ts-ignore
+					domain: loaderData.domain ?? "",
+				},
 			);
 			if (firebaseRest.isError(login)) return;
 			submit({ idToken: login.idToken, email, password }, { method: "post" });
@@ -134,9 +138,9 @@ export default function Login() {
 				<section>
 					<h1>ログイン</h1>
 					<div className="w-96 mx-auto flex flex-col gap-8">
-						{actionData?.message && (
-							<Alert state={actionData.success ? "info" : "error"}>
-								{actionData.message}
+						{typedActionData && (
+							<Alert state={typedActionData?.success ? "info" : "error"}>
+								{typedActionData.message ?? ""}
 							</Alert>
 						)}
 						<form
