@@ -14,8 +14,6 @@ import { getFormProps, getInputProps, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { Link, data, redirect, useSubmit } from "react-router";
 import { z } from "zod";
-
-import type { ActionData } from "@/types";
 import type { Route } from "./+types/login";
 
 const schema = z.object({
@@ -76,7 +74,7 @@ export const action = async ({ request }: Route.ActionArgs) => {
 			headers: {
 				"Set-Cookie": await commitSession(session),
 			},
-		});
+		}) as never;
 	} catch (error) {
 		console.error(error);
 		return data(
@@ -94,10 +92,9 @@ export default function Login({
 	loaderData,
 	actionData,
 }: Route.ComponentProps) {
-	const typedActionData = actionData as ActionData;
 	const submit = useSubmit();
 	const [form, fields] = useForm({
-		lastResult: typedActionData?.submission,
+		lastResult: actionData?.submission,
 		onValidate({ formData }) {
 			return parseWithZod(formData, { schema });
 		},
@@ -135,9 +132,9 @@ export default function Login({
 				<section>
 					<h1>ログイン</h1>
 					<div className="max-w-96 mx-auto flex flex-col gap-8">
-						{typedActionData && (
-							<Alert state={typedActionData?.success ? "info" : "error"}>
-								{typedActionData.message ?? ""}
+						{actionData && (
+							<Alert state={actionData?.success ? "info" : "error"}>
+								{actionData.message ?? ""}
 							</Alert>
 						)}
 						<form

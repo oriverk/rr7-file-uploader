@@ -4,7 +4,6 @@ import { Textarea } from "@/components/forms/Textarea";
 import { MAX_FILE_DESCRIPTION_LENGTH } from "@/constants";
 import { requireAdmin, requireAuth } from "@/server/auth.server";
 import { getUserFile, updateUserFile } from "@/server/database.server";
-import type { ActionData } from "@/types";
 import {
 	getFormProps,
 	getInputProps,
@@ -87,7 +86,7 @@ export const action = async ({ params, request }: Route.ActionArgs) => {
 			throw new Error("failed to save file data");
 		}
 		if (writeResult.id) {
-			return redirect(`/files/${writeResult.id}/edit`);
+			return redirect(`/files/${writeResult.id}/edit`) as never;
 		}
 	} catch (error) {
 		console.error(error);
@@ -102,12 +101,10 @@ export const action = async ({ params, request }: Route.ActionArgs) => {
 	}
 };
 
-type Props = {
-	loaderData: Route.ComponentProps["loaderData"];
-	actionData?: ActionData;
-};
-
-export default function Index({ loaderData, actionData }: Props) {
+export default function Index({
+	loaderData,
+	actionData,
+}: Route.ComponentProps) {
 	const { file } = loaderData;
 	const [form, fields] = useForm({
 		lastResult: actionData?.submission,

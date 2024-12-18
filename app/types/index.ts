@@ -1,11 +1,3 @@
-import type { SubmissionResult } from "@conform-to/react";
-
-export type ActionData = {
-	success?: boolean;
-	message?: string;
-	submission?: SubmissionResult<string[]>;
-};
-
 export type User = {
 	// Firestore ドキュメントのID
 	id?: string;

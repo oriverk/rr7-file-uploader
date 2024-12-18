@@ -11,7 +11,6 @@ import {
 import { requireAdmin, requireAuth } from "@/server/auth.server";
 import { addUserFile } from "@/server/database.server";
 import { uploadToStorageHandler } from "@/server/storage.server";
-import type { ActionData } from "@/types";
 import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
 import {
 	getFormProps,
@@ -105,7 +104,7 @@ export const action = async ({ request }: Route.ActionArgs) => {
 		if (!writeResult.writeTime) {
 			throw new Error("failed to save file data");
 		}
-		return redirect(`/files/${writeResult.id}/edit`);
+		return redirect(`/files/${writeResult.id}/edit`) as never;
 	} catch (error) {
 		console.error("File upload failed:", error);
 		return data(
@@ -115,11 +114,7 @@ export const action = async ({ request }: Route.ActionArgs) => {
 	}
 };
 
-type Props = {
-	actionData?: ActionData;
-};
-
-export default function Index({ actionData }: Props) {
+export default function Index({ actionData }: Route.ComponentProps) {
 	const [form, fields] = useForm({
 		lastResult: actionData?.submission,
 		onValidate({ formData }) {

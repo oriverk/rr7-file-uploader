@@ -4,7 +4,6 @@ import { Textarea } from "@/components/forms/Textarea";
 import { MAX_PROFILE_LENGTH } from "@/constants";
 import { requireAuth } from "@/server/auth.server";
 import { getUserWithId, updateUser } from "@/server/database.server";
-import type { ActionData } from "@/types";
 import {
 	getFormProps,
 	getInputProps,
@@ -51,20 +50,15 @@ export const action = async ({ params, request }: Route.ActionArgs) => {
 		});
 		return {
 			success: !!result.writeTime,
-			submission: [],
+			submission: null,
 		};
 	} catch (error) {
 		console.error(error);
-		return data({ error: String(error) }, { status: 401 });
+		return data({ success: false, message: String(error), submission: null }, { status: 401 });
 	}
 };
 
-type Props = {
-	loaderData: Route.ComponentProps["loaderData"];
-	actionData?: ActionData;
-};
-
-export default function Profile({ loaderData, actionData }: Props) {
+export default function Profile({ loaderData, actionData }: Route.ComponentProps) {
 	const { user } = loaderData;
 	const [form, fields] = useForm({
 		lastResult: actionData?.submission,

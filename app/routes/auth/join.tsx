@@ -13,8 +13,6 @@ import { z } from "zod";
 
 import type { Route } from "./+types/join";
 
-import type { ActionData } from "@/types";
-
 function createSchema(
 	intent: Intent | null,
 	options?: {
@@ -80,7 +78,7 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
 		"Set-Cookie": await commitSession(session),
 	};
 	if (uid) {
-		return redirect("/", { headers });
+		return redirect("/", { headers }) as never;
 	}
 	return data(null, { headers });
 };
@@ -125,7 +123,7 @@ export const action = async ({ request }: Route.ActionArgs) => {
 			headers: {
 				"Set-Cookie": await commitSession(session),
 			},
-		});
+		}) as never;
 	} catch (error) {
 		console.error(error);
 		return data(
@@ -139,11 +137,7 @@ export const action = async ({ request }: Route.ActionArgs) => {
 	}
 };
 
-type Props = {
-	actionData?: ActionData;
-};
-
-export default function Login({ actionData }: Props) {
+export default function Login({ actionData }: Route.ComponentProps) {
 	const [username, setUsername] = useState("");
 	const [form, fields] = useForm({
 		lastResult: actionData?.submission,
