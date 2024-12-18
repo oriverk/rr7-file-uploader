@@ -1,5 +1,6 @@
-import { writeAsyncIterableToWritable } from "@remix-run/node";
-
+import { ALLOWED_CONTENT_TYPES, CONTENT_TYPES } from "@/constant";
+import type { FileUpload, FileUploadHandler } from "@mjackson/form-data-parser";
+import { v4 as uuidv4 } from "uuid";
 import { storage } from "./firebase.server";
 
 export async function getServerFileSignedUrl(
@@ -18,22 +19,39 @@ export async function getServerFileSignedUrl(
 }
 
 /**
- * @param data The iterable of the file bytes
- * @param name The name of the file in this bucket. (like images/rickroll.mp4)
- * @param expires Signed URL expiration
+ *
+ * @param fieldName The name of the <input> field used to upload the file.
+ * @param destination storage bucket directory, files
  * @returns
  */
-export async function uploadToFirebaseStorage(
-	data: AsyncIterable<Uint8Array>,
-	name: string,
-	expires?: number,
+export function uploadToStorageHandler(
+	fieldName: string,
+	destination: string,
+): FileUploadHandler {
+	return (file) => {
+		if (file.fieldName !== fieldName) return;
+		if (!ALLOWED_CONTENT_TYPES.includes(file.type)) return;
+		const fileName = `${uuidv4()}.${CONTENT_TYPES[file.type]}`;
+
+		return uploadToStorage(file, destination, fileName);
+	};
+}
+
+export async function uploadToStorage(
+	fileUpload: FileUpload,
+	destination: string,
+	fileName: string,
 ) {
-	const blob = storage.file(name);
-	const writableStream = blob.createWriteStream();
-	await writeAsyncIterableToWritable(data, writableStream);
-	const [url] = await blob.getSignedUrl({
-		action: "read",
-		expires: expires ?? Date.now() + 60 * 60 * 1000,
-	});
-	return url;
+	const path = `${destination}/${fileName}`;
+	const file = storage.file(path);
+	const data = await fileUpload.arrayBuffer();
+	const buffer = Buffer.from(data);
+	try {
+		await file.save(buffer);
+	} catch (error) {
+		console.error("File upload failed:", error);
+	}
+
+	const blob = new Blob([data]);
+	return new File([blob], fileName, { type: fileUpload.type });
 }
