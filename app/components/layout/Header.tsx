@@ -1,7 +1,6 @@
-import { Form, Link } from "@remix-run/react";
+import { Link } from "react-router";
 import { Container } from "../Container";
-import { UploadIcon } from "../icons";
-import { HumanIcon } from "../icons/Human";
+import { HumanIcon, UploadIcon } from "../icons";
 
 type Props = {
 	isAuthenticated: boolean;
@@ -12,7 +11,7 @@ export function Header(props: Props) {
 	const { isAuthenticated, name } = props;
 
 	return (
-		<header>
+		<header className="not-prose">
 			<Container maxWidth="wide">
 				<div className="flex items-center min-h-16 w-full">
 					<div className="flex-1">
@@ -60,9 +59,6 @@ export function Header(props: Props) {
 										</li>
 										<li>
 											<Link to="/logout">ログアウト</Link>
-											{/* <Form method="post" action="/logout">
-												<button type="submit">ログアウト</button>
-											</Form> */}
 										</li>
 									</ul>
 								</div>

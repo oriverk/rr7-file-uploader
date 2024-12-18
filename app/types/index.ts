@@ -16,10 +16,19 @@ export type User = {
 export type FirestoreFile = {
 	// Firestore ドキュメントのID
 	id?: string;
+	/**
+	 * xxx.zip
+	 */
 	fileName: string;
 	fileDescription: string;
+	/**
+	 * {uuid}.{contentType}
+	 */
 	filePath: string;
 	size: number;
+	/**
+	 * MIME type
+	 */
 	contentType: string;
 	isPublished: boolean;
 	downloadCount: number;

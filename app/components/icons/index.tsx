@@ -9,3 +9,4 @@ export * from "./ChevronDown";
 export * from "./Close";
 export * from "./Eye";
 export * from "./EyeClosed";
+export * from "./Human";

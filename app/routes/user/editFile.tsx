@@ -1,23 +1,20 @@
-import { parseWithZod } from "@conform-to/zod";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { Form, Link, useActionData } from "@remix-run/react";
-import { redirect, typedjson, useTypedLoaderData } from "remix-typedjson";
-import invariant from "tiny-invariant";
-import { z } from "zod";
-
 import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
-import { Textarea } from "@/components/form/Textarea";
-import { MAX_FILE_DESCRIPTION_LENGTH } from "@/constant";
+import { Textarea } from "@/components/forms/Textarea";
+import { MAX_FILE_DESCRIPTION_LENGTH } from "@/constants";
+import { requireAdmin, requireAuth } from "@/server/auth.server";
+import { getUserFile, updateUserFile } from "@/server/database.server";
 import {
 	getFormProps,
 	getInputProps,
 	getTextareaProps,
 	useForm,
 } from "@conform-to/react";
-import { requireAdmin, requireAuth } from "../server/auth.server";
-import { getUserFile, updateUserFile } from "../server/firestore.server";
+import { parseWithZod } from "@conform-to/zod";
+import { Form, Link, data, redirect } from "react-router";
+import invariant from "tiny-invariant";
+import { z } from "zod";
+import type { Route } from "./+types/editFile";
 
 const schema = z
 	.object({
@@ -31,7 +28,7 @@ const schema = z
 	})
 	.required();
 
-export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+export const loader = async ({ params, request }: Route.LoaderArgs) => {
 	invariant(params.fileId, "params.fileId is required");
 	const user = await requireAuth(request);
 
@@ -47,16 +44,16 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	const filename = !admin.isAdmin ? "demo.zip" : fileName;
 	const desc = !admin.isAdmin ? "file description for demo" : fileDescription;
 
-	return typedjson({
+	return {
 		file: {
 			fileName: filename,
 			fileDescription: desc,
 			isPublished,
 		},
-	});
+	};
 };
 
-export const action = async ({ params, request }: ActionFunctionArgs) => {
+export const action = async ({ params, request }: Route.ActionArgs) => {
 	invariant(params.fileId, "params.fileId is required");
 	const user = await requireAuth(request);
 	const formData = await request.formData();
@@ -64,19 +61,19 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 
 	try {
 		if (submission.status !== "success") {
-			return json({
+			return {
 				success: false,
 				message: null,
 				submission: submission.reply(),
-			});
+			};
 		}
 		const admin = requireAdmin(user.email ?? "");
 		if (!admin.isAdmin) {
-			return json({
+			return {
 				success: false,
 				message: "This is demo app. You can't edit file.",
 				submission: null,
-			});
+			};
 		}
 
 		const { fileDescription, isPublished } = submission.value;
@@ -89,11 +86,11 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 			throw new Error("failed to save file data");
 		}
 		if (writeResult.id) {
-			return redirect(`/files/${writeResult.id}/edit`);
+			return redirect(`/files/${writeResult.id}/edit`) as never;
 		}
 	} catch (error) {
 		console.error(error);
-		return json(
+		return data(
 			{
 				success: false,
 				message: String(error),
@@ -104,9 +101,11 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 	}
 };
 
-export default function Index() {
-	const { file } = useTypedLoaderData<typeof loader>();
-	const actionData = useActionData<typeof action>();
+export default function Index({
+	loaderData,
+	actionData,
+}: Route.ComponentProps) {
+	const { file } = loaderData;
 	const [form, fields] = useForm({
 		lastResult: actionData?.submission,
 		onValidate({ formData }) {
@@ -118,15 +117,15 @@ export default function Index() {
 	const { fileName, fileDescription, isPublished } = file;
 
 	return (
-		<article className="py-12">
+		<main className="py-12">
 			<Container>
 				<section>
 					<h1 className="break-all">{fileName}</h1>
 					<h2 className="text-center">ファイル編集</h2>
 					<div className="max-w-2xl mx-auto flex flex-col gap-8">
-						{actionData?.message && (
+						{actionData && (
 							<Alert state={actionData.success ? "info" : "error"}>
-								{actionData.message}
+								{actionData.message ?? ""}
 							</Alert>
 						)}
 						<Form
@@ -178,6 +177,6 @@ export default function Index() {
 					</div>
 				</section>
 			</Container>
-		</article>
+		</main>
 	);
 }

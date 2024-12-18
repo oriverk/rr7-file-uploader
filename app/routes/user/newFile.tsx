@@ -1,3 +1,17 @@
+import { Alert } from "@/components/Alert";
+import { Container } from "@/components/Container";
+import { FileInput } from "@/components/forms/FileInput";
+import { Textarea } from "@/components/forms/Textarea";
+import {
+	ALLOWED_CONTENT_TYPES,
+	ALLOWED_FILE_EXTENSIONS,
+	MAX_FILE_DESCRIPTION_LENGTH,
+	MAX_FILE_SIZE,
+} from "@/constants";
+import { requireAdmin, requireAuth } from "@/server/auth.server";
+import { addUserFile } from "@/server/database.server";
+import { uploadToStorageHandler } from "@/server/storage.server";
+import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
 import {
 	getFormProps,
 	getInputProps,
@@ -5,35 +19,10 @@ import {
 	useForm,
 } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
-import type {
-	ActionFunctionArgs,
-	LoaderFunctionArgs,
-	UploadHandler,
-} from "@remix-run/node";
-import {
-	unstable_composeUploadHandlers as composeUploadHandlers,
-	unstable_createMemoryUploadHandler as createMemoryUploadHandler,
-	json,
-	unstable_parseMultipartFormData as parseMultipartFormData,
-} from "@remix-run/node";
-import { Form, Link, useActionData } from "@remix-run/react";
-import { redirect, typedjson } from "remix-typedjson";
-import { v4 as uuidv4 } from "uuid";
+import { parseFormData } from "@mjackson/form-data-parser";
+import { Form, Link, data, redirect } from "react-router";
 import { z } from "zod";
-
-import { Alert } from "@/components/Alert";
-import { Container } from "@/components/Container";
-import { FileInput } from "@/components/form/FileInput";
-import { Textarea } from "@/components/form/Textarea";
-import {
-	ALLOWED_FILE_EXTENSIONS,
-	MAX_FILE_DESCRIPTION_LENGTH,
-	MAX_FILE_SIZE,
-} from "@/constant";
-import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
-import { requireAdmin, requireAuth } from "../server/auth.server";
-import { addUserFile } from "../server/firestore.server";
-import { uploadToFirebaseStorage } from "../server/storage.server";
+import type { Route } from "./+types/newFile";
 
 const schema = z
 	.object({
@@ -51,8 +40,7 @@ const schema = z
 			)
 			.refine(
 				(file) => {
-					const fileExtension = file.name.split(".").pop()?.toLowerCase() ?? "";
-					return ALLOWED_FILE_EXTENSIONS.includes(fileExtension);
+					return ALLOWED_CONTENT_TYPES.includes(file.type);
 				},
 				`ファイル拡張子は ${ALLOWED_FILE_EXTENSIONS.join(" か ")} のみ`,
 			),
@@ -60,73 +48,54 @@ const schema = z
 	})
 	.required();
 
-export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+export const loader = async ({ params, request }: Route.LoaderArgs) => {
 	await requireAuth(request);
-
-	return typedjson({
+	return {
 		success: true,
-	});
+	};
 };
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+export const action = async ({ request }: Route.ActionArgs) => {
 	const user = await requireAuth(request);
 	const formData = await request.clone().formData();
+	const submission = parseWithZod(formData, { schema });
+	if (submission.status !== "success") {
+		return {
+			success: false,
+			message: null,
+			submission: submission.reply(),
+		};
+	}
+
+	// for demo
+	const admin = requireAdmin(user.email ?? "");
+	if (!admin.isAdmin) {
+		return {
+			success: false,
+			message: "This is demo app. You can't upload file.",
+			submission: null,
+		};
+	}
+	const { fileDescription, file, isPublished } = submission.value;
+	const { name, type: contentType, size } = file;
 
 	try {
-		const submission = parseWithZod(formData, { schema });
-		if (submission.status !== "success") {
-			return json({
-				success: false,
-				message: null,
-				submission: submission.reply(),
-			});
-		}
-
-		// for demo
-		const admin = requireAdmin(user.email ?? "");
-		if (!admin.isAdmin) {
-			return json({
-				success: false,
-				message: "This is demo app. You can't upload file.",
-				submission: null,
-			});
-		}
-
-		const { fileDescription, file, isPublished } = submission.value;
-		const { name, type: contentType, size } = file;
-		const uuid = uuidv4();
-		const fileName = `${uuid}-${name}`;
-
-		const uploadHandler: UploadHandler = composeUploadHandlers(
-			async ({ name, contentType, data, filename }) => {
-				if (name !== "file" || !filename) {
-					return null;
-				}
-
-				// const fileExtension = filename.split(".").pop()?.toLowerCase();
-				// if (!ALLOWED_FILE_EXTENSIONS.includes(fileExtension || "")) {
-				// throw new Error("Invalid file extension");
-				// }
-
-				const signedUrl = await uploadToFirebaseStorage(
-					data,
-					`files/${uuid}-${filename}`,
-					Date.now() + 60 * 60 * 1000,
-				);
-				return signedUrl;
+		const form = await parseFormData(
+			request,
+			uploadToStorageHandler("file", "files"),
+			{
+				maxFileSize: MAX_FILE_SIZE,
 			},
-			createMemoryUploadHandler(),
 		);
-		const form = await parseMultipartFormData(request, uploadHandler);
-		const url = form.get("file");
-		if (!url) {
+		const formFile = form.get("file");
+		if (!(formFile instanceof File)) {
 			throw new Error("failed to upload file");
 		}
 
 		const writeResult = await addUserFile(user.uid, {
 			fileName: name,
 			fileDescription,
-			filePath: fileName,
+			filePath: formFile.name,
 			size,
 			contentType,
 			isPublished,
@@ -135,20 +104,17 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		if (!writeResult.writeTime) {
 			throw new Error("failed to save file data");
 		}
-		if (writeResult.id) {
-			return redirect(`/files/${writeResult.id}/edit`);
-		}
+		return redirect(`/files/${writeResult.id}/edit`) as never;
 	} catch (error) {
 		console.error("File upload failed:", error);
-		return json(
+		return data(
 			{ success: false, message: String(error), submission: null },
 			{ status: 500 },
 		);
 	}
 };
 
-export default function Index() {
-	const actionData = useActionData<typeof action>();
+export default function Index({ actionData }: Route.ComponentProps) {
 	const [form, fields] = useForm({
 		lastResult: actionData?.submission,
 		onValidate({ formData }) {
@@ -159,7 +125,7 @@ export default function Index() {
 	});
 
 	return (
-		<article className="py-12">
+		<main className="py-12">
 			<Container>
 				<section>
 					<h1>アップロード</h1>
@@ -240,6 +206,6 @@ export default function Index() {
 					</div>
 				</section>
 			</Container>
-		</article>
+		</main>
 	);
 }

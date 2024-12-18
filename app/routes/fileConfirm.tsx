@@ -1,16 +1,15 @@
 import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
 import { requireAdmin } from "@/server/auth.server";
-import type { LoaderFunctionArgs } from "@remix-run/node";
-import { Link } from "@remix-run/react";
+import { getUser, getUserFile } from "@/server/database.server";
+import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
 import { format } from "date-fns";
 import { useState } from "react";
-import { typedjson, useTypedLoaderData } from "remix-typedjson";
+import { Link } from "react-router";
 import invariant from "tiny-invariant";
-import { getUser, getUserFile } from "../server/firestore.server";
-import { convertByteWithUnit } from "../utils/convertByteWithUnit";
+import type { Route } from "./+types/fileConfirm";
 
-export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+export const loader = async ({ params, request }: Route.LoaderArgs) => {
 	invariant(params.username, "params.username is requied");
 	invariant(params.fileId, "params.fileId is required");
 	const user = await getUser(params.username);
@@ -36,18 +35,18 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
 	// for demo
 	const filename = !admin.isAdmin ? "demo.zip" : fileName;
-	return typedjson({
+	return {
 		isAdmin: admin.isAdmin,
 		user: { username, displayName, profileImageUrl },
 		file: {
 			...rest,
 			fileName: filename,
 		},
-	});
+	};
 };
 
-export default function UserFile() {
-	const { isAdmin, user, file } = useTypedLoaderData<typeof loader>();
+export default function UserFile({ loaderData }: Route.ComponentProps) {
+	const { isAdmin, user, file } = loaderData;
 	const [isConfirmed, setIsConfirmed] = useState(false);
 	const { username, displayName, profileImageUrl } = user;
 	const { fileName, contentType, size, createdAt, updatedAt, downloadCount } =
@@ -62,7 +61,7 @@ export default function UserFile() {
 	};
 
 	return (
-		<article className="py-12">
+		<main className="py-12">
 			<Container maxWidth="wide">
 				<div>
 					<div className="py-4 flex flex-col gap-4 items-center justify-evenly">
@@ -175,6 +174,6 @@ export default function UserFile() {
 					</div>
 				</section>
 			</Container>
-		</article>
+		</main>
 	);
 }

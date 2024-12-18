@@ -1,9 +1,9 @@
 import { Container } from "@/components/Container";
-import { TextInput } from "@/components/form/TextInput";
-import { Textarea } from "@/components/form/Textarea";
-import { MAX_PROFILE_LENGTH } from "@/constant";
+import { TextInput } from "@/components/forms/TextInput";
+import { Textarea } from "@/components/forms/Textarea";
+import { MAX_PROFILE_LENGTH } from "@/constants";
 import { requireAuth } from "@/server/auth.server";
-import { getUserWithId, updateUser } from "@/server/firestore.server";
+import { getUserWithId, updateUser } from "@/server/database.server";
 import {
 	getFormProps,
 	getInputProps,
@@ -11,11 +11,10 @@ import {
 	useForm,
 } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { useEffect } from "react";
+import { Form, data } from "react-router";
 import { z } from "zod";
+import type { Route } from "./+types/profile";
 
 const schema = z.object({
 	displayName: z
@@ -24,21 +23,24 @@ const schema = z.object({
 	profile: z.string().max(140, "自己紹介文は140文字まで").optional(),
 });
 
-export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+export const loader = async ({ params, request }: Route.LoaderArgs) => {
 	const auth = await requireAuth(request);
 	const { displayName, profile } = await getUserWithId(auth.uid);
-	return json({
+	return {
 		user: { displayName, profile },
-	});
+	};
 };
 
-export const action = async ({ params, request }: ActionFunctionArgs) => {
+export const action = async ({ params, request }: Route.ActionArgs) => {
 	const user = await requireAuth(request);
 	const formData = await request.formData();
 	const submission = parseWithZod(formData, { schema });
 	try {
 		if (submission.status !== "success") {
-			return json(submission.reply());
+			return {
+				success: false,
+				submission: submission.reply(),
+			};
 		}
 
 		const { displayName, profile } = submission.value;
@@ -46,21 +48,20 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 			displayName,
 			profile,
 		});
-		return json({
+		return {
 			success: !!result.writeTime,
-		});
+			submission: null,
+		};
 	} catch (error) {
 		console.error(error);
-		return json({ error: String(error) }, { status: 401 });
+		return data({ success: false, message: String(error), submission: null }, { status: 401 });
 	}
 };
 
-export default function Profile() {
-	const { user } = useLoaderData<typeof loader>();
-	const actionData = useActionData<typeof action>();
+export default function Profile({ loaderData, actionData }: Route.ComponentProps) {
+	const { user } = loaderData;
 	const [form, fields] = useForm({
-		// @ts-ignore
-		lastResult: actionData,
+		lastResult: actionData?.submission,
 		onValidate({ formData }) {
 			return parseWithZod(formData, { schema });
 		},
@@ -77,7 +78,7 @@ export default function Profile() {
 	}, [actionData]);
 
 	return (
-		<article className="py-12">
+		<main className="py-12">
 			<Container>
 				<section>
 					<h1>プロフィール編集</h1>
@@ -105,7 +106,7 @@ export default function Profile() {
 								<div className="label">
 									<span className="label-text-alt text-sm" />
 									<span className="label-text-alt text-error">
-										{fields.username.errors}
+										{fields.displayName.errors}
 									</span>
 								</div>
 							</label>
@@ -135,6 +136,6 @@ export default function Profile() {
 					</div>
 				</section>
 			</Container>
-		</article>
+		</main>
 	);
 }

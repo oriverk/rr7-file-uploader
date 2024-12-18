@@ -1,10 +1,10 @@
-import { Link } from "@remix-run/react";
 import type { FC } from "react";
+import { Link } from "react-router";
 import { Container } from "../Container";
 
 export const Footer: FC = () => {
 	return (
-		<footer>
+		<footer className="not-prose">
 			<Container
 				maxWidth="wide"
 				className="footer footer-center max-w-none bg-base-200 text-base-content p-10"

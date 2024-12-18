@@ -4,13 +4,12 @@ import { FileCard } from "@/components/FileCard";
 import { Pagination } from "@/components/Pagination";
 import { usePagination } from "@/hooks/usePagination";
 import { requireAdmin } from "@/server/auth.server";
+import { getUser, getUserFiles } from "@/server/database.server";
 import type { FirestoreFile } from "@/types";
-import type { LoaderFunctionArgs } from "@remix-run/node";
-import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import invariant from "tiny-invariant";
-import { getUser, getUserFiles } from "../server/firestore.server";
+import type { Route } from "./+types/userFiles";
 
-export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+export const loader = async ({ params, request }: Route.LoaderArgs) => {
 	invariant(params.username, "params.usename is required");
 	const user = await getUser(params.username);
 	invariant(user.id, "user not found");
@@ -31,7 +30,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 		});
 	}
 
-	return typedjson({
+	return {
 		// for demo
 		isAdmin: admin.isAdmin,
 		user: {
@@ -41,17 +40,17 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 			profileImageUrl,
 		},
 		files,
-	});
+	};
 };
 
-export default function UserFiles() {
-	const { isAdmin, user, files } = useTypedLoaderData<typeof loader>();
+export default function UserFiles({ loaderData }: Route.ComponentProps) {
+	const { isAdmin, user, files } = loaderData;
 	const { username, displayName, profile, profileImageUrl } = user;
 	const { currentItems, endIndex, goToPage, nextPage, prevPage } =
 		usePagination<FirestoreFile>(files, 6, 1);
 
 	return (
-		<article className="py-12">
+		<main className="py-12">
 			<Container>
 				<div className="flex flex-col gap-8">
 					{!isAdmin && (
@@ -119,6 +118,6 @@ export default function UserFiles() {
 					)}
 				</section>
 			</Container>
-		</article>
+		</main>
 	);
 }

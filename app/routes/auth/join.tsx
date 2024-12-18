@@ -1,24 +1,17 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
-import { Form, Link, useActionData } from "@remix-run/react";
-
 import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
-import { EmailInput } from "@/components/form/EmailInput";
-import { PasswordInput } from "@/components/form/PasswordInput";
-import { TextInput } from "@/components/form/TextInput";
-import { checkExistingUser } from "@/server/firestore.server";
+import { EmailInput, PasswordInput, TextInput } from "@/components/forms";
+import { checkSessionCookie, requireAdmin, signUp } from "@/server/auth.server";
+import { checkExistingUser } from "@/server/database.server";
+import { commitSession, getSession } from "@/server/sesions.server";
 import type { Intent } from "@conform-to/react";
 import { getFormProps, getInputProps, useForm } from "@conform-to/react";
 import { conformZodMessage, parseWithZod } from "@conform-to/zod";
 import { useState } from "react";
+import { Form, Link, data, redirect } from "react-router";
 import { z } from "zod";
-import {
-	checkSessionCookie,
-	requireAdmin,
-	signUp,
-} from "../server/auth.server";
-import { commitSession, getSession } from "../sesions";
+
+import type { Route } from "./+types/join";
 
 function createSchema(
 	intent: Intent | null,
@@ -77,7 +70,7 @@ function createSchema(
 		);
 }
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ request }: Route.LoaderArgs) => {
 	const session = await getSession(request.headers.get("cookie"));
 	const { uid } = await checkSessionCookie(session);
 
@@ -85,12 +78,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 		"Set-Cookie": await commitSession(session),
 	};
 	if (uid) {
-		return redirect("/", { headers });
+		return redirect("/", { headers }) as never;
 	}
-	return json(null, { headers });
+	return data(null, { headers });
 };
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+export const action = async ({ request }: Route.ActionArgs) => {
 	const formData = await request.formData();
 	const submission = await parseWithZod(formData, {
 		schema: (intent) =>
@@ -105,22 +98,22 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 	try {
 		if (submission.status !== "success") {
-			return json({
+			return {
 				success: false,
 				message: null,
 				submission: submission.reply(),
-			});
+			};
 		}
 		const { username, email, password } = submission.value;
 		// for demo
 		const admin = requireAdmin(email);
 		if (!admin.isAdmin) {
-			return json({
+			return {
 				success: false,
 				message:
 					"This is demo app. You can't register, but you can log in with a demo account.",
 				submission: submission.reply(),
-			});
+			};
 		}
 
 		const sessionCookie = await signUp(username, username, email, password);
@@ -130,10 +123,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			headers: {
 				"Set-Cookie": await commitSession(session),
 			},
-		});
+		}) as never;
 	} catch (error) {
 		console.error(error);
-		return json(
+		return data(
 			{
 				success: false,
 				message: String(error),
@@ -144,9 +137,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	}
 };
 
-export default function Login() {
+export default function Login({ actionData }: Route.ComponentProps) {
 	const [username, setUsername] = useState("");
-	const actionData = useActionData<typeof action>();
 	const [form, fields] = useForm({
 		lastResult: actionData?.submission,
 		onValidate({ formData }) {
@@ -163,11 +155,11 @@ export default function Login() {
 	};
 
 	return (
-		<article className="py-12">
+		<main className="py-12">
 			<Container>
 				<section>
 					<h1>アカウントを作成</h1>
-					<div className="mx-auto w-96 flex flex-col gap-8">
+					<div className="mx-auto max-w-96 flex flex-col gap-8">
 						{actionData?.message && (
 							<Alert state={actionData.success ? "info" : "error"}>
 								{actionData.message}
@@ -258,6 +250,6 @@ export default function Login() {
 					</div>
 				</section>
 			</Container>
-		</article>
+		</main>
 	);
 }

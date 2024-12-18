@@ -1,18 +1,16 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-
 import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
 import { DashboardFileCard } from "@/components/DashboradFileCard";
 import { Pagination } from "@/components/Pagination";
 import { usePagination } from "@/hooks/usePagination";
 import { requireAdmin, requireAuth } from "@/server/auth.server";
-import { getUserFiles, softDeleteUserFile } from "@/server/firestore.server";
+import { getUserFiles, softDeleteUserFile } from "@/server/database.server";
 import type { FirestoreFile } from "@/types";
-import { Link, json, useActionData, useSubmit } from "@remix-run/react";
 import { useRef, useState } from "react";
-import { typedjson, useTypedLoaderData } from "remix-typedjson";
+import { Link, data, useSubmit } from "react-router";
+import type { Route } from "./+types/dashboard";
 
-export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+export const loader = async ({ params, request }: Route.LoaderArgs) => {
 	const user = await requireAuth(request);
 	// for demo;
 	const admin = requireAdmin(user.email ?? "");
@@ -29,13 +27,13 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 		});
 	}
 
-	return typedjson({
+	return {
 		isAdmin: admin.isAdmin,
 		files,
-	});
+	};
 };
 
-export const action = async ({ params, request }: ActionFunctionArgs) => {
+export const action = async ({ params, request }: Route.ActionArgs) => {
 	const form = await request.formData();
 	const fileId = form.get("fileId");
 	const user = await requireAuth(request);
@@ -48,19 +46,19 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 		// for demo
 		const admin = requireAdmin(user.email ?? "");
 		if (!admin.isAdmin) {
-			return json({
+			return {
 				success: false,
 				message: "This is demo app. You can't delete a file.",
-			});
+			};
 		}
 		await softDeleteUserFile(user.uid, fileId);
-		return json({
+		return {
 			success: true,
 			message: "file was deleted successfully",
-		});
+		};
 	} catch (error) {
 		console.error("failed to delete file", error);
-		return json(
+		return data(
 			{
 				success: false,
 				message: String(error),
@@ -72,9 +70,11 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 
 type DeletingFile = Record<"fileId" | "fileName", string>;
 
-export default function Dashboard() {
-	const { isAdmin, files } = useTypedLoaderData<typeof loader>();
-	const actionData = useActionData<typeof action>();
+export default function Dashboard({
+	loaderData,
+	actionData,
+}: Route.ComponentProps) {
+	const { isAdmin, files } = loaderData;
 	const [deletingFile, setDeletingFile] = useState<DeletingFile | null>(null);
 	const { currentItems, endIndex, goToPage, nextPage, prevPage } =
 		usePagination<FirestoreFile>(files, 10, 1);
@@ -104,7 +104,7 @@ export default function Dashboard() {
 
 	return (
 		<>
-			<article className="py-12">
+			<main className="py-12">
 				<Container>
 					<section className="flex flex-col gap-8">
 						{/* for demo */}
@@ -161,7 +161,7 @@ export default function Dashboard() {
 						)}
 					</section>
 				</Container>
-			</article>
+			</main>
 			<dialog className="modal" ref={dialog}>
 				<div className="modal-box">
 					<h3 className="font-bold text-lg text-center">削除しますか？</h3>

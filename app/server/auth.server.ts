@@ -1,11 +1,11 @@
-import type { Session } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
 import type { UserRecord } from "firebase-admin/auth";
+import type { Session } from "react-router";
+import { redirect } from "react-router";
 
 import type { User } from "@/types";
-import { destroySession, getSession } from "../sesions";
+import { addUser } from "./database.server";
 import { auth } from "./firebase.server";
-import { addUser } from "./firestore.server";
+import { destroySession, getSession } from "./sesions.server";
 import "dotenv/config";
 
 export function requireAdmin(email: string) {

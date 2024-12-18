@@ -1,28 +1,20 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
-import {
-	Link,
-	useActionData,
-	useLoaderData,
-	useSubmit,
-} from "@remix-run/react";
-
 import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
-import { EmailInput } from "@/components/form/EmailInput";
-import { PasswordInput } from "@/components/form/PasswordInput";
-import { getFormProps, getInputProps, useForm } from "@conform-to/react";
-import { parseWithZod } from "@conform-to/zod";
-import { z } from "zod";
-import * as firebaseRest from "../firebase-rest";
+import { EmailInput, PasswordInput } from "@/components/forms";
+import * as firebaseRest from "@/firebase-rest";
 import {
 	checkSessionCookie,
 	requireAdmin,
 	signIn,
 	signInWithToken,
-} from "../server/auth.server";
-import { getRestConfig } from "../server/firebase.server";
-import { commitSession, getSession } from "../sesions";
+} from "@/server/auth.server";
+import { getRestConfig } from "@/server/firebase.server";
+import { commitSession, getSession } from "@/server/sesions.server";
+import { getFormProps, getInputProps, useForm } from "@conform-to/react";
+import { parseWithZod } from "@conform-to/zod";
+import { Link, data, redirect, useSubmit } from "react-router";
+import { z } from "zod";
+import type { Route } from "./+types/login";
 
 const schema = z.object({
 	email: z
@@ -32,7 +24,7 @@ const schema = z.object({
 	idToken: z.string().optional(),
 });
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ request }: Route.LoaderArgs) => {
 	const session = await getSession(request.headers.get("cookie"));
 	const { uid } = await checkSessionCookie(session);
 	const headers = {
@@ -42,20 +34,20 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 		return redirect("/", { headers });
 	}
 	const { apiKey, domain } = getRestConfig();
-	return json({ apiKey, domain }, { headers });
+	return data({ apiKey, domain }, { headers });
 };
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+export const action = async ({ request }: Route.ActionArgs) => {
 	const formData = await request.formData();
 	const submission = parseWithZod(formData, { schema });
 	let sessionCookie: string;
 	try {
 		if (submission.status !== "success") {
-			return json({
+			return {
 				success: false,
 				message: null,
 				submission: submission.reply(),
-			});
+			};
 		}
 
 		const { idToken, email, password } = submission.value;
@@ -63,12 +55,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		// for demo
 		const admin = requireAdmin(email);
 		if (email !== "test@example.com" && !admin.isAdmin) {
-			return json({
+			return {
 				success: false,
 				message:
 					"This is demo app. You can login only with test@example.com and password",
 				submission: submission.reply(),
-			});
+			};
 		}
 
 		if (typeof idToken === "string") {
@@ -82,10 +74,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			headers: {
 				"Set-Cookie": await commitSession(session),
 			},
-		});
+		}) as never;
 	} catch (error) {
 		console.error(error);
-		return json(
+		return data(
 			{
 				success: false,
 				message: String(error),
@@ -96,9 +88,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	}
 };
 
-export default function Login() {
-	const restConfig = useLoaderData<typeof loader>();
-	const actionData = useActionData<typeof action>();
+export default function Login({
+	loaderData,
+	actionData,
+}: Route.ComponentProps) {
 	const submit = useSubmit();
 	const [form, fields] = useForm({
 		lastResult: actionData?.submission,
@@ -118,7 +111,12 @@ export default function Login() {
 					password,
 					returnSecureToken: true,
 				},
-				restConfig,
+				{
+					// @ts-ignore
+					apiKey: loaderData.apiKey ?? "",
+					// @ts-ignore
+					domain: loaderData.domain ?? "",
+				},
 			);
 			if (firebaseRest.isError(login)) return;
 			submit({ idToken: login.idToken, email, password }, { method: "post" });
@@ -129,14 +127,14 @@ export default function Login() {
 
 	const { onSubmit, ...restFormSubmit } = getFormProps(form);
 	return (
-		<article className="py-12">
+		<main className="py-12">
 			<Container>
 				<section>
 					<h1>ログイン</h1>
-					<div className="w-96 mx-auto flex flex-col gap-8">
-						{actionData?.message && (
-							<Alert state={actionData.success ? "info" : "error"}>
-								{actionData.message}
+					<div className="max-w-96 mx-auto flex flex-col gap-8">
+						{actionData && (
+							<Alert state={actionData?.success ? "info" : "error"}>
+								{actionData.message ?? ""}
 							</Alert>
 						)}
 						<form
@@ -194,6 +192,6 @@ export default function Login() {
 					</div>
 				</section>
 			</Container>
-		</article>
+		</main>
 	);
 }
