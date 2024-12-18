@@ -1,4 +1,4 @@
-import { RESERVED_WORDS } from "@/constant";
+import { RESERVED_WORDS } from "@/constants";
 import type {
 	DocumentData,
 	FirestoreDataConverter,

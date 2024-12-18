@@ -1,3 +1,18 @@
+import { Alert } from "@/components/Alert";
+import { Container } from "@/components/Container";
+import { FileInput } from "@/components/forms/FileInput";
+import { Textarea } from "@/components/forms/Textarea";
+import {
+	ALLOWED_CONTENT_TYPES,
+	ALLOWED_FILE_EXTENSIONS,
+	MAX_FILE_DESCRIPTION_LENGTH,
+	MAX_FILE_SIZE,
+} from "@/constants";
+import { requireAdmin, requireAuth } from "@/server/auth.server";
+import { addUserFile } from "@/server/database.server";
+import { uploadToStorageHandler } from "@/server/storage.server";
+import type { ActionData } from "@/types";
+import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
 import {
 	getFormProps,
 	getInputProps,
@@ -8,22 +23,6 @@ import { parseWithZod } from "@conform-to/zod";
 import { parseFormData } from "@mjackson/form-data-parser";
 import { Form, Link, data, redirect } from "react-router";
 import { z } from "zod";
-
-import { Alert } from "@/components/Alert";
-import { Container } from "@/components/Container";
-import { FileInput } from "@/components/form/FileInput";
-import { Textarea } from "@/components/form/Textarea";
-import {
-	ALLOWED_CONTENT_TYPES,
-	ALLOWED_FILE_EXTENSIONS,
-	MAX_FILE_DESCRIPTION_LENGTH,
-	MAX_FILE_SIZE,
-} from "@/constant";
-import { requireAdmin, requireAuth } from "@/server/auth.server";
-import { addUserFile } from "@/server/firestore.server";
-import { uploadToStorageHandler } from "@/server/storage.server";
-import type { ActionData } from "@/types";
-import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
 import type { Route } from "./+types/newFile";
 
 const schema = z
@@ -131,7 +130,7 @@ export default function Index({ actionData }: Props) {
 	});
 
 	return (
-		<article className="py-12">
+		<main className="py-12">
 			<Container>
 				<section>
 					<h1>アップロード</h1>
@@ -212,6 +211,6 @@ export default function Index({ actionData }: Props) {
 					</div>
 				</section>
 			</Container>
-		</article>
+		</main>
 	);
 }

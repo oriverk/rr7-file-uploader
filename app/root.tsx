@@ -16,7 +16,7 @@ import { Footer, Header } from "./components/layout";
 
 import { Container } from "./components/Container";
 import { checkSessionCookie } from "./server/auth.server";
-import { getSession } from "./sesions";
+import { getSession } from "./server/sesions.server";
 import tailwind from "./styles/tailwind.css?url";
 
 import type { Route } from "./+types/root";
@@ -115,7 +115,7 @@ export default function App({ loaderData }: Route.ComponentProps) {
 
 	return (
 		<Document>
-			<div className="flex h-hull flex-1 flex-col">
+			<div className="prose prose-h1:text-center max-w-none flex h-hull flex-1 flex-col">
 				<Header isAuthenticated={isAuthenticated} name={name} />
 				<Outlet />
 				<Footer />

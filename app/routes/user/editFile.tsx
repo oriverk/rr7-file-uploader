@@ -1,14 +1,9 @@
-import { parseWithZod } from "@conform-to/zod";
-import { Form, Link, data, redirect } from "react-router";
-import invariant from "tiny-invariant";
-import { z } from "zod";
-
 import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
-import { Textarea } from "@/components/form/Textarea";
-import { MAX_FILE_DESCRIPTION_LENGTH } from "@/constant";
+import { Textarea } from "@/components/forms/Textarea";
+import { MAX_FILE_DESCRIPTION_LENGTH } from "@/constants";
 import { requireAdmin, requireAuth } from "@/server/auth.server";
-import { getUserFile, updateUserFile } from "@/server/firestore.server";
+import { getUserFile, updateUserFile } from "@/server/database.server";
 import type { ActionData } from "@/types";
 import {
 	getFormProps,
@@ -16,6 +11,10 @@ import {
 	getTextareaProps,
 	useForm,
 } from "@conform-to/react";
+import { parseWithZod } from "@conform-to/zod";
+import { Form, Link, data, redirect } from "react-router";
+import invariant from "tiny-invariant";
+import { z } from "zod";
 import type { Route } from "./+types/editFile";
 
 const schema = z
@@ -121,7 +120,7 @@ export default function Index({ loaderData, actionData }: Props) {
 	const { fileName, fileDescription, isPublished } = file;
 
 	return (
-		<article className="py-12">
+		<main className="py-12">
 			<Container>
 				<section>
 					<h1 className="break-all">{fileName}</h1>
@@ -181,6 +180,6 @@ export default function Index({ loaderData, actionData }: Props) {
 					</div>
 				</section>
 			</Container>
-		</article>
+		</main>
 	);
 }

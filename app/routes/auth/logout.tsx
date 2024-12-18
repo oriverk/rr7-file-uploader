@@ -1,7 +1,6 @@
 import { Container } from "@/components/Container";
-import { destroySession, getSession } from "@/sesions";
+import { destroySession, getSession } from "@/server/sesions.server";
 import { redirect } from "react-router";
-
 import type { Route } from "./+types/logout";
 
 export const loader = async ({ request, params }: Route.LoaderArgs) => {
@@ -13,7 +12,7 @@ export const loader = async ({ request, params }: Route.LoaderArgs) => {
 
 export default function Logout() {
 	return (
-		<main>
+		<main className="py-12">
 			<article>
 				<Container
 					maxWidth="wide"

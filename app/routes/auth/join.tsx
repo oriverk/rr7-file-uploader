@@ -1,18 +1,15 @@
-import { data, redirect } from "react-router";
-import { Form, Link } from "react-router";
-
 import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
-import { EmailInput, PasswordInput, TextInput } from "@/components/form";
+import { EmailInput, PasswordInput, TextInput } from "@/components/forms";
 import { checkSessionCookie, requireAdmin, signUp } from "@/server/auth.server";
-import { checkExistingUser } from "@/server/firestore.server";
+import { checkExistingUser } from "@/server/database.server";
+import { commitSession, getSession } from "@/server/sesions.server";
 import type { Intent } from "@conform-to/react";
 import { getFormProps, getInputProps, useForm } from "@conform-to/react";
 import { conformZodMessage, parseWithZod } from "@conform-to/zod";
 import { useState } from "react";
+import { Form, Link, data, redirect } from "react-router";
 import { z } from "zod";
-
-import { commitSession, getSession } from "@/sesions";
 
 import type { Route } from "./+types/join";
 
@@ -164,11 +161,11 @@ export default function Login({ actionData }: Props) {
 	};
 
 	return (
-		<article className="py-12">
+		<main className="py-12">
 			<Container>
 				<section>
 					<h1>アカウントを作成</h1>
-					<div className="mx-auto w-96 flex flex-col gap-8">
+					<div className="mx-auto max-w-96 flex flex-col gap-8">
 						{actionData?.message && (
 							<Alert state={actionData.success ? "info" : "error"}>
 								{actionData.message}
@@ -259,6 +256,6 @@ export default function Login({ actionData }: Props) {
 					</div>
 				</section>
 			</Container>
-		</article>
+		</main>
 	);
 }

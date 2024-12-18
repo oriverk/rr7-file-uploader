@@ -1,10 +1,6 @@
-import { data, redirect } from "react-router";
-import { Link, useSubmit } from "react-router";
-
 import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
-import { EmailInput } from "@/components/form/EmailInput";
-import { PasswordInput } from "@/components/form/PasswordInput";
+import { EmailInput, PasswordInput } from "@/components/forms";
 import * as firebaseRest from "@/firebase-rest";
 import {
 	checkSessionCookie,
@@ -13,9 +9,10 @@ import {
 	signInWithToken,
 } from "@/server/auth.server";
 import { getRestConfig } from "@/server/firebase.server";
-import { commitSession, getSession } from "@/sesions";
+import { commitSession, getSession } from "@/server/sesions.server";
 import { getFormProps, getInputProps, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
+import { Link, data, redirect, useSubmit } from "react-router";
 import { z } from "zod";
 
 import type { ActionData } from "@/types";
@@ -133,11 +130,11 @@ export default function Login({
 
 	const { onSubmit, ...restFormSubmit } = getFormProps(form);
 	return (
-		<article className="py-12">
+		<main className="py-12">
 			<Container>
 				<section>
 					<h1>ログイン</h1>
-					<div className="w-96 mx-auto flex flex-col gap-8">
+					<div className="max-w-96 mx-auto flex flex-col gap-8">
 						{typedActionData && (
 							<Alert state={typedActionData?.success ? "info" : "error"}>
 								{typedActionData.message ?? ""}
@@ -198,6 +195,6 @@ export default function Login({
 					</div>
 				</section>
 			</Container>
-		</article>
+		</main>
 	);
 }

@@ -1,4 +1,4 @@
-import { ALLOWED_CONTENT_TYPES, CONTENT_TYPES } from "@/constant";
+import { ALLOWED_CONTENT_TYPES, CONTENT_TYPES } from "@/constants";
 import type { FileUpload, FileUploadHandler } from "@mjackson/form-data-parser";
 import { v4 as uuidv4 } from "uuid";
 import { storage } from "./firebase.server";

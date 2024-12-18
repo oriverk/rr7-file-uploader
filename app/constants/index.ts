@@ -27,6 +27,7 @@ export const RESERVED_WORDS = [
 	"root",
 	"signup",
 	"admin",
+	"administrator",
 	"account",
 	"posts",
 ];

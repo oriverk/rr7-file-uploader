@@ -1,14 +1,12 @@
 import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
 import { requireAdmin } from "@/server/auth.server";
-
+import { getUser, getUserFile } from "@/server/database.server";
+import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
 import { format } from "date-fns";
 import { useState } from "react";
-import invariant from "tiny-invariant";
-import { getUser, getUserFile } from "../server/firestore.server";
-import { convertByteWithUnit } from "../utils/convertByteWithUnit";
-
 import { Link } from "react-router";
+import invariant from "tiny-invariant";
 import type { Route } from "./+types/fileConfirm";
 
 export const loader = async ({ params, request }: Route.LoaderArgs) => {
@@ -63,7 +61,7 @@ export default function UserFile({ loaderData }: Route.ComponentProps) {
 	};
 
 	return (
-		<article className="py-12">
+		<main className="py-12">
 			<Container maxWidth="wide">
 				<div>
 					<div className="py-4 flex flex-col gap-4 items-center justify-evenly">
@@ -176,6 +174,6 @@ export default function UserFile({ loaderData }: Route.ComponentProps) {
 					</div>
 				</section>
 			</Container>
-		</article>
+		</main>
 	);
 }

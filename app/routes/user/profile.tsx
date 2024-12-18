@@ -1,9 +1,9 @@
 import { Container } from "@/components/Container";
-import { TextInput } from "@/components/form/TextInput";
-import { Textarea } from "@/components/form/Textarea";
-import { MAX_PROFILE_LENGTH } from "@/constant";
+import { TextInput } from "@/components/forms/TextInput";
+import { Textarea } from "@/components/forms/Textarea";
+import { MAX_PROFILE_LENGTH } from "@/constants";
 import { requireAuth } from "@/server/auth.server";
-import { getUserWithId, updateUser } from "@/server/firestore.server";
+import { getUserWithId, updateUser } from "@/server/database.server";
 import type { ActionData } from "@/types";
 import {
 	getFormProps,
@@ -15,7 +15,6 @@ import { parseWithZod } from "@conform-to/zod";
 import { useEffect } from "react";
 import { Form, data } from "react-router";
 import { z } from "zod";
-
 import type { Route } from "./+types/profile";
 
 const schema = z.object({
@@ -85,7 +84,7 @@ export default function Profile({ loaderData, actionData }: Props) {
 	}, [actionData]);
 
 	return (
-		<article className="py-12">
+		<main className="py-12">
 			<Container>
 				<section>
 					<h1>プロフィール編集</h1>
@@ -143,6 +142,6 @@ export default function Profile({ loaderData, actionData }: Props) {
 					</div>
 				</section>
 			</Container>
-		</article>
+		</main>
 	);
 }

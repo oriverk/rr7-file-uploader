@@ -4,10 +4,9 @@ import { FileCard } from "@/components/FileCard";
 import { Pagination } from "@/components/Pagination";
 import { usePagination } from "@/hooks/usePagination";
 import { requireAdmin } from "@/server/auth.server";
-import { getUser, getUserFiles } from "@/server/firestore.server";
+import { getUser, getUserFiles } from "@/server/database.server";
 import type { FirestoreFile } from "@/types";
 import invariant from "tiny-invariant";
-
 import type { Route } from "./+types/userFiles";
 
 export const loader = async ({ params, request }: Route.LoaderArgs) => {
@@ -51,7 +50,7 @@ export default function UserFiles({ loaderData }: Route.ComponentProps) {
 		usePagination<FirestoreFile>(files, 6, 1);
 
 	return (
-		<article className="py-12">
+		<main className="py-12">
 			<Container>
 				<div className="flex flex-col gap-8">
 					{!isAdmin && (
@@ -119,6 +118,6 @@ export default function UserFiles({ loaderData }: Route.ComponentProps) {
 					)}
 				</section>
 			</Container>
-		</article>
+		</main>
 	);
 }

@@ -4,7 +4,7 @@ import { DashboardFileCard } from "@/components/DashboradFileCard";
 import { Pagination } from "@/components/Pagination";
 import { usePagination } from "@/hooks/usePagination";
 import { requireAdmin, requireAuth } from "@/server/auth.server";
-import { getUserFiles, softDeleteUserFile } from "@/server/firestore.server";
+import { getUserFiles, softDeleteUserFile } from "@/server/database.server";
 import type { FirestoreFile } from "@/types";
 import { useRef, useState } from "react";
 import { Link, data, useSubmit } from "react-router";
@@ -104,7 +104,7 @@ export default function Dashboard({
 
 	return (
 		<>
-			<article className="py-12">
+			<main className="py-12">
 				<Container>
 					<section className="flex flex-col gap-8">
 						{/* for demo */}
@@ -161,7 +161,7 @@ export default function Dashboard({
 						)}
 					</section>
 				</Container>
-			</article>
+			</main>
 			<dialog className="modal" ref={dialog}>
 				<div className="modal-box">
 					<h3 className="font-bold text-lg text-center">削除しますか？</h3>

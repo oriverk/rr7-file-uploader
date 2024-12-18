@@ -1,15 +1,14 @@
 import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
 import { requireAdmin } from "@/server/auth.server";
-
-import { getUser, getUserFile } from "@/server/firestore.server";
+import { getUser, getUserFile } from "@/server/database.server";
 import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
 import { parseMarkdown } from "@/utils/markdown";
 import { format } from "date-fns";
-import invariant from "tiny-invariant";
-
 import { Link } from "react-router";
+import invariant from "tiny-invariant";
 import type { Route } from "./+types/fileDetail";
+import { CONTENT_TYPES } from "@/constants";
 
 export const loader = async ({ params, request }: Route.LoaderArgs) => {
 	invariant(params.username, "params.username is requied");
@@ -55,8 +54,10 @@ export default function UserFile({ loaderData }: Route.ComponentProps) {
 		fileDescription,
 	} = file;
 
+	const extension = CONTENT_TYPES[contentType];
+
 	return (
-		<article className="py-12">
+		<main className="py-12">
 			<Container maxWidth="wide">
 				<div>
 					<div className="py-4 flex flex-col gap-4 items-center justify-evenly">
@@ -112,8 +113,8 @@ export default function UserFile({ loaderData }: Route.ComponentProps) {
 								<table className="table">
 									<tbody>
 										<tr>
-											<th>タイプ</th>
-											<td>{contentType}</td>
+											<th>ファイルタイプ</th>
+											<td>{extension}</td>
 										</tr>
 										<tr>
 											<th>サイズ</th>
@@ -140,6 +141,6 @@ export default function UserFile({ loaderData }: Route.ComponentProps) {
 					</div>
 				</section>
 			</Container>
-		</article>
+		</main>
 	);
 }
