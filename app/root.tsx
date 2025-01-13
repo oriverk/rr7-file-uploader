@@ -1,6 +1,4 @@
 import { useEffect } from "react";
-import * as gtag from "./utils/gtags.client";
-
 import {
 	Link,
 	Links,
@@ -13,19 +11,19 @@ import {
 	useRouteError,
 } from "react-router";
 import { Footer, Header } from "./components/layout";
-
 import { Container } from "./components/Container";
 import { checkSessionCookie } from "./server/auth.server";
 import { getSession } from "./server/sesions.server";
 import tailwind from "./styles/tailwind.css?url";
-
 import type { Route } from "./+types/root";
 import { GoogleAnalytics } from "./components/GoogleAnalytics";
+import ReactGA from "react-ga4";
 
 export const links: Route.LinksFunction = () => [
 	{ rel: "stylesheet", href: tailwind },
 	{ rel: "icon", type: "image/svg+xml", href: "/favicon/favicon.svg" },
 	{ rel: "apple-touch-icon", href: "/favicon/favicon.svg" },
+	{ rel: "sitemap", href: "/sitemap.xml" }
 ];
 
 export function meta() {
@@ -58,8 +56,8 @@ type DocumentProps = {
 	title?: string;
 	isDev?: boolean;
 	noIndex?: boolean;
-	children: React.ReactNode;
 	gaTrackingId?: string;
+	children: React.ReactNode;
 };
 
 function Document(props: DocumentProps) {
@@ -67,10 +65,13 @@ function Document(props: DocumentProps) {
 	const location = useLocation();
 
 	useEffect(() => {
-		if (gaTrackingId?.length) {
-			gtag.pageview(location.pathname, gaTrackingId);
-		}
-	}, [location, gaTrackingId]);
+		if (isDev || !gaTrackingId?.length) return;
+		ReactGA.initialize(gaTrackingId);
+		ReactGA.send({
+			hitType: "pageview",
+			page: location.pathname + location.search,
+		});
+	}, [isDev, gaTrackingId, location]);
 
 	return (
 		<html lang="ja-JP" data-theme="dim">
@@ -102,19 +103,11 @@ function Document(props: DocumentProps) {
 }
 
 export default function App({ loaderData }: Route.ComponentProps) {
-	const location = useLocation();
 	const isAuthenticated = loaderData?.isAuthenticated ?? false;
 	const name = loaderData?.name ?? "";
-	const gaTrackingId = loaderData?.gaTrackingId ?? "";
-
-	useEffect(() => {
-		if (gaTrackingId?.length) {
-			gtag.pageview(location.pathname, gaTrackingId);
-		}
-	}, [location, gaTrackingId]);
 
 	return (
-		<Document>
+		<Document gaTrackingId={loaderData?.gaTrackingId ?? ""}>
 			<div className="prose prose-h1:text-center max-w-none flex h-hull flex-1 flex-col">
 				<Header isAuthenticated={isAuthenticated} name={name} />
 				<Outlet />
