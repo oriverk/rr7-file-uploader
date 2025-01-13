@@ -54,11 +54,17 @@ export const action = async ({ params, request }: Route.ActionArgs) => {
 		};
 	} catch (error) {
 		console.error(error);
-		return data({ success: false, message: String(error), submission: null }, { status: 401 });
+		return data(
+			{ success: false, message: String(error), submission: null },
+			{ status: 401 },
+		);
 	}
 };
 
-export default function Profile({ loaderData, actionData }: Route.ComponentProps) {
+export default function Profile({
+	loaderData,
+	actionData,
+}: Route.ComponentProps) {
 	const { user } = loaderData;
 	const [form, fields] = useForm({
 		lastResult: actionData?.submission,

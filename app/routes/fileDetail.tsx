@@ -1,5 +1,6 @@
 import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
+import { CONTENT_TYPES } from "@/constants";
 import { requireAdmin } from "@/server/auth.server";
 import { getUser, getUserFile } from "@/server/database.server";
 import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
@@ -8,7 +9,6 @@ import { format } from "date-fns";
 import { Link } from "react-router";
 import invariant from "tiny-invariant";
 import type { Route } from "./+types/fileDetail";
-import { CONTENT_TYPES } from "@/constants";
 
 export const loader = async ({ params, request }: Route.LoaderArgs) => {
 	invariant(params.username, "params.username is requied");

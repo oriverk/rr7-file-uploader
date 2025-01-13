@@ -33,19 +33,20 @@ export const loader = async ({ params, request }: Route.LoaderArgs) => {
 		...rest
 	} = file;
 
-	// for demo
-	const filename = !admin.isAdmin ? "demo.zip" : fileName;
 	return {
 		isAdmin: admin.isAdmin,
 		user: { username, displayName, profileImageUrl },
 		file: {
 			...rest,
-			fileName: filename,
+			fileName: !admin.isAdmin ? "demo.zip" : fileName,
 		},
 	};
 };
 
-export default function UserFile({ loaderData }: Route.ComponentProps) {
+export default function UserFile({
+	loaderData,
+	actionData,
+}: Route.ComponentProps) {
 	const { isAdmin, user, file } = loaderData;
 	const [isConfirmed, setIsConfirmed] = useState(false);
 	const { username, displayName, profileImageUrl } = user;
@@ -54,10 +55,6 @@ export default function UserFile({ loaderData }: Route.ComponentProps) {
 
 	const handleConfirm = () => {
 		setIsConfirmed(!isConfirmed);
-	};
-
-	const handleDownload = () => {
-		setIsConfirmed(false);
 	};
 
 	return (
@@ -138,7 +135,6 @@ export default function UserFile({ loaderData }: Route.ComponentProps) {
 								</Link>
 								に同意した上で「ダウンロード」ボタンを押下してください。ダウンロードが開始されます。
 							</p>
-
 							<div className="form-control mb-4">
 								<label className="label cursor-pointer justify-center">
 									<input
@@ -154,9 +150,7 @@ export default function UserFile({ loaderData }: Route.ComponentProps) {
 							{isConfirmed && isAdmin ? (
 								<Link
 									to="execute"
-									download
 									reloadDocument
-									onClick={handleDownload}
 									className="btn btn-block btn-primary"
 								>
 									ダウンロードする
