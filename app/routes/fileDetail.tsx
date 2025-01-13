@@ -1,11 +1,11 @@
 import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
-import { CONTENT_TYPES } from "@/constants";
 import { requireAdmin } from "@/server/auth.server";
 import { getUser, getUserFile } from "@/server/database.server";
 import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
 import { parseMarkdown } from "@/utils/markdown";
 import { format } from "date-fns";
+import { useState } from "react";
 import { Link } from "react-router";
 import invariant from "tiny-invariant";
 import type { Route } from "./+types/fileDetail";
@@ -41,8 +41,9 @@ export const loader = async ({ params, request }: Route.LoaderArgs) => {
 	};
 };
 
-export default function UserFile({ loaderData }: Route.ComponentProps) {
+export default function Page({ loaderData }: Route.ComponentProps) {
 	const { isAdmin, user, file } = loaderData;
+	const [isConfirmed, setIsConfirmed] = useState(false);
 	const { username, displayName, profileImageUrl } = user;
 	const {
 		fileName,
@@ -54,7 +55,9 @@ export default function UserFile({ loaderData }: Route.ComponentProps) {
 		fileDescription,
 	} = file;
 
-	const extension = CONTENT_TYPES[contentType];
+	const handleConfirm = () => {
+		setIsConfirmed(!isConfirmed);
+	};
 
 	return (
 		<main className="py-12">
@@ -114,7 +117,7 @@ export default function UserFile({ loaderData }: Route.ComponentProps) {
 									<tbody>
 										<tr>
 											<th>ファイルタイプ</th>
-											<td>{extension}</td>
+											<td>{contentType}</td>
 										</tr>
 										<tr>
 											<th>サイズ</th>
@@ -131,9 +134,39 @@ export default function UserFile({ loaderData }: Route.ComponentProps) {
 								dangerouslySetInnerHTML={{ __html: fileDescription }}
 								className="break-words prose-img:rounded-xl"
 							/>
-							<Link to="download" className="btn btn-primary">
-								ダウロードページへ
-							</Link>
+							<p>
+								ダウンロードを続けるには、
+								<Link to="/terms" className="link">
+									利用規約
+								</Link>
+								に同意した上で「ダウンロード」ボタンを押下してください。ダウンロードが開始されます。
+							</p>
+							<div className="form-control mb-4">
+								<label className="label cursor-pointer justify-center">
+									<input
+										type="checkbox"
+										name="confirm"
+										checked={isConfirmed}
+										onChange={handleConfirm}
+										className="checkbox checkbox-primary"
+									/>
+									<span className="label-text ml-4">同意する</span>
+								</label>
+							</div>
+							{isConfirmed && isAdmin ? (
+								<Link
+									to="download"
+									reloadDocument
+									className="btn btn-block btn-primary"
+								>
+									ダウンロードする
+								</Link>
+							) : (
+								<button type="button" disabled className="btn btn-block">
+									ダウンロード不可
+									{!isAdmin && <span>（デモアカウントのため）</span>}
+								</button>
+							)}
 							<Link to={`/${username}`} className="btn btn-secondary btn-block">
 								ファイル一覧へ戻る
 							</Link>
