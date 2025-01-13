@@ -21,7 +21,7 @@ export default [
 			index("./routes/fileDetail.tsx"),
 			...prefix("download", [
 				index("./routes/fileConfirm.tsx"),
-				route("execute", "./routes/fileDownload.ts")
+				route("execute", "./routes/fileDownload.ts"),
 			]),
 		]),
 	]),

@@ -57,11 +57,14 @@ export async function uploadToStorage(
 }
 
 /**
- * 
- * @param destination storage bucket directory, files 
+ *
+ * @param destination storage bucket directory, files
  * @param fileName hoge.zip
  */
-export async function downloadFileFromStorage(destination: string, fileName: string){
+export async function downloadFileFromStorage(
+	destination: string,
+	fileName: string,
+) {
 	const [buffer] = await storage.file(`${destination}/${fileName}`).download();
-	return buffer
+	return buffer;
 }
