@@ -15,13 +15,14 @@ export default [
 	route("privacy", "./routes/privacy.tsx"),
 	route("terms", "./routes/terms.tsx"),
 
-	// route(":username", "./routes/user/index.tsx")
 	...prefix(":username", [
 		index("./routes/userFiles.tsx"),
 		...prefix("files/:fileId", [
 			index("./routes/fileDetail.tsx"),
-			route("download", "./routes/fileConfirm.tsx"),
-			route("donwload/execute", "./routes/fileDownload.tsx"),
+			...prefix("download", [
+				index("./routes/fileConfirm.tsx"),
+				route("execute", "./routes/fileDownload.ts")
+			]),
 		]),
 	]),
 	route("dashboard", "./routes/user/dashboard.tsx"),

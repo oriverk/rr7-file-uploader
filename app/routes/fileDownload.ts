@@ -1,8 +1,8 @@
 import { getUser, getUserFile, updateUserFile } from "@/server/database.server";
-import { storage } from "@/server/firebase.server";
 import { FieldValue } from "firebase-admin/firestore";
 import invariant from "tiny-invariant";
 import type { Route } from "./+types/fileDownload";
+import { downloadFileFromStorage } from "@/server/storage.server";
 
 export const loader = async ({ params, request }: Route.LoaderArgs) => {
 	try {
@@ -22,14 +22,16 @@ export const loader = async ({ params, request }: Route.LoaderArgs) => {
 			true,
 		);
 
-		const [buffer] = await storage.file(`files/${file.filePath}`).download();
+		const buffer = await downloadFileFromStorage("files", file.filePath);
 
 		return new Response(buffer, {
-			headers: {
-				"Content-Type": file.contentType,
-				"Content-Disposition": `attachment; filename="${file.fileName}"`,
-			},
-		});
+    status: 200,
+    headers: {
+      "Content-Type": file.contentType,
+			"Content-Disposition": `attachment; filename="${file.fileName}"`,
+    },
+  });
+
 	} catch (error) {
 		console.error("Error downloading file:", error);
 		throw new Response("Failed to download file", { status: 500 });
