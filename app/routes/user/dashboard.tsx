@@ -70,10 +70,7 @@ export const action = async ({ params, request }: Route.ActionArgs) => {
 
 type DeletingFile = Record<"fileId" | "fileName", string>;
 
-export default function Dashboard({
-	loaderData,
-	actionData,
-}: Route.ComponentProps) {
+export default function Page({ loaderData, actionData }: Route.ComponentProps) {
 	const { isAdmin, files } = loaderData;
 	const [deletingFile, setDeletingFile] = useState<DeletingFile | null>(null);
 	const { currentItems, endIndex, goToPage, nextPage, prevPage } =

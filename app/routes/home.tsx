@@ -1,4 +1,4 @@
-export default function Index() {
+export default function Page() {
 	return (
 		<main className="not-prose container mt-8 mx-auto flex flex-1 flex-col items-center">
 			<div className="hero min-h-screen">

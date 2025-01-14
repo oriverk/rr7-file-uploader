@@ -43,7 +43,7 @@ export const loader = async ({ params, request }: Route.LoaderArgs) => {
 	};
 };
 
-export default function UserFiles({ loaderData }: Route.ComponentProps) {
+export default function Page({ loaderData }: Route.ComponentProps) {
 	const { isAdmin, user, files } = loaderData;
 	const { username, displayName, profile, profileImageUrl } = user;
 	const { currentItems, endIndex, goToPage, nextPage, prevPage } =

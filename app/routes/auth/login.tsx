@@ -88,10 +88,7 @@ export const action = async ({ request }: Route.ActionArgs) => {
 	}
 };
 
-export default function Login({
-	loaderData,
-	actionData,
-}: Route.ComponentProps) {
+export default function Page({ loaderData, actionData }: Route.ComponentProps) {
 	const submit = useSubmit();
 	const [form, fields] = useForm({
 		lastResult: actionData?.submission,

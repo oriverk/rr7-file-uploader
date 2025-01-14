@@ -61,10 +61,7 @@ export const action = async ({ params, request }: Route.ActionArgs) => {
 	}
 };
 
-export default function Profile({
-	loaderData,
-	actionData,
-}: Route.ComponentProps) {
+export default function Page({ loaderData, actionData }: Route.ComponentProps) {
 	const { user } = loaderData;
 	const [form, fields] = useForm({
 		lastResult: actionData?.submission,

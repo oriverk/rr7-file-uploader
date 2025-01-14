@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import ReactGA from "react-ga4";
 import {
 	Link,
 	Links,
@@ -10,20 +11,19 @@ import {
 	useLocation,
 	useRouteError,
 } from "react-router";
-import { Footer, Header } from "./components/layout";
+import type { Route } from "./+types/root";
 import { Container } from "./components/Container";
+import { GoogleAnalytics } from "./components/GoogleAnalytics";
+import { Footer, Header } from "./components/layout";
 import { checkSessionCookie } from "./server/auth.server";
 import { getSession } from "./server/sesions.server";
 import tailwind from "./styles/tailwind.css?url";
-import type { Route } from "./+types/root";
-import { GoogleAnalytics } from "./components/GoogleAnalytics";
-import ReactGA from "react-ga4";
 
 export const links: Route.LinksFunction = () => [
 	{ rel: "stylesheet", href: tailwind },
 	{ rel: "icon", type: "image/svg+xml", href: "/favicon/favicon.svg" },
 	{ rel: "apple-touch-icon", href: "/favicon/favicon.svg" },
-	{ rel: "sitemap", href: "/sitemap.xml" }
+	{ rel: "sitemap", href: "/sitemap.xml" },
 ];
 
 export function meta() {
