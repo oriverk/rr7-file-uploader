@@ -58,7 +58,9 @@ export function Header(props: Props) {
 											<Link to="/settings/profile">アカウント設定</Link>
 										</li>
 										<li>
-											<Link to="/logout">ログアウト</Link>
+											<Link to="/logout" reloadDocument>
+												ログアウト
+											</Link>
 										</li>
 									</ul>
 								</div>

@@ -101,10 +101,7 @@ export const action = async ({ params, request }: Route.ActionArgs) => {
 	}
 };
 
-export default function Index({
-	loaderData,
-	actionData,
-}: Route.ComponentProps) {
+export default function Page({ loaderData, actionData }: Route.ComponentProps) {
 	const { file } = loaderData;
 	const [form, fields] = useForm({
 		lastResult: actionData?.submission,

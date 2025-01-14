@@ -22,7 +22,7 @@ import { parseWithZod } from "@conform-to/zod";
 import { parseFormData } from "@mjackson/form-data-parser";
 import { Form, Link, data, redirect } from "react-router";
 import { z } from "zod";
-import type { Route } from "./+types/newFile";
+import type { Route } from "./+types/createFile";
 
 const schema = z
 	.object({
@@ -114,7 +114,7 @@ export const action = async ({ request }: Route.ActionArgs) => {
 	}
 };
 
-export default function Index({ actionData }: Route.ComponentProps) {
+export default function Page({ actionData }: Route.ComponentProps) {
 	const [form, fields] = useForm({
 		lastResult: actionData?.submission,
 		onValidate({ formData }) {

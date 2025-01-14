@@ -55,3 +55,16 @@ export async function uploadToStorage(
 	const blob = new Blob([data]);
 	return new File([blob], fileName, { type: fileUpload.type });
 }
+
+/**
+ *
+ * @param destination storage bucket directory, files
+ * @param fileName hoge.zip
+ */
+export async function downloadFileFromStorage(
+	destination: string,
+	fileName: string,
+) {
+	const [buffer] = await storage.file(`${destination}/${fileName}`).download();
+	return buffer;
+}

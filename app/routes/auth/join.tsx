@@ -137,7 +137,7 @@ export const action = async ({ request }: Route.ActionArgs) => {
 	}
 };
 
-export default function Login({ actionData }: Route.ComponentProps) {
+export default function Page({ actionData }: Route.ComponentProps) {
 	const [username, setUsername] = useState("");
 	const [form, fields] = useForm({
 		lastResult: actionData?.submission,
