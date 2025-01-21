@@ -1,3 +1,4 @@
+import { AdSense } from "@/components/Adsense";
 import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
 import { FileCard } from "@/components/FileCard";
@@ -83,9 +84,12 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 					</div>
 				</div>
 			</Container>
+			<Container maxWidth="wide">
+				<AdSense />
+			</Container>
 			<Container>
 				<section className="py-8">
-					<h2 className="text-center">ファイル一覧</h2>
+					{/* <h2 className="text-center">ファイル一覧</h2> */}
 					{!files.length ? (
 						<p className="text-center">
 							アップロードされたファイルはありません
@@ -117,6 +121,9 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 						</div>
 					)}
 				</section>
+			</Container>
+			<Container maxWidth="wide">
+				<AdSense />
 			</Container>
 		</main>
 	);
