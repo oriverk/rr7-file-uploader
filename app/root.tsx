@@ -65,6 +65,17 @@ function Document(props: DocumentProps) {
 	const location = useLocation();
 
 	useEffect(() => {
+		if (typeof window !== "undefined" && window.adsbygoogle) {
+			try {
+				// biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
+				(window.adsbygoogle = window.adsbygoogle || []).push({});
+			} catch (e) {
+				console.error("AdSense initialization failed:", e);
+			}
+		}
+	}, []);
+
+	useEffect(() => {
 		if (isDev || !gaTrackingId?.length) return;
 		ReactGA.initialize(gaTrackingId);
 		ReactGA.send({
