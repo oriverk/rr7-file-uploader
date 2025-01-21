@@ -1,3 +1,4 @@
+import { AdSense } from "@/components/Adsense";
 import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
 import { requireAdmin } from "@/server/auth.server";
@@ -109,6 +110,9 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 				</div>
 			</Container>
 			<Container maxWidth="wide">
+				<AdSense />
+			</Container>
+			<Container maxWidth="wide">
 				<section>
 					<div className="py-8">
 						<div className="flex flex-col justify-around gap-8">
@@ -173,6 +177,9 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 						</div>
 					</div>
 				</section>
+			</Container>
+			<Container maxWidth="wide">
+				<AdSense />
 			</Container>
 		</main>
 	);

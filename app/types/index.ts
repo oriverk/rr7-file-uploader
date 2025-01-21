@@ -1,3 +1,10 @@
+declare global {
+  interface Window {
+    adsbygoogle: any[]; // 型を適切に定義
+  }
+}
+
+
 export type User = {
 	// Firestore ドキュメントのID
 	id?: string;
