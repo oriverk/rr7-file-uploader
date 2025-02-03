@@ -36,9 +36,9 @@ export function DashboardFileCard(props: Props) {
 							tabIndex={0}
 							type="button"
 							onClick={handleClickDelete}
-							className="group btn btn-ghost hover:btn-error btn-sm"
+							className="group btn btn-ghost hover:btn-error btn-sm btn-square"
 						>
-							<CloseIcon className="h-4 w-4 fill-current group-hover:fill-error" />
+							<CloseIcon className="h-4 w-4 fill-current" />
 						</button>
 					</div>
 				</div>

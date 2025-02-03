@@ -11,6 +11,7 @@ import { useState } from "react";
 import { Form, Link, data, redirect } from "react-router";
 import { z } from "zod";
 
+import clsx from "clsx";
 import type { Route } from "./+types/join";
 
 function createSchema(
@@ -165,81 +166,74 @@ export default function Page({ actionData }: Route.ComponentProps) {
 								{actionData.message}
 							</Alert>
 						)}
-						<Form
-							method="post"
-							className="flex flex-col gap-8"
-							{...getFormProps(form)}
-						>
-							<label className="form-control">
-								<div className="label">
-									<span className="label-text">Eメール</span>
-									<span className="label-text-alt">hoge</span>
-								</div>
-								<EmailInput
-									autoComplete="email"
-									placeholder="test@example.com"
-									isError={!fields.email.valid}
-									{...getInputProps(fields.email, { type: "email" })}
-								/>
-								<div className="label">
-									<span className="label-text-alt">hoge</span>
-									<span className="label-text-alt text-error">
+						<Form method="post" {...getFormProps(form)}>
+							<fieldset className="fieldset max-w-sm flex flex-col gap-8">
+								<label>
+									<legend className="fieldset-legend text-base">Email</legend>
+									<EmailInput
+										autoComplete="email"
+										placeholder="test@example.com"
+										isError={!fields.email.valid}
+										{...getInputProps(fields.email, {
+											type: "email",
+										})}
+										className={clsx(
+											"w-full",
+											fields.email.valid && "validator",
+										)}
+									/>
+									<div className="validator-hint text-error">
 										{fields.email.errors}
-									</span>
-								</div>
-							</label>
-							<label className="form-control">
-								<div className="label">
-									<span className="label-text">パスワード</span>
-									<span className="label-text-alt" />
-								</div>
-								<PasswordInput
-									placeholder="password"
-									autoComplete="new-password"
-									isError={!fields.password.valid}
-									{...getInputProps(fields.password, { type: "password" })}
-								/>
-								<div className="label">
-									<span className="label-text-alt text-sm" />
-									<span className="label-text-alt text-error">
+									</div>
+								</label>
+
+								<label>
+									<legend className="fieldset-legend text-base">
+										Password
+									</legend>
+									<PasswordInput
+										placeholder="password"
+										autoComplete="new-password"
+										isError={!fields.password.valid}
+										{...getInputProps(fields.password, { type: "password" })}
+										className={clsx(
+											"w-full",
+											fields.password.valid && "validator",
+										)}
+									/>
+									<div className="validator-hint text-error">
 										{fields.password.errors}
-									</span>
-								</div>
-							</label>
-							<label className="form-control">
-								<div className="label">
-									<span className="label-text">ハンドルネーム</span>
-									<span className="label-text-alt">hoge</span>
-								</div>
-								<TextInput
-									autoComplete="off"
-									autoCorrect="off"
-									autoCapitalize="none"
-									isError={!fields.username.valid}
-									onInput={handleInputName}
-									{...getInputProps(fields.username, { type: "text" })}
-								/>
-								<div className="label">
-									<span className="label-text-alt text-sm">
+									</div>
+								</label>
+
+								<label className="flex flex-col gap-2">
+									<legend className="fieldset-legend text-base">Name</legend>
+									<TextInput
+										autoComplete="off"
+										autoCorrect="off"
+										autoCapitalize="none"
+										isError={!fields.username.valid}
+										onInput={handleInputName}
+										{...getInputProps(fields.username, { type: "text" })}
+										className={clsx(
+											"w-full",
+											fields.username.valid && "validator",
+										)}
+									/>
+									<div className="fieldset-label">
 										<code>{"/^[a-zd-]{3,}$/"}</code>
-									</span>
-									<span className="label-text-alt text-error">
+									</div>
+									<div className="fieldset-label">
+										ファイルURLは `{`/${username}/files/{fileId}`}`
+									</div>
+									<div className="validator-hint text-error">
 										{fields.username.errors}
-									</span>
-								</div>
-								<div className="label">
-									{username ? (
-										<span className="label-text-alt">
-											ファイルURLは `{`/${username}/files/{fileId}`}`
-										</span>
-									) : (
-										<span className="label-text-alt">&nbsp;</span>
-									)}
-								</div>
-							</label>
-							<button type="submit" className="btn btn-primary">
-								登録
-							</button>
+									</div>
+								</label>
+								<button type="submit" className="btn btn-block btn-primary">
+									登録
+								</button>
+							</fieldset>
 						</Form>
 						<p className="text-center">
 							<Link to="/login" className="link">

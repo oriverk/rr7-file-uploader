@@ -7,7 +7,7 @@ export const Footer: FC = () => {
 		<footer className="not-prose">
 			<Container
 				maxWidth="wide"
-				className="footer footer-center max-w-none bg-base-200 text-base-content p-10"
+				className="footer footer-horizontal footer-center max-w-none bg-base-200 text-base-content p-10"
 			>
 				<nav className="grid grid-flow-col gap-4">
 					<Link className="link link-hover" to="/">
