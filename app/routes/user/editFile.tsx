@@ -11,6 +11,7 @@ import {
 	useForm,
 } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
+import clsx from "clsx";
 import { Form, Link, data, redirect } from "react-router";
 import invariant from "tiny-invariant";
 import { z } from "zod";
@@ -125,50 +126,53 @@ export default function Page({ loaderData, actionData }: Route.ComponentProps) {
 								{actionData.message ?? ""}
 							</Alert>
 						)}
-						<Form
-							method="post"
-							className="flex flex-col gap-8"
-							{...getFormProps(form)}
-							noValidate
-						>
-							<div className="form-control">
-								<label className="label cursor-pointer">
-									<span className="label-text">公開する</span>
-									<input
-										className="toggle toggle-primary"
-										{...getInputProps(fields.isPublished, {
-											type: "checkbox",
-										})}
-										defaultChecked={isPublished}
-									/>
+						<Form method="post" {...getFormProps(form)} noValidate>
+							<fieldset className="fieldset max-w-xl mx-auto gap-8">
+								<label>
+									<div className="flex gap-8 items-center">
+										<legend className="fieldset-legend text-base">
+											公開する
+										</legend>
+										<input
+											className={clsx(
+												"toggle toggle-primary",
+												fields.isPublished.valid && "validator",
+											)}
+											{...getInputProps(fields.isPublished, {
+												type: "checkbox",
+											})}
+											defaultChecked={isPublished}
+										/>
+									</div>
 								</label>
-								<div>{fields.isPublished.errors}</div>
-							</div>
-							<label className="form-control">
-								<div className="label">
-									<span className="label-text">説明文</span>
-									<span className="label-text-alt">
+								<label className="flex flex-col gap-2">
+									<legend className="fieldset-legend text-base">説明</legend>
+									<div className="fieldset-label">
 										{MAX_FILE_DESCRIPTION_LENGTH}文字まで
-									</span>
-								</div>
-								<Textarea
-									placeholder="ファイル説明文（markdown記法使用可能）"
-									isError={!fields.fileDescription.valid}
-									{...getTextareaProps(fields.fileDescription)}
-									defaultValue={fileDescription ?? ""}
-								/>
-								<div className="label">
-									<span className="label-text-alt" />
-									<span className="label-text-alt text-error">
+									</div>
+									<Textarea
+										placeholder="ファイル説明文（markdown記法使用可能）"
+										isError={!fields.fileDescription.valid}
+										{...getTextareaProps(fields.fileDescription)}
+										defaultValue={fileDescription ?? ""}
+										className={clsx(
+											"w-full",
+											fields.fileDescription.valid && "validator",
+										)}
+									/>
+									<div className="validator-hint text-error">
 										{fields.fileDescription.errors}
-									</span>
-								</div>
-							</label>
-							<button type="submit" className="btn btn-block btn-primary">
-								更新する
-							</button>
+									</div>
+								</label>
+								<button type="submit" className="btn btn-primary">
+									更新する
+								</button>
+							</fieldset>
 						</Form>
-						<Link to="/dashboard" className="btn btn-secondary btn-block">
+						<Link
+							to="/dashboard"
+							className="link text-base text-center no-underline link-hover"
+						>
 							ファイルの管理へ戻る
 						</Link>
 					</div>

@@ -3,7 +3,7 @@ import type { VariantProps } from "tailwind-variants";
 import { tv } from "tailwind-variants";
 
 const styles = tv({
-	base: "file-input file-input-bordered",
+	base: "file-input",
 	variants: {
 		isError: {
 			true: "file-input-error",

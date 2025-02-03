@@ -136,32 +136,36 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 							</div>
 							<div
 								dangerouslySetInnerHTML={{ __html: fileDescription }}
-								className="break-words prose-img:rounded-xl"
+								className="break-words prose-a:link prose-a:link-primary prose-a:link-hover prose-img:rounded-xl"
 							/>
 							<p>
 								ダウンロードを続けるには、
-								<Link to="/terms" className="link">
+								<Link to="/terms" className="link link-primary link-hover">
 									利用規約
 								</Link>
 								に同意した上で「ダウンロード」ボタンを押下してください。ダウンロードが開始されます。
 							</p>
-							<div className="form-control mb-4">
-								<label className="label cursor-pointer justify-center">
-									<input
-										type="checkbox"
-										name="confirm"
-										checked={isConfirmed}
-										onChange={handleConfirm}
-										className="checkbox checkbox-primary"
-									/>
-									<span className="label-text ml-4">同意する</span>
+							<fieldset className="not-prose fieldset max-w-xl mx-auto flex flex-col gap-8">
+								<label>
+									<div className="flex gap-8 items-center">
+										<legend className="fieldset-legend text-base">
+											同意する
+										</legend>
+										<input
+											type="checkbox"
+											name="confirm"
+											checked={isConfirmed}
+											onChange={handleConfirm}
+											className="checkbox checkbox-primary"
+										/>
+									</div>
 								</label>
-							</div>
+							</fieldset>
 							{isConfirmed && isAdmin ? (
 								<Link
 									to="download"
 									reloadDocument
-									className="btn btn-block btn-primary"
+									className="not-prose btn btn-primary"
 								>
 									ダウンロードする
 								</Link>
@@ -171,7 +175,10 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 									{!isAdmin && <span>（デモアカウントのため）</span>}
 								</button>
 							)}
-							<Link to={`/${username}`} className="btn btn-secondary btn-block">
+							<Link
+								to={`/${username}`}
+								className="link text-base text-center no-underline link-hover"
+							>
 								ファイル一覧へ戻る
 							</Link>
 						</div>

@@ -11,6 +11,7 @@ import {
 	useForm,
 } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
+import clsx from "clsx";
 import { useEffect } from "react";
 import { Form, data } from "react-router";
 import { z } from "zod";
@@ -85,19 +86,15 @@ export default function Page({ loaderData, actionData }: Route.ComponentProps) {
 			<Container>
 				<section>
 					<h1>プロフィール編集</h1>
-					<div className="max-w-2xl mx-auto">
-						<Form
-							method="post"
-							// encType="multipart/form-data"
-							className="flex flex-col gap-8"
-							{...getFormProps(form)}
-							noValidate
-						>
-							<label className="form-control">
-								<div className="label">
-									<span className="label-text">表示名</span>
-									<span className="label-text-alt">hoge</span>
-								</div>
+					<Form
+						method="post"
+						// encType="multipart/form-data"
+						{...getFormProps(form)}
+						noValidate
+					>
+						<fieldset className="fieldset max-w-xl mx-auto flex flex-col gap-8">
+							<label className="flex flex-col gap-2">
+								<legend className="fieldset-legend text-base">表示名</legend>
 								<TextInput
 									autoComplete="off"
 									autoCorrect="off"
@@ -105,38 +102,39 @@ export default function Page({ loaderData, actionData }: Route.ComponentProps) {
 									isError={!fields.displayName.valid}
 									defaultValue={displayName}
 									{...getInputProps(fields.displayName, { type: "text" })}
+									className={clsx(
+										"w-full",
+										fields.displayName.valid && "validator",
+									)}
 								/>
-								<div className="label">
-									<span className="label-text-alt text-sm" />
-									<span className="label-text-alt text-error">
-										{fields.displayName.errors}
-									</span>
+								<div className="validator-hint text-error">
+									{fields.displayName.errors}
 								</div>
 							</label>
-							<label className="form-control">
-								<div className="label">
-									<span className="label-text">自己紹介</span>
-									<span className="label-text-alt">
-										{MAX_PROFILE_LENGTH}文字まで
-									</span>
+
+							<label className="flex flex-col gap-2">
+								<legend className="fieldset-legend text-base">自己紹介</legend>
+								<div className="fieldset-label flex justify-between">
+									{MAX_PROFILE_LENGTH}文字まで
 								</div>
 								<Textarea
 									defaultValue={profile ?? ""}
 									isError={!fields.profile.valid}
 									{...getTextareaProps(fields.profile)}
+									className={clsx(
+										"w-full",
+										fields.profile.valid && "validator",
+									)}
 								/>
-								<div className="label">
-									<span className="label-text-alt" />
-									<span className="label-text-alt text-error">
-										{fields.profile.errors}
-									</span>
+								<div className="validator-hint text-error">
+									{fields.profile.errors}
 								</div>
 							</label>
 							<button type="submit" className="btn btn-primary">
 								更新
 							</button>
-						</Form>
-					</div>
+						</fieldset>
+					</Form>
 				</section>
 			</Container>
 		</main>
