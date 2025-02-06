@@ -20,6 +20,7 @@ import {
 } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { parseFormData } from "@mjackson/form-data-parser";
+import clsx from "clsx";
 import { Form, Link, data, redirect } from "react-router";
 import { z } from "zod";
 import type { Route } from "./+types/createFile";
@@ -129,7 +130,7 @@ export default function Page({ actionData }: Route.ComponentProps) {
 			<Container>
 				<section>
 					<h1>アップロード</h1>
-					<div className="max-w-2xl mx-auto flex flex-col gap-8">
+					<div className="flex flex-col gap-8">
 						{actionData?.message && (
 							<Alert state={actionData.success ? "info" : "error"}>
 								{actionData.message}
@@ -138,69 +139,83 @@ export default function Page({ actionData }: Route.ComponentProps) {
 						<Form
 							method="post"
 							encType="multipart/form-data"
-							className="flex flex-col gap-8"
 							{...getFormProps(form)}
 							noValidate
 						>
-							<label className="form-control">
-								<div className="label">
-									<span className="label-text">ファイルを選択</span>
-									<span className="label-text-alt">
-										{convertByteWithUnit(MAX_FILE_SIZE)}まで
-									</span>
-								</div>
-								<FileInput
-									{...getInputProps(fields.file, { type: "file" })}
-									isError={!fields.file.valid}
-								/>
-								<div className="label">
-									<span className="label-text-alt">
-										{ALLOWED_FILE_EXTENSIONS.map((extension, index) => (
-											<code
-												className="text-sm"
-												key={extension}
-											>{`.${extension}${ALLOWED_FILE_EXTENSIONS.length - 1 !== index ? ", " : ""}`}</code>
-										))}
-									</span>
-									<span className="label-text-alt text-error">
-										{fields.file.errors}
-									</span>
-								</div>
-							</label>
-							<div className="form-control">
-								<label className="label cursor-pointer">
-									<span className="label-text">公開する</span>
-									<input
-										className="toggle toggle-primary"
-										{...getInputProps(fields.isPublished, { type: "checkbox" })}
+							<fieldset className="fieldset max-w-xl mx-auto flex flex-col gap-8">
+								<label className="flex flex-col gap-2">
+									<legend className="fieldset-legend text-base">
+										ファイルを選択
+									</legend>
+									<div className="fieldset-label flex justify-between">
+										<span>
+											{ALLOWED_FILE_EXTENSIONS.map((extension, index) => (
+												<code
+													className="text-sm"
+													key={extension}
+												>{`.${extension}${ALLOWED_FILE_EXTENSIONS.length - 1 !== index ? ", " : ""}`}</code>
+											))}
+										</span>
+										<span>{convertByteWithUnit(MAX_FILE_SIZE)}まで</span>
+									</div>
+									<FileInput
+										{...getInputProps(fields.file, { type: "file" })}
+										isError={!fields.file.valid}
+										className={clsx("w-full", fields.file.valid && "validator")}
 									/>
+									<div className="validator-hint text-error">
+										{fields.file.errors}
+									</div>
 								</label>
-								<div>{fields.isPublished.errors}</div>
-							</div>
-							<label className="form-control">
-								<div className="label">
-									<span className="label-text">説明文</span>
-									<span className="label-text-alt">
+
+								<label>
+									<div className="flex gap-8 items-center">
+										<legend className="fieldset-legend text-base">
+											公開する
+										</legend>
+										<input
+											className={clsx(
+												"toggle toggle-primary",
+												fields.isPublished.valid && "validator",
+											)}
+											{...getInputProps(fields.isPublished, {
+												type: "checkbox",
+											})}
+										/>
+									</div>
+									<div className="validator-hint text-error">
+										{fields.isPublished.errors}
+									</div>
+								</label>
+
+								<label className="flex flex-col gap-2">
+									<legend className="fieldset-legend text-base">説明</legend>
+									<div className="fieldset-label">
 										{MAX_FILE_DESCRIPTION_LENGTH}文字まで
-									</span>
-								</div>
-								<Textarea
-									placeholder="ファイル説明文（markdown記法使用可能）"
-									isError={!fields.fileDescription.valid}
-									{...getTextareaProps(fields.fileDescription)}
-								/>
-								<div className="label">
-									<span className="label-text-alt" />
-									<span className="label-text-alt text-error">
+									</div>
+									<Textarea
+										placeholder="ファイル説明文（markdown記法使用可能）"
+										isError={!fields.fileDescription.valid}
+										{...getTextareaProps(fields.fileDescription)}
+										className={clsx(
+											"w-full",
+											fields.fileDescription.valid && "validator",
+										)}
+									/>
+									<div className="validator-hint text-error">
 										{fields.fileDescription.errors}
-									</span>
-								</div>
-							</label>
-							<button type="submit" className="btn btn-block btn-primary">
-								アップロード
-							</button>
+									</div>
+								</label>
+
+								<button type="submit" className="btn btn-block btn-primary">
+									アップロード
+								</button>
+							</fieldset>
 						</Form>
-						<Link to="/dashboard" className="btn btn-secondary btn-block mt-8">
+						<Link
+							to="/dashboard"
+							className="link text-base text-center no-underline link-hover"
+						>
 							ファイルの管理へ戻る
 						</Link>
 					</div>

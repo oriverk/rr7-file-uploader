@@ -3,6 +3,7 @@ import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
 import { FileCard } from "@/components/FileCard";
 import { Pagination } from "@/components/Pagination";
+import { LinkIcon } from "@/components/icons";
 import { usePagination } from "@/hooks/usePagination";
 import { requireAdmin } from "@/server/auth.server";
 import { getUser, getUserFiles } from "@/server/database.server";
@@ -14,7 +15,14 @@ export const loader = async ({ params, request }: Route.LoaderArgs) => {
 	invariant(params.username, "params.usename is required");
 	const user = await getUser(params.username);
 	invariant(user.id, "user not found");
-	const { username, displayName, profile, profileImageUrl } = user;
+	const {
+		username,
+		displayName,
+		profile,
+		profileImageUrl,
+		twitterUsername,
+		websiteUrl,
+	} = user;
 
 	// for demo;
 	const admin = requireAdmin(user.email ?? "");
@@ -39,6 +47,8 @@ export const loader = async ({ params, request }: Route.LoaderArgs) => {
 			displayName,
 			profile,
 			profileImageUrl,
+			twitterUsername,
+			websiteUrl,
 		},
 		files,
 	};
@@ -46,9 +56,9 @@ export const loader = async ({ params, request }: Route.LoaderArgs) => {
 
 export default function Page({ loaderData }: Route.ComponentProps) {
 	const { isAdmin, user, files } = loaderData;
-	const { username, displayName, profile, profileImageUrl } = user;
+	const { username, displayName, profile, profileImageUrl, websiteUrl } = user;
 	const { currentItems, endIndex, goToPage, nextPage, prevPage } =
-		usePagination<FirestoreFile>(files, 6, 1);
+		usePagination<FirestoreFile>(files, 10, 1);
 
 	return (
 		<main className="py-12">
@@ -74,12 +84,22 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 								)}
 							</div>
 						</div>
-						<div className="info">
+						<div className="info flex flex-col gap-y-2">
 							<h1>{displayName}</h1>
-							<p>{profile}</p>
-							<div>
-								<span className="font-bold">{files.length}</span> files
-							</div>
+							<p className="m-0">{profile}</p>
+							{!!websiteUrl && (
+								<div className="flex gap-2 items-center">
+									<LinkIcon className="w-5 h-5 fill-current" />
+									<a
+										href={websiteUrl}
+										rel="nofollow noopener noreferrer"
+										target="_blank"
+										className="link link-hover"
+									>
+										{websiteUrl}
+									</a>
+								</div>
+							)}
 						</div>
 					</div>
 				</div>
@@ -89,7 +109,6 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 			</Container>
 			<Container>
 				<section className="py-8">
-					{/* <h2 className="text-center">ファイル一覧</h2> */}
 					{!files.length ? (
 						<p className="text-center">
 							アップロードされたファイルはありません

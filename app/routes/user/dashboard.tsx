@@ -1,7 +1,8 @@
 import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
-import { DashboardFileCard } from "@/components/DashboradFileCard";
+import { FileCard } from "@/components/FileCard";
 import { Pagination } from "@/components/Pagination";
+import { CloseIcon } from "@/components/icons";
 import { usePagination } from "@/hooks/usePagination";
 import { requireAdmin, requireAuth } from "@/server/auth.server";
 import { getUserFiles, softDeleteUserFile } from "@/server/database.server";
@@ -137,11 +138,21 @@ export default function Page({ loaderData, actionData }: Route.ComponentProps) {
 										const path = `/files/${id}/edit`;
 										return (
 											<div key={id}>
-												<DashboardFileCard
+												<FileCard
 													path={path}
 													file={file}
-													handleClickDelete={() =>
-														handleOpenModal({ fileId: id, fileName })
+													isAuthenticatd={true}
+													actionButton={
+														<button
+															tabIndex={0}
+															type="button"
+															onClick={() =>
+																handleOpenModal({ fileId: id, fileName })
+															}
+															className="group btn btn-ghost hover:btn-error btn-sm btn-square"
+														>
+															<CloseIcon className="h-4 w-4 fill-current" />
+														</button>
 													}
 												/>
 											</div>

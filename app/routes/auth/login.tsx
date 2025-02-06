@@ -12,6 +12,7 @@ import { getRestConfig } from "@/server/firebase.server";
 import { commitSession, getSession } from "@/server/sesions.server";
 import { getFormProps, getInputProps, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
+import clsx from "clsx";
 import { Link, data, redirect, useSubmit } from "react-router";
 import { z } from "zod";
 import type { Route } from "./+types/login";
@@ -134,51 +135,45 @@ export default function Page({ loaderData, actionData }: Route.ComponentProps) {
 								{actionData.message ?? ""}
 							</Alert>
 						)}
-						<form
-							method="post"
-							{...getFormProps(form)}
-							className="flex flex-col gap-4"
-							{...restFormSubmit}
-						>
-							<label className="form-control">
-								<div className="label">
-									<span className="label-text">Eメール</span>
-									<span className="label-text-alt">hoge</span>
-								</div>
-								<EmailInput
-									autoComplete="email"
-									placeholder="test@example.com"
-									isError={!fields.email.valid}
-									{...getInputProps(fields.email, { type: "email" })}
-								/>
-								<div className="label">
-									<span className="label-text-alt">hoge</span>
-									<span className="label-text-alt text-error">
+						<form method="post" {...getFormProps(form)} {...restFormSubmit}>
+							<fieldset className="fieldset max-w-sm flex flex-col gap-8">
+								<label>
+									<legend className="fieldset-legend text-base">Email</legend>
+									<EmailInput
+										autoComplete="email"
+										placeholder="test@example.com"
+										isError={!fields.email.valid}
+										{...getInputProps(fields.email, {
+											type: "email",
+										})}
+										className={clsx(
+											"w-full",
+											fields.email.valid && "validator",
+										)}
+									/>
+									<div className="validator-hint text-error">
 										{fields.email.errors}
-									</span>
-								</div>
-							</label>
-							<label className="form-control">
-								<div className="label">
-									<span className="label-text">パスワード</span>
-									<span className="label-text-alt" />
-								</div>
-								<PasswordInput
-									placeholder="password"
-									autoComplete="current-password"
-									isError={!fields.password.valid}
-									{...getInputProps(fields.password, { type: "password" })}
-								/>
-								<div className="label">
-									<span className="label-text-alt text-sm" />
-									<span className="label-text-alt text-error">
+									</div>
+								</label>
+								<label>
+									<legend className="fieldset-legend text-base">
+										Password
+									</legend>
+									<PasswordInput
+										placeholder="password"
+										autoComplete="current-password"
+										isError={!fields.password.valid}
+										{...getInputProps(fields.password, { type: "password" })}
+										className={clsx(fields.email.valid && "validator")}
+									/>
+									<div className="validator-hint text-error">
 										{fields.password.errors}
-									</span>
-								</div>
-							</label>
-							<button type="submit" className="btn btn-primary">
-								ログイン
-							</button>
+									</div>
+								</label>
+								<button type="submit" className="btn btn-block btn-primary">
+									ログイン
+								</button>
+							</fieldset>
 						</form>
 						<p className="text-center">
 							<Link to="/join" className="link">

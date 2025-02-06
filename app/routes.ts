@@ -23,10 +23,11 @@ export default [
 		]),
 	]),
 	route("dashboard", "./routes/user/dashboard.tsx"),
-	...prefix("settings", [route("profile", "./routes/user/profile.tsx")]),
+	...prefix("settings", [route("profile", "./routes/user/editProfile.tsx")]),
 	...prefix("files", [
 		index("./routes/files.tsx"),
 		route("new", "./routes/user/createFile.tsx"),
+		// route("naw", "./routes/user/createFileX.tsx"),
 		route(":fileId/edit", "./routes/user/editFile.tsx"),
 	]),
 ] satisfies RouteConfig;

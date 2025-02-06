@@ -1,6 +1,12 @@
 import { AdSense } from "@/components/Adsense";
 import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
+import {
+	DownloadIcon,
+	FileIcon,
+	HistoryIcon,
+	UploadIcon,
+} from "@/components/icons";
 import { requireAdmin } from "@/server/auth.server";
 import { getUser, getUserFile } from "@/server/database.server";
 import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
@@ -56,6 +62,11 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 		fileDescription,
 	} = file;
 
+	const _size = convertByteWithUnit(size);
+	const _createdAt = format(createdAt, "yyyy-MM-dd");
+	const _updatedAt =
+		createdAt !== updatedAt ? format(updatedAt, "yyyy-MM-dd") : undefined;
+
 	const handleConfirm = () => {
 		setIsConfirmed(!isConfirmed);
 	};
@@ -64,7 +75,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 		<main className="py-12">
 			<Container maxWidth="wide">
 				<div>
-					<div className="py-4 flex flex-col gap-4 items-center justify-evenly">
+					<div className="py-4 flex flex-col gap-8 items-center justify-evenly">
 						{!isAdmin && (
 							<Alert state="info">
 								This is a demo account, but it displays files from other
@@ -72,6 +83,35 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 							</Alert>
 						)}
 						<h1 className="mb-0 break-all">{fileName}</h1>
+						<div className="flex flex-wrap gap-4">
+							<div className="flex items-center gap-2 text-sm">
+								<UploadIcon className="w-4 h-4 fill-current" />
+								<span className="sr-only">公開</span>
+								<time dateTime={createdAt.toISOString()}>{_createdAt}</time>
+							</div>
+							{createdAt !== updatedAt && (
+								<div className="flex items-center gap-2 text-sm">
+									<HistoryIcon className="w-5 h-5 fill-current" />
+									<span className="sr-only">更新</span>
+									<time dateTime={updatedAt.toISOString()}>{_updatedAt}</time>
+								</div>
+							)}
+							<div className="flex items-center gap-2 text-sm">
+								<FileIcon className="w-4 h-4 fill-current" />
+								<span className="sr-only">ファイルタイプ</span>
+								<span>{contentType}</span>
+							</div>
+							<div className="flex items-center gap-2 text-sm">
+								<FileIcon className="w-4 h-4 fill-current" />
+								<span className="sr-only">ファイルサイズ</span>
+								<span>{_size}</span>
+							</div>
+							<div className="flex items-center gap-2 text-sm">
+								<DownloadIcon className="w-4 h-4 fill-current" />
+								<span className="sr-only">ダウンロード数</span>
+								<span>{downloadCount}</span>
+							</div>
+						</div>
 						<Link to={`/${username}`} className="no-underline">
 							<div className="flex items-center gap-4">
 								<div className="avatar">
@@ -90,22 +130,6 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 								<div className="text-lg">{displayName}</div>
 							</div>
 						</Link>
-						<div className="flex flex-wrap gap-4">
-							<div>
-								<span>公開：</span>
-								<time dateTime={createdAt.toISOString()}>
-									{format(createdAt, "yyyy年MM月dd日")}
-								</time>
-							</div>
-							{createdAt !== updatedAt && (
-								<div>
-									<span>更新：</span>
-									<time dateTime={updatedAt.toISOString()}>
-										{format(updatedAt, "yyyy年MM月dd日")}
-									</time>
-								</div>
-							)}
-						</div>
 					</div>
 				</div>
 			</Container>
@@ -116,52 +140,38 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 				<section>
 					<div className="py-8">
 						<div className="flex flex-col justify-around gap-8">
-							<div className="overflow-x-auto">
-								<table className="table">
-									<tbody>
-										<tr>
-											<th>ファイルタイプ</th>
-											<td>{contentType}</td>
-										</tr>
-										<tr>
-											<th>サイズ</th>
-											<td>{convertByteWithUnit(size)}</td>
-										</tr>
-										<tr>
-											<th>ダウンロード数</th>
-											<td>{downloadCount}</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
 							<div
 								dangerouslySetInnerHTML={{ __html: fileDescription }}
-								className="break-words prose-img:rounded-xl"
+								className="break-words prose-a:link prose-a:link-primary prose-a:link-hover prose-img:rounded-xl"
 							/>
 							<p>
 								ダウンロードを続けるには、
-								<Link to="/terms" className="link">
+								<Link to="/terms" className="link link-primary link-hover">
 									利用規約
 								</Link>
 								に同意した上で「ダウンロード」ボタンを押下してください。ダウンロードが開始されます。
 							</p>
-							<div className="form-control mb-4">
-								<label className="label cursor-pointer justify-center">
-									<input
-										type="checkbox"
-										name="confirm"
-										checked={isConfirmed}
-										onChange={handleConfirm}
-										className="checkbox checkbox-primary"
-									/>
-									<span className="label-text ml-4">同意する</span>
+							<fieldset className="not-prose fieldset max-w-xl mx-auto flex flex-col gap-8">
+								<label>
+									<div className="flex gap-8 items-center">
+										<legend className="fieldset-legend text-base">
+											同意する
+										</legend>
+										<input
+											type="checkbox"
+											name="confirm"
+											checked={isConfirmed}
+											onChange={handleConfirm}
+											className="checkbox checkbox-primary"
+										/>
+									</div>
 								</label>
-							</div>
+							</fieldset>
 							{isConfirmed && isAdmin ? (
 								<Link
 									to="download"
 									reloadDocument
-									className="btn btn-block btn-primary"
+									className="not-prose btn btn-primary"
 								>
 									ダウンロードする
 								</Link>
@@ -171,7 +181,10 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 									{!isAdmin && <span>（デモアカウントのため）</span>}
 								</button>
 							)}
-							<Link to={`/${username}`} className="btn btn-secondary btn-block">
+							<Link
+								to={`/${username}`}
+								className="link text-base text-center no-underline link-hover"
+							>
 								ファイル一覧へ戻る
 							</Link>
 						</div>

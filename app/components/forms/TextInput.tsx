@@ -3,7 +3,7 @@ import type { VariantProps } from "tailwind-variants";
 import { tv } from "tailwind-variants";
 
 const styles = tv({
-	base: "input input-bordered",
+	base: "input",
 	variants: {
 		isError: {
 			true: "input-error",

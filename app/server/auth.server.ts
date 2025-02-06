@@ -76,6 +76,8 @@ export const signUp = async (
 		email,
 		profile: "",
 		profileImageUrl: photoURL ?? "",
+		twitterUsername: "",
+		websiteUrl: "",
 	});
 	return await signIn(email, password);
 };
