@@ -1,9 +1,8 @@
 declare global {
-  interface Window {
-    adsbygoogle: any[]; // 型を適切に定義
-  }
+	interface Window {
+		adsbygoogle: any[]; // 型を適切に定義
+	}
 }
-
 
 export type User = {
 	// Firestore ドキュメントのID
@@ -15,6 +14,8 @@ export type User = {
 	email: string;
 	profile: string;
 	profileImageUrl: string;
+	twitterUsername: string;
+	websiteUrl: string;
 	createdAt: Date;
 	updatedAt: Date;
 	deletedAt: Date | null;

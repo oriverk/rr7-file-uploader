@@ -1,9 +1,11 @@
 import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
 import { Textarea } from "@/components/forms/Textarea";
+import { FileIcon, HistoryIcon, UploadIcon } from "@/components/icons";
 import { MAX_FILE_DESCRIPTION_LENGTH } from "@/constants";
 import { requireAdmin, requireAuth } from "@/server/auth.server";
 import { getUserFile, updateUserFile } from "@/server/database.server";
+import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
 import {
 	getFormProps,
 	getInputProps,
@@ -12,6 +14,7 @@ import {
 } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import clsx from "clsx";
+import { format } from "date-fns";
 import { Form, Link, data, redirect } from "react-router";
 import invariant from "tiny-invariant";
 import { z } from "zod";
@@ -39,7 +42,15 @@ export const loader = async ({ params, request }: Route.LoaderArgs) => {
 
 	const file = await getUserFile(userid, params.fileId);
 	invariant(file, "file not found");
-	const { fileName, fileDescription, isPublished } = file;
+	const {
+		fileName,
+		fileDescription,
+		isPublished,
+		contentType,
+		size,
+		createdAt,
+		updatedAt,
+	} = file;
 
 	// for demo
 	const filename = !admin.isAdmin ? "demo.zip" : fileName;
@@ -50,6 +61,10 @@ export const loader = async ({ params, request }: Route.LoaderArgs) => {
 			fileName: filename,
 			fileDescription: desc,
 			isPublished,
+			contentType,
+			size,
+			createdAt,
+			updatedAt,
 		},
 	};
 };
@@ -112,13 +127,50 @@ export default function Page({ loaderData, actionData }: Route.ComponentProps) {
 		shouldValidate: "onBlur",
 		shouldRevalidate: "onInput",
 	});
-	const { fileName, fileDescription, isPublished } = file;
+	const {
+		fileName,
+		contentType,
+		size,
+		createdAt,
+		updatedAt,
+		fileDescription,
+		isPublished,
+	} = file;
+
+	const _size = convertByteWithUnit(size);
+	const _createdAt = format(createdAt, "yyyy-MM-dd");
+	const _updatedAt =
+		createdAt !== updatedAt ? format(updatedAt, "yyyy-MM-dd") : undefined;
 
 	return (
 		<main className="py-12">
 			<Container>
 				<section>
 					<h1 className="break-all">{fileName}</h1>
+					<div className="flex flex-wrap justify-center gap-4">
+						<div className="flex items-center gap-2 text-sm">
+							<UploadIcon className="w-4 h-4 fill-current" />
+							<span className="sr-only">公開</span>
+							<time dateTime={createdAt.toISOString()}>{_createdAt}</time>
+						</div>
+						{createdAt !== updatedAt && (
+							<div className="flex items-center gap-2 text-sm">
+								<HistoryIcon className="w-5 h-5 fill-current" />
+								<span className="sr-only">更新</span>
+								<time dateTime={updatedAt.toISOString()}>{_updatedAt}</time>
+							</div>
+						)}
+						<div className="flex items-center gap-2 text-sm">
+							<FileIcon className="w-4 h-4 fill-current" />
+							<span className="sr-only">ファイルタイプ</span>
+							<span>{contentType}</span>
+						</div>
+						<div className="flex items-center gap-2 text-sm">
+							<FileIcon className="w-4 h-4 fill-current" />
+							<span className="sr-only">ファイルサイズ</span>
+							<span>{_size}</span>
+						</div>
+					</div>
 					<h2 className="text-center">ファイル編集</h2>
 					<div className="max-w-2xl mx-auto flex flex-col gap-8">
 						{actionData && (

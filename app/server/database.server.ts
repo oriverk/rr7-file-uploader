@@ -28,6 +28,8 @@ const userConverter: FirestoreDataConverter<User> = {
 			email: data.email,
 			profile: data.profile,
 			profileImageUrl: data.profileImageUrl,
+			twitterUsername: data.twitterUsername,
+			websiteUrl: data.websiteUrl,
 			createdAt: data.createdAt.toDate(),
 			updatedAt: data.updatedAt.toDate(),
 			deletedAt: data.deletedAt ? data.deletedAt.toDate() : null,

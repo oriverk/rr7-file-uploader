@@ -10,3 +10,6 @@ export * from "./Close";
 export * from "./Eye";
 export * from "./EyeClosed";
 export * from "./Human";
+export * from "./History";
+export * from "./Link";
+export * from "./TwitterX";

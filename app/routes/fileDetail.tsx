@@ -1,6 +1,12 @@
 import { AdSense } from "@/components/Adsense";
 import { Alert } from "@/components/Alert";
 import { Container } from "@/components/Container";
+import {
+	DownloadIcon,
+	FileIcon,
+	HistoryIcon,
+	UploadIcon,
+} from "@/components/icons";
 import { requireAdmin } from "@/server/auth.server";
 import { getUser, getUserFile } from "@/server/database.server";
 import { convertByteWithUnit } from "@/utils/convertByteWithUnit";
@@ -56,6 +62,11 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 		fileDescription,
 	} = file;
 
+	const _size = convertByteWithUnit(size);
+	const _createdAt = format(createdAt, "yyyy-MM-dd");
+	const _updatedAt =
+		createdAt !== updatedAt ? format(updatedAt, "yyyy-MM-dd") : undefined;
+
 	const handleConfirm = () => {
 		setIsConfirmed(!isConfirmed);
 	};
@@ -64,7 +75,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 		<main className="py-12">
 			<Container maxWidth="wide">
 				<div>
-					<div className="py-4 flex flex-col gap-4 items-center justify-evenly">
+					<div className="py-4 flex flex-col gap-8 items-center justify-evenly">
 						{!isAdmin && (
 							<Alert state="info">
 								This is a demo account, but it displays files from other
@@ -72,6 +83,35 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 							</Alert>
 						)}
 						<h1 className="mb-0 break-all">{fileName}</h1>
+						<div className="flex flex-wrap gap-4">
+							<div className="flex items-center gap-2 text-sm">
+								<UploadIcon className="w-4 h-4 fill-current" />
+								<span className="sr-only">公開</span>
+								<time dateTime={createdAt.toISOString()}>{_createdAt}</time>
+							</div>
+							{createdAt !== updatedAt && (
+								<div className="flex items-center gap-2 text-sm">
+									<HistoryIcon className="w-5 h-5 fill-current" />
+									<span className="sr-only">更新</span>
+									<time dateTime={updatedAt.toISOString()}>{_updatedAt}</time>
+								</div>
+							)}
+							<div className="flex items-center gap-2 text-sm">
+								<FileIcon className="w-4 h-4 fill-current" />
+								<span className="sr-only">ファイルタイプ</span>
+								<span>{contentType}</span>
+							</div>
+							<div className="flex items-center gap-2 text-sm">
+								<FileIcon className="w-4 h-4 fill-current" />
+								<span className="sr-only">ファイルサイズ</span>
+								<span>{_size}</span>
+							</div>
+							<div className="flex items-center gap-2 text-sm">
+								<DownloadIcon className="w-4 h-4 fill-current" />
+								<span className="sr-only">ダウンロード数</span>
+								<span>{downloadCount}</span>
+							</div>
+						</div>
 						<Link to={`/${username}`} className="no-underline">
 							<div className="flex items-center gap-4">
 								<div className="avatar">
@@ -90,22 +130,6 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 								<div className="text-lg">{displayName}</div>
 							</div>
 						</Link>
-						<div className="flex flex-wrap gap-4">
-							<div>
-								<span>公開：</span>
-								<time dateTime={createdAt.toISOString()}>
-									{format(createdAt, "yyyy年MM月dd日")}
-								</time>
-							</div>
-							{createdAt !== updatedAt && (
-								<div>
-									<span>更新：</span>
-									<time dateTime={updatedAt.toISOString()}>
-										{format(updatedAt, "yyyy年MM月dd日")}
-									</time>
-								</div>
-							)}
-						</div>
 					</div>
 				</div>
 			</Container>
@@ -116,24 +140,6 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 				<section>
 					<div className="py-8">
 						<div className="flex flex-col justify-around gap-8">
-							<div className="overflow-x-auto">
-								<table className="table">
-									<tbody>
-										<tr>
-											<th>ファイルタイプ</th>
-											<td>{contentType}</td>
-										</tr>
-										<tr>
-											<th>サイズ</th>
-											<td>{convertByteWithUnit(size)}</td>
-										</tr>
-										<tr>
-											<th>ダウンロード数</th>
-											<td>{downloadCount}</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
 							<div
 								dangerouslySetInnerHTML={{ __html: fileDescription }}
 								className="break-words prose-a:link prose-a:link-primary prose-a:link-hover prose-img:rounded-xl"
