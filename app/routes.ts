@@ -27,7 +27,7 @@ export default [
 	...prefix("files", [
 		index("./routes/files.tsx"),
 		route("new", "./routes/user/createFile.tsx"),
-		route("naw", "./routes/user/createFileX.tsx"),
+		// route("naw", "./routes/user/createFileX.tsx"),
 		route(":fileId/edit", "./routes/user/editFile.tsx"),
 	]),
 ] satisfies RouteConfig;
